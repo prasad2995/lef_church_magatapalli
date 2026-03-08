@@ -261,7 +261,7 @@
   </ul>
   <div class="nav-right">
     <a href="#register" class="nav-btn">🎒 Register</a>
-    <button class="admin-nav-btn" id="adminBtn">🔐Admin</button>
+    <button class="admin-nav-btn" id="adminBtn">🔐 Admin</button>
   </div>
 </nav>
 
@@ -729,6 +729,32 @@
     document.getElementById('viewerNotice').classList.toggle('show',!isAdmin);
     document.getElementById('exportBtn').style.display   = isAdmin?'block':'none';
     document.getElementById('deleteColHead').textContent = isAdmin?'Delete':'';
+
+    // Viewer: show only Analytics tab, hide Registrations tab
+    if(!isAdmin){
+      document.getElementById('adminPanel').classList.add('active');
+      document.body.style.overflow='hidden';
+      // Hide registrations tab, lock to analytics
+      document.querySelectorAll('.dash-tab').forEach(t=>{
+        if(t.dataset.tab==='registrations') t.style.display='none';
+        if(t.dataset.tab==='analytics'){
+          t.classList.add('active');
+        }
+      });
+      document.querySelectorAll('.dash-view').forEach(v=>v.classList.remove('active'));
+      document.getElementById('view-analytics').classList.add('active');
+      document.getElementById('adminPanel').classList.add('active');
+      document.body.style.overflow='hidden';
+      loadData();
+      return;
+    }
+
+    // Admin: show all tabs, default to registrations
+    document.querySelectorAll('.dash-tab').forEach(t=>t.style.display='');
+    document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.dash-view').forEach(v=>v.classList.remove('active'));
+    document.querySelector('[data-tab="registrations"]').classList.add('active');
+    document.getElementById('view-registrations').classList.add('active');
     document.getElementById('adminPanel').classList.add('active');
     document.body.style.overflow='hidden';
     loadData();
@@ -747,6 +773,8 @@
       const snap=await getDocs(query(collection(db,'registrations'),orderBy('createdAt','desc')));
       allData=snap.docs.map(d=>({id:d.id,...d.data()}));
       refreshStats(); applyFilters();
+      // Re-render analytics if that tab is active
+      if(document.getElementById('view-analytics').classList.contains('active')) renderAnalytics();
     }catch{
       document.getElementById('tableBody').innerHTML='<tr><td colspan="10" class="no-data"><span class="ni">⚠️</span>Could not load data. Check Firestore rules.</td></tr>';
     }
@@ -781,7 +809,7 @@
         <td><strong style="color:#94A3B8">${i+1}</strong></td>
         <td><strong>${r.childName||r.childFirst||''} ${r.childName?'':(r.childLast||'')}</strong></td>
         <td>${r.age||'—'}</td>
-        <td><span class="badge ${r.gender==='Boy'?'b-boy':'b-girl'}">${r.gender||'—'}</span></td>
+        <td><span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span></td>
         <td>${r.parentName||'—'}</td>
         <td><a href="tel:${r.phone}" style="color:var(--navy);font-weight:700;text-decoration:none">${r.phone||'—'}</a></td>
         <td>${r.address||'—'}</td>
