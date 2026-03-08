@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEF Church Magatapalli</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-pale: #F5E6C0;
+    --deep: #0D1B2A;
+    --deep2: #142236;
+    --cream: #FDF8EE;
+    --text: #2C1A0E;
+    --muted: #7A6A58;
+    --accent: #8B2020;
+    --white: #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(13,27,42,0.97);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding: 0 2rem;
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Cinzel Decorative', serif;
+    color: var(--gold);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+  .nav-links a {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #0D1B2A 0%, #1a2e45 40%, #0f2035 70%, #0D1B2A 100%);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding-top: 64px;
+  }
+
+  /* cross watermark */
+  .hero::before {
+    content: '✝';
+    position: absolute;
+    font-size: 55vw;
+    color: rgba(201,168,76,0.04);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  /* radial glow */
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .hero-content { position: relative; z-index: 2; padding: 2rem; }
+
+  .hero-badge {
+    display: inline-block;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.4rem 1.4rem;
+    border-radius: 50px;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 0.4rem;
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+
+  .hero h1 span { color: var(--gold); }
+
+  .hero-location {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: var(--gold-pale);
+    font-style: italic;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.8rem;
+    animation: fadeUp 1s 0.2s ease both;
+  }
+
+  .hero-verse {
+    max-width: 500px; margin: 0 auto 2.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.65);
+    font-style: italic;
+    line-height: 1.7;
+    animation: fadeUp 1s 0.3s ease both;
+  }
+
+  .hero-cta {
+    display: inline-flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    animation: fadeUp 1s 0.4s ease both;
+  }
+
+  .btn {
+    padding: 0.85rem 2.2rem;
+    border-radius: 4px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s;
+    display: inline-block;
+  }
+  .btn-gold {
+    background: var(--gold);
+    color: var(--deep);
+    border: 2px solid var(--gold);
+  }
+  .btn-gold:hover { background: var(--gold-light); border-color: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,168,76,0.35); }
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    border: 2px solid rgba(255,255,255,0.4);
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION SHARED ── */
+  section { padding: 5rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold); font-weight: 700; margin-bottom: 0.6rem;
+  }
+  .section-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    color: var(--deep);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  .section-title.light { color: var(--white); }
+  .divider {
+    width: 60px; height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    margin: 1rem 0 2rem;
+    border-radius: 2px;
+  }
+
+  /* ── WELCOME ── */
+  .welcome { background: var(--cream); }
+  .welcome-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .welcome-text p {
+    font-size: 1.05rem; line-height: 1.85;
+    color: #4a3a2a; margin-bottom: 1rem;
+  }
+  .welcome-symbol {
+    text-align: center;
+    font-size: 10rem;
+    line-height: 1;
+    color: var(--gold);
+    opacity: 0.2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .welcome-symbol span { font-size: 8rem; }
+
+  /* ── SERVICES ── */
+  .services { background: var(--deep); }
+  .services .section-label { color: var(--gold-light); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  .service-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .service-card:hover { background: rgba(201,168,76,0.07); transform: translateY(-4px); border-color: rgba(201,168,76,0.5); }
+  .service-card:hover::before { opacity: 1; }
+  .service-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .service-day {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.85rem; color: var(--gold);
+    letter-spacing: 0.05em; margin-bottom: 0.4rem;
+  }
+  .service-name {
+    font-size: 1rem; font-weight: 700;
+    color: var(--white); margin-bottom: 0.5rem;
+  }
+  .service-time {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; color: var(--gold-light);
+    font-style: italic;
+  }
+
+  /* ── EVENTS ── */
+  .events { background: #F7F2E8; }
+  .events-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.8rem; margin-top: 1rem;
+  }
+  .event-card {
+    background: var(--white);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    transition: all 0.3s;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+  }
+  .event-card:hover { transform: translateY(-6px); box-shadow: 0 12px 35px rgba(0,0,0,0.13); }
+  .event-header {
+    background: linear-gradient(135deg, var(--deep) 0%, #1e3a5a 100%);
+    padding: 1.5rem 1.8rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .event-header::after {
+    content: '';
+    position: absolute; bottom: -20px; right: -20px;
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.15);
+  }
+  .event-date-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--deep);
+    font-weight: 800;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.9rem;
+    border-radius: 3px;
+    margin-bottom: 0.7rem;
+  }
+  .event-card-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.1rem; color: var(--white);
+    line-height: 1.3;
+  }
+  .event-body { padding: 1.4rem 1.8rem; }
+  .event-desc {
+    font-size: 0.9rem; color: var(--muted);
+    line-height: 1.7; margin-bottom: 1rem;
+  }
+  .event-tag {
+    display: inline-block;
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.25rem 0.7rem;
+    border-radius: 3px;
+    background: var(--gold-pale);
+    color: var(--accent);
+  }
+  .event-link-hint {
+    font-size: 0.78rem; color: var(--gold);
+    font-weight: 700; letter-spacing: 0.05em;
+    display: flex; align-items: center; gap: 0.3rem;
+    margin-top: 0.5rem;
+  }
+
+  /* ── LOCATION ── */
+  .location { background: var(--deep2); }
+  .location .section-label { color: var(--gold-light); }
+  .location-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;
+  }
+  .location-info { color: rgba(255,255,255,0.75); }
+  .location-info p { line-height: 1.8; font-size: 1rem; margin-bottom: 1rem; }
+  .location-info strong { color: var(--gold-light); }
+  .contact-item {
+    display: flex; align-items: center; gap: 0.8rem;
+    padding: 0.9rem 1.2rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 6px;
+    margin-bottom: 0.8rem;
+    color: var(--white);
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .contact-item:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); }
+  .contact-icon { font-size: 1.3rem; }
+  .map-embed {
+    border-radius: 10px; overflow: hidden;
+    border: 2px solid rgba(201,168,76,0.2);
+    height: 350px;
+  }
+  .map-embed iframe { width: 100%; height: 100%; border: none; }
+
+  /* ── SUGGEST SECTION ── */
+  .suggestions { background: var(--cream); }
+  .suggest-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.2rem; margin-top: 1rem;
+  }
+  .suggest-card {
+    background: var(--white);
+    border: 1px solid #e8dfc8;
+    border-radius: 8px;
+    padding: 1.5rem 1.2rem;
+    text-align: center;
+    transition: all 0.25s;
+  }
+  .suggest-card:hover { border-color: var(--gold); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+  .suggest-icon { font-size: 1.8rem; margin-bottom: 0.6rem; }
+  .suggest-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--deep); }
+  .suggest-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--deep);
+    border-top: 1px solid rgba(201,168,76,0.2);
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+  .footer-cross {
+    font-size: 2rem; color: var(--gold); margin-bottom: 0.8rem;
+  }
+  .footer-name {
+    font-family: 'Cinzel Decorative', serif;
+    color: var(--white); font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+  }
+  .footer-sub { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .welcome-grid, .location-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .welcome-symbol { display: none; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">LEF Church</a>
+    <ul class="nav-links">
+      <li><a href="#welcome">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#events">Events</a></li>
+      <li><a href="#location">Location</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">✝ &nbsp; Welcome to Our Family</div>
+    <h1>LEF Church<br><span>Magatapalli</span></h1>
+    <div class="hero-location">Living, Empowered, Fellowship</div>
+    <p class="hero-verse">"For where two or three gather in my name,<br>there am I with them." — Matthew 18:20</p>
+    <div class="hero-cta">
+      <a href="#services" class="btn btn-gold">Join Us Sunday</a>
+      <a href="#location" class="btn btn-outline">Find Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- WELCOME -->
+<section class="welcome" id="welcome">
+  <div class="container">
+    <div class="welcome-grid">
+      <div class="welcome-text">
+        <div class="section-label">About Us</div>
+        <h2 class="section-title">A Place of Faith,<br>Hope & Community</h2>
+        <div class="divider"></div>
+        <p>Welcome to LEF Church, Magatapalli — a vibrant community of believers united in faith, love, and the Word of God. We are part of the Living Empowered Fellowship, committed to worshipping God with all our heart.</p>
+        <p>Whether you are visiting for the first time or have been with us for years, you are cherished here. Come as you are — God's grace is for everyone.</p>
+        <a href="#services" class="btn btn-gold" style="margin-top: 1rem;">Our Services</a>
+      </div>
+      <div class="welcome-symbol">
+        <span>✝</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="section-label">Gatherings</div>
+    <h2 class="section-title light">Weekly Services</h2>
+    <div class="divider"></div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">🕊️</div>
+        <div class="service-day">Sunday</div>
+        <div class="service-name">Sunday Worship Service</div>
+        <div class="service-time">9:00 AM</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🙏</div>
+        <div class="service-day">Wednesday</div>
+        <div class="service-name">Mid Week Prayer</div>
+        <div class="service-time">7:00 PM</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">👩‍👩‍👧</div>
+        <div class="service-day">Friday</div>
+        <div class="service-name">Women's Meeting</div>
+        <div class="service-time">7:00 PM</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🕯️</div>
+        <div class="service-day">Saturday</div>
+        <div class="service-name">Fasting Prayer</div>
+        <div class="service-time">7:00 PM</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section class="events" id="events">
+  <div class="container">
+    <div class="section-label">Mark Your Calendar</div>
+    <h2 class="section-title">Upcoming Events</h2>
+    <div class="divider"></div>
+    <div class="events-grid">
+
+      <!-- Revival Meetings -->
+      <div class="event-card" style="cursor:default;">
+        <div class="event-header">
+          <div class="event-date-badge">April 23 – 24</div>
+          <div class="event-card-title">Revival Meetings</div>
+        </div>
+        <div class="event-body">
+          <p class="event-desc">Join us for two powerful evenings of revival, prayer, and the Word of God. Come expecting God to move in a mighty way!</p>
+          <span class="event-tag">Special Meeting</span>
+        </div>
+      </div>
+
+      <!-- VBS — links to VBS site -->
+      <a class="event-card" href="vbs2026.html" target="_blank" rel="noopener">
+        <div class="event-header" style="background: linear-gradient(135deg, #8B2020 0%, #c0392b 100%);">
+          <div class="event-date-badge" style="background: #FFD700; color: #8B2020;">April 25 – 27</div>
+          <div class="event-card-title">Vacation Bible School (VBS)</div>
+        </div>
+        <div class="event-body">
+          <p class="event-desc">Three days of fun, Bible learning, worship, and activities for kids! VBS is a wonderful time for children to grow in faith and friendship.</p>
+          <span class="event-tag">Children's Ministry</span>
+          <div class="event-link-hint">🔗 Visit VBS Website →</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION + CONTACT -->
+<section class="location" id="location">
+  <div class="container">
+    <div class="section-label">Find Us</div>
+    <h2 class="section-title light">Location & Contact</h2>
+    <div class="divider"></div>
+    <div class="location-grid">
+      <div class="location-info" id="contact">
+        <p>We are located in <strong>Magatapalli</strong>. Come visit us — all are welcome!</p>
+        <a class="contact-item" href="tel:9000912358">
+          <span class="contact-icon">📞</span>
+          <span>+91 90009 12358</span>
+        </a>
+        <a class="contact-item" href="tel:9949307671">
+          <span class="contact-icon">📞</span>
+          <span>+91 99493 07671</span>
+        </a>
+        <a class="contact-item" href="https://maps.app.goo.gl/GGUV2tdGh9G61m5P7" target="_blank">
+          <span class="contact-icon">📍</span>
+          <span>Get Directions on Google Maps</span>
+        </a>
+        <a class="contact-item" href="mailto:lefchurchmagatapalli@gmail.com">
+          <span class="contact-icon">✉️</span>
+          <span>Send us an Email</span>
+        </a>
+      </div>
+      <div class="map-embed">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15327!2d79.7!3d15.4!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTXCsDI0JzAwLjAiTiA3OcKwNDInMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890"
+          allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="LEF Church Magatapalli Location">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUGGESTIONS SECTION -->
+<section class="suggestions" id="suggestions">
+  <div class="container">
+    <div class="section-label">Grow With Us</div>
+    <h2 class="section-title">What You Can Add to This Website</h2>
+    <div class="divider"></div>
+    <p style="color: var(--muted); margin-bottom: 2rem; font-size: 0.95rem; max-width: 600px;">Here are some great ideas to expand your church website and better serve your congregation:</p>
+    <div class="suggest-grid">
+      <div class="suggest-card">
+        <div class="suggest-icon">📖</div>
+        <div class="suggest-title">Sermon Archive</div>
+        <div class="suggest-desc">Share recorded sermons and messages for members to revisit or those who missed service.</div>
+      </div>
+      <div class="suggest-card">
+        <div class="suggest-icon">🎶</div>
+        <div class="suggest-title">Worship Music</div>
+        <div class="suggest-desc">A playlist or audio player with worship songs used in services.</div>
+      </div>
+      <div class="suggest-card">
+        <div class="suggest-icon">📸</div>
+        <div class="suggest-title">Photo Gallery</div>
+        <div class="suggest-desc">Memories from VBS, revival meetings, youth gatherings, and celebrations.</div>
+      </div>
+      <div class="suggest-card">
+        <div class="suggest-icon">🙋</div>
+        <div class="suggest-title">Prayer Request Form</div>
+        <div class="suggest-desc">Let visitors submit prayer requests online and feel supported by the community.</div>
+      </div>
+      <div class="suggest-card">
+        <div class="suggest-icon">👨‍👩‍👧‍👦</div>
+        <div class="suggest-title">Ministries Page</div>
+        <div class="suggest-desc">Highlight your children's ministry, youth, women's fellowship, and outreach programs.</div>
+      </div>
+      <div class="suggest-card">
+        <div class="suggest-icon">🤝</div>
+        <div class="suggest-title">Leadership / Pastors</div>
+        <div class="suggest-desc">Introduce your pastor and church leadership with bios and photos.</div>
+      </div>
+      <div class="suggest-card">
+        <div class="suggest-icon">💌</div>
+        <div class="suggest-title">Newsletter Signup</div>
+        <div class="suggest-desc">Let people subscribe to receive weekly updates, devotionals, and announcements.</div>
+      </div>
+      <div class="suggest-card">
+        <div class="suggest-icon">💛</div>
+        <div class="suggest-title">Online Giving / Tithe</div>
+        <div class="suggest-desc">Provide a secure way for members to give tithes and offerings online.</div>
+      </div>
+      <div class="suggest-card">
+        <div class="suggest-icon">📱</div>
+        <div class="suggest-title">Social Media Links</div>
+        <div class="suggest-desc">Connect your Facebook, YouTube, or WhatsApp community group to the website.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-cross">✝</div>
+  <div class="footer-name">LEF Church, Magatapalli</div>
+  <div class="footer-sub" style="margin-top:0.4rem;">📞 9000912358 &nbsp;|&nbsp; 9949307671</div>
+  <div class="footer-sub" style="margin-top:1rem;">© 2025 LEF Church Magatapalli · All Rights Reserved</div>
+</footer>
+
+</body>
+</html>
