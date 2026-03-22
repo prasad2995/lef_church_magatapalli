@@ -278,53 +278,9 @@
   .no-data .ni{font-size:3rem;display:block;margin-bottom:10px;}
   .loading-row{text-align:center;padding:40px;color:#94A3B8;font-weight:700;}
   .del-btn{background:#FEE2E2;color:#DC2626;border:none;padding:5px 8px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:700;}
-  .edit-btn{background:#DBEAFE;color:#1D4ED8;border:none;padding:5px 8px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:700;margin-right:3px;}
-  .edit-btn:hover{background:#BFDBFE;}
   .share-btn{background:#EDE9FE;color:#6D28D9;border:none;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:700;}
   .share-btn:hover{background:#DDD6FE;}
   .del-btn:hover{background:#FECACA;}
-  /* Row checkbox */
-  .row-check{width:16px;height:16px;cursor:pointer;accent-color:var(--coral);}
-  /* Bulk action bar */
-  .bulk-bar{display:none;background:#FEF3C7;border-bottom:2px solid #FCD34D;padding:10px 22px;align-items:center;gap:12px;flex-wrap:wrap;}
-  .bulk-bar.show{display:flex;}
-  .bulk-del-btn{background:#DC2626;color:white;border:none;padding:8px 16px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;}
-  .bulk-del-btn:hover{background:#B91C1C;}
-  .bulk-count{font-weight:800;font-size:0.88rem;color:#92400E;}
-  .import-btn{background:#0EA5E9;color:white;border:none;padding:10px 16px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;}
-  .import-btn:hover{background:#0284C7;}
-  /* Edit modal form */
-  .edit-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  @media(max-width:500px){.edit-form-grid{grid-template-columns:1fr;}}
-  .edit-form-group label{display:block;font-weight:700;font-size:0.8rem;color:var(--navy);margin-bottom:4px;}
-  .edit-form-group input,.edit-form-group select{width:100%;padding:10px 12px;border:2px solid #DDD;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.9rem;outline:none;background:#F8FAFC;}
-  .edit-form-group input:focus,.edit-form-group select:focus{border-color:var(--coral);background:white;}
-  .edit-save-btn{width:100%;background:var(--coral);color:white;border:2px solid var(--navy);border-radius:12px;padding:13px;font-family:'Fredoka One',cursive;font-size:1.1rem;cursor:pointer;margin-top:4px;box-shadow:3px 3px 0 var(--navy);}
-  .edit-save-btn:hover{background:var(--orange);}
-  /* Custom confirm dialog */
-  .confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:3000;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-  .confirm-overlay.active{display:flex;}
-  .confirm-box{background:white;border-radius:20px;padding:32px 28px;width:90%;max-width:380px;border:3px solid var(--navy);box-shadow:6px 6px 0 var(--navy);text-align:center;}
-  .confirm-box .confirm-icon{font-size:2.5rem;margin-bottom:10px;}
-  .confirm-box h3{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--navy);margin-bottom:8px;}
-  .confirm-box p{color:#555;font-size:0.9rem;margin-bottom:22px;line-height:1.5;}
-  .confirm-btns{display:flex;gap:10px;justify-content:center;}
-  .confirm-ok{background:#DC2626;color:white;border:2px solid var(--navy);border-radius:10px;padding:10px 28px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;box-shadow:3px 3px 0 var(--navy);}
-  .confirm-ok:hover{background:#B91C1C;}
-  .confirm-cancel{background:#F1F5F9;color:var(--navy);border:2px solid #CBD5E1;border-radius:10px;padding:10px 22px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;}
-  .confirm-cancel:hover{background:#E2E8F0;}
-  /* Teacher management tab */
-  .teacher-mgmt-card{background:white;border-radius:18px;border:2px solid #E2E8F0;box-shadow:0 2px 8px rgba(0,0,0,.06);padding:24px;margin-bottom:20px;}
-  .teacher-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #F1F5F9;flex-wrap:wrap;}
-  .teacher-row:last-child{border-bottom:none;}
-  .teacher-num{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--coral);min-width:28px;}
-  .teacher-name-input{flex:1;min-width:140px;padding:8px 12px;border:2px solid #E2E8F0;border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.88rem;outline:none;}
-  .teacher-name-input:focus{border-color:var(--coral);}
-  .teacher-class-sel{padding:8px 10px;border:2px solid #E2E8F0;border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.85rem;outline:none;cursor:pointer;}
-  .teacher-class-sel:focus{border-color:var(--coral);}
-  .save-teacher-btn{background:var(--coral);color:white;border:none;padding:7px 14px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.8rem;cursor:pointer;}
-  .save-teacher-btn:hover{background:var(--orange);}
-  .teacher-saved-badge{font-size:0.75rem;color:#16A34A;font-weight:700;display:none;}
   .del-btn:hover{background:#FECACA;}
   .viewer-notice{background:#EFF6FF;border:2px solid #93C5FD;border-radius:12px;padding:14px 20px;margin-bottom:20px;color:#1E40AF;font-weight:700;font-size:0.9rem;display:none;align-items:center;gap:10px;}
   .viewer-notice.show{display:flex;}
@@ -678,7 +634,6 @@
     <div class="dash-tabs">
       <button class="dash-tab active" data-tab="registrations">📋 Registrations</button>
       <button class="dash-tab" data-tab="analytics">📊 Analytics</button>
-      <button class="dash-tab" data-tab="teachers" id="teachersTab" style="display:none">👩‍🏫 Teachers</button>
     </div>
 
     <!-- REGISTRATIONS VIEW -->
@@ -692,18 +647,10 @@
     <div class="table-card">
       <div class="table-header">
         <h3>📋 All Registrations</h3>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
           <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search name, phone…">
           <button class="export-btn" id="exportBtn" style="display:none">⬇ Export CSV</button>
-          <button class="import-btn" id="importBtn" style="display:none">⬆ Import CSV</button>
-          <input type="file" id="importFileInput" accept=".csv" style="display:none">
         </div>
-      </div>
-      <!-- Bulk action bar -->
-      <div class="bulk-bar" id="bulkBar">
-        <span class="bulk-count" id="bulkCount">0 selected</span>
-        <button class="bulk-del-btn" id="bulkDelBtn">🗑 Delete Selected</button>
-        <button style="background:#6B7280;color:white;border:none;padding:8px 14px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.82rem;cursor:pointer;" id="bulkCancelBtn">✕ Cancel</button>
       </div>
       <div class="filter-row">
         <button class="filter-btn active" data-filter="all">All</button>
@@ -724,7 +671,7 @@
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th><input type="checkbox" id="selectAllCheck" class="row-check" title="Select all"></th><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th>Class</th><th>Parent</th><th>Phone</th><th>Village</th><th>Days</th><th>Registered On</th><th id="actionsHead"></th></tr>
+            <tr><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th>Class</th><th>Parent</th><th>Phone</th><th>Village</th><th>Days</th><th>Registered On</th><th id="actionsHead"></th></tr>
           </thead>
           <tbody id="tableBody">
             <tr><td colspan="10" class="loading-row">⏳ Loading…</td></tr>
@@ -733,17 +680,6 @@
       </div>
     </div>
     </div><!-- /view-registrations -->
-
-    <!-- TEACHERS VIEW -->
-    <div class="dash-view" id="view-teachers">
-      <div class="teacher-mgmt-card">
-        <h3 style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--navy);margin-bottom:6px;">👩‍🏫 Manage Teachers</h3>
-        <p style="font-size:0.85rem;color:#64748B;margin-bottom:18px;">Set teacher names and assign classes. Changes are saved locally on this device.</p>
-        <div id="teacherMgmtList"></div>
-        <button id="saveAllTeachersBtn" style="margin-top:14px;background:var(--coral);color:white;border:2px solid var(--navy);border-radius:12px;padding:12px 28px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;box-shadow:3px 3px 0 var(--navy);">💾 Save All Teachers</button>
-        <div id="teacherSaveMsg" style="display:none;margin-top:10px;padding:10px;border-radius:10px;font-weight:700;font-size:0.85rem;"></div>
-      </div>
-    </div><!-- /view-teachers -->
 
     <!-- ANALYTICS VIEW -->
     <div class="dash-view" id="view-analytics">
@@ -1034,7 +970,6 @@
       tab.classList.add('active');
       document.getElementById('view-' + tab.dataset.tab).classList.add('active');
       if(tab.dataset.tab === 'analytics') renderAnalytics();
-      if(tab.dataset.tab === 'teachers') buildTeacherMgmt();
     });
   });
 
@@ -1175,7 +1110,6 @@
       `👩‍🏫 <strong>${tc.label}</strong> — Showing Class ${tc.class} students only.`;
     document.getElementById('viewerNotice').classList.add('show');
     document.getElementById('exportBtn').style.display   = 'none';
-    document.getElementById('importBtn').style.display   = 'none';
     document.getElementById('actionsHead').textContent   = 'Certificate';
 
     // Hide class filter buttons for teachers
@@ -1202,22 +1136,15 @@
     document.getElementById('loggedInEmail').textContent = auth.currentUser?.email||'';
     document.getElementById('viewerNotice').classList.remove('show'); // viewer has full access
     document.getElementById('exportBtn').style.display   = (isAdmin||currentRole==='viewer')?'block':'none';
-    document.getElementById('importBtn').style.display   = isAdmin?'block':'none';
     document.getElementById('actionsHead').textContent = 'Actions';
 
     // Admin + Viewer: show all tabs, default to registrations
-    document.querySelectorAll('.dash-tab').forEach(t=>{ t.style.display=''; t.classList.remove('active'); });
+    document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
     document.querySelectorAll('.dash-view').forEach(v=>v.classList.remove('active'));
-    // Teachers tab — admin only
-    document.getElementById('teachersTab').style.display = isAdmin ? '' : 'none';
-    if(isAdmin) buildTeacherMgmt();
     document.querySelector('[data-tab="registrations"]').classList.add('active');
     document.getElementById('view-registrations').classList.add('active');
     document.getElementById('adminPanel').classList.add('active');
     document.body.style.overflow='hidden';
-    // selectAll checkbox — admin only
-    const sa = document.getElementById('selectAllCheck');
-    if(sa) sa.style.display = isAdmin ? '' : 'none';
     loadData();
   }
 
@@ -1238,7 +1165,7 @@
   }
 
   async function loadData(){
-    document.getElementById('tableBody').innerHTML='<tr><td colspan="12" class="loading-row">⏳ Loading registrations…</td></tr>';
+    document.getElementById('tableBody').innerHTML='<tr><td colspan="11" class="loading-row">⏳ Loading registrations…</td></tr>';
     try{
       const snap=await getDocs(query(collection(db,'registrations'),orderBy('createdAt','desc')));
       allData=snap.docs.map(d=>({id:d.id,...d.data()}));
@@ -1291,7 +1218,7 @@
 
   function renderRows(data){
     const tb=document.getElementById('tableBody');
-    if(!data.length){ tb.innerHTML='<tr><td colspan="12" class="no-data"><span class="ni">📋</span>No registrations found.</td></tr>'; return; }
+    if(!data.length){ tb.innerHTML='<tr><td colspan="11" class="no-data"><span class="ni">📋</span>No registrations found.</td></tr>'; return; }
     const isAdmin  = currentRole==='admin';
     const isTeacher= currentRole==='teacher';
     tb.innerHTML=data.map((r,i)=>{
@@ -1306,12 +1233,9 @@
         : `<span class="badge b-days">${cls?'Class '+cls:'—'}</span>`;
       const childName = r.childName||((r.childFirst||'')+(r.childLast?' '+r.childLast:''));
       const shareBtn  = `<button class="share-btn" data-id="${r.id}" data-name="${childName}" data-days="${r.days||''}" data-age="${r.age||''}" data-phone="${r.phone||''}" title="Share Certificate">📜 Share</button>`;
-      const editBtn   = `<button class="edit-btn" data-id="${r.id}" title="Edit record">✏️</button>`;
-      const delBtn    = `<button class="del-btn" data-id="${r.id}" style="margin-left:3px">🗑</button>`;
-      const actionBtns = isAdmin ? editBtn + shareBtn + delBtn : shareBtn;
-      const chk = isAdmin ? `<input type="checkbox" class="row-check rec-check" data-id="${r.id}">` : '';
+      const delBtn    = `<button class="del-btn" data-id="${r.id}" style="margin-left:4px">🗑</button>`;
+      const actionBtns = isAdmin ? shareBtn + delBtn : shareBtn;
       return `<tr>
-        <td>${chk}</td>
         <td><strong style="color:#94A3B8">${i+1}</strong></td>
         <td><strong>${childName}</strong></td>
         <td>${r.age||'—'}</td>
@@ -1342,10 +1266,9 @@
     // Wire delete buttons
     document.querySelectorAll('.del-btn').forEach(btn=>{
       btn.addEventListener('click', async()=>{
-        const ok = await showConfirm('Delete Registration?','This record will be permanently deleted and cannot be recovered.','🗑 Delete','🗑️');
-        if(!ok) return;
-        try{ await deleteDoc(doc(db,'registrations',btn.dataset.id)); allData=allData.filter(r=>r.id!==btn.dataset.id); refreshStats(); applyFilters(); showToast('✅ Record deleted.',2500); }
-        catch{ showToast('❌ Delete failed. Try again.',3000); }
+        if(!confirm('Delete this registration? This cannot be undone.')) return;
+        try{ await deleteDoc(doc(db,'registrations',btn.dataset.id)); allData=allData.filter(r=>r.id!==btn.dataset.id); refreshStats(); applyFilters(); }
+        catch{ alert('Error deleting. Please try again.'); }
       });
     });
 
@@ -1354,16 +1277,6 @@
       btn.addEventListener('click',()=>{
         openCertModal(btn.dataset.id, btn.dataset.name, btn.dataset.days, btn.dataset.age, btn.dataset.phone);
       });
-    });
-
-    // Wire edit buttons
-    document.querySelectorAll('.edit-btn').forEach(btn=>{
-      btn.addEventListener('click',()=>{ openEditModal(btn.dataset.id); });
-    });
-
-    // Wire row checkboxes
-    document.querySelectorAll('.rec-check').forEach(cb=>{
-      cb.addEventListener('change', updateBulkBar);
     });
   }
 
@@ -1544,235 +1457,163 @@
 
   function generateCertificate(){
     const canvas = document.getElementById('certCanvas');
-    canvas.width  = 1080;
-    canvas.height = 1527;
+    // 9:16 portrait — good for WhatsApp status / mobile share
+    canvas.width  = 900;
+    canvas.height = 1400;
     const ctx = canvas.getContext('2d');
     const W = canvas.width, H = canvas.height;
-    const cx = W / 2;
+    const cx = W/2;
 
-    // ── HELPERS ──────────────────────────────
-    function roundRect(x,y,w,h,r,fill,stroke,lw=2){
-      ctx.beginPath();
-      ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
-      ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
-      ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
-      ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r);
-      ctx.closePath();
-      if(fill){ctx.fillStyle=fill; ctx.fill();}
-      if(stroke){ctx.strokeStyle=stroke; ctx.lineWidth=lw; ctx.stroke();}
-    }
-    function hLine(y, c1='rgba(255,255,255,0.15)', c2='rgba(255,255,255,0.7)'){
-      const g=ctx.createLinearGradient(60,0,W-60,0);
-      g.addColorStop(0,'transparent'); g.addColorStop(0.2,c1);
-      g.addColorStop(0.5,c2); g.addColorStop(0.8,c1); g.addColorStop(1,'transparent');
-      ctx.strokeStyle=g; ctx.lineWidth=1.5;
-      ctx.beginPath(); ctx.moveTo(60,y); ctx.lineTo(W-60,y); ctx.stroke();
-    }
-    function cornerDeco(x,y,sx,sy){
-      ctx.save(); ctx.translate(x,y); ctx.scale(sx,sy);
-      ctx.strokeStyle='rgba(255,255,255,0.5)'; ctx.lineWidth=2;
-      ctx.beginPath(); ctx.moveTo(0,50); ctx.lineTo(0,10);
-      ctx.arcTo(0,0,10,0,10); ctx.lineTo(50,0); ctx.stroke();
-      ctx.fillStyle='rgba(255,255,255,0.7)';
-      ctx.beginPath(); ctx.moveTo(8,0); ctx.lineTo(14,-7);
-      ctx.lineTo(20,0); ctx.lineTo(14,7); ctx.closePath(); ctx.fill();
-      ctx.restore();
-    }
-
-    // ── 1. COLORFUL BACKGROUND ───────────────
+    // ── Background gradient ──
     const bg = ctx.createLinearGradient(0,0,W,H);
-    bg.addColorStop(0,  '#1a0533');
-    bg.addColorStop(0.3,'#2E0854');
-    bg.addColorStop(0.6,'#1B3A7A');
-    bg.addColorStop(1,  '#0D1F4A');
-    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+    bg.addColorStop(0,'#0D2748');
+    bg.addColorStop(0.5,'#1E3A5F');
+    bg.addColorStop(1,'#0D2748');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,W,H);
 
-    const glow = ctx.createRadialGradient(cx,H*0.45,50,cx,H*0.45,600);
-    glow.addColorStop(0,'rgba(255,200,50,0.12)'); glow.addColorStop(1,'transparent');
-    ctx.fillStyle=glow; ctx.fillRect(0,0,W,H);
+    // ── Gold border outer ──
+    ctx.strokeStyle = '#FFD700';
+    ctx.lineWidth = 18;
+    ctx.strokeRect(18,18,W-36,H-36);
 
-    ctx.save(); ctx.globalAlpha=0.04;
-    ctx.strokeStyle='#FFD700'; ctx.lineWidth=1;
-    for(let i=-H;i<W+H;i+=60){
-      ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i+H,H); ctx.stroke();
+    // ── Gold border inner ──
+    ctx.strokeStyle = 'rgba(255,215,0,0.4)';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(36,36,W-72,H-72);
+
+    // ── Corner ornaments ──
+    function drawCorner(x,y,r1,r2){
+      ctx.strokeStyle='#FFD700'; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.arc(x,y,r1,0,Math.PI*2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(x,y,r2,0,Math.PI*2); ctx.stroke();
     }
-    ctx.restore();
+    drawCorner(60,60,18,10); drawCorner(W-60,60,18,10);
+    drawCorner(60,H-60,18,10); drawCorner(W-60,H-60,18,10);
 
-    // ── 2. BORDERS ───────────────────────────
-    ctx.shadowColor='rgba(255,200,50,0.6)'; ctx.shadowBlur=20;
-    roundRect(12,12,W-24,H-24,16,null,'#FFD700',8);
-    ctx.shadowBlur=0;
-    roundRect(26,26,W-52,H-52,12,null,'rgba(255,215,0,0.4)',2);
-    roundRect(38,38,W-76,H-76,8,null,'rgba(255,215,0,0.15)',1);
-    cornerDeco(46,46, 1, 1); cornerDeco(W-46,46,-1, 1);
-    cornerDeco(46,H-46, 1,-1); cornerDeco(W-46,H-46,-1,-1);
-
-    // ── 3. BIBLE VERSE — no box ───────────────
-    ctx.textAlign='center';
-    ctx.fillStyle='rgba(255,240,180,0.95)';
-    ctx.font='italic 24px Georgia';
-    ctx.fillText('"Let the little children come to me."', cx, 96);
+    // ── Top cross ──
     ctx.fillStyle='#FFD700';
+    ctx.font='bold 52px Arial';
+    ctx.textAlign='center';
+    ctx.fillText('✝',cx,115);
+
+    // ── Church name ──
+    ctx.fillStyle='#FFD700';
+    ctx.font='bold 32px Georgia';
+    ctx.fillText('LEF Church Magatapalli',cx,165);
+
+    // ── Divider line ──
+    const grad1=ctx.createLinearGradient(80,0,W-80,0);
+    grad1.addColorStop(0,'transparent'); grad1.addColorStop(0.5,'#FFD700'); grad1.addColorStop(1,'transparent');
+    ctx.strokeStyle=grad1; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(80,185); ctx.lineTo(W-80,185); ctx.stroke();
+
+    // ── Certificate of Participation ──
+    ctx.fillStyle='white';
+    ctx.font='italic 28px Georgia';
+    ctx.fillText('Certificate of Participation',cx,228);
+
+    // ── VBS 2026 ──
+    ctx.fillStyle='#FFD700';
+    ctx.font='bold 58px Georgia';
+    ctx.fillText('VBS 2026',cx,300);
+
+    // ── Theme ──
+    ctx.fillStyle='rgba(255,255,255,0.85)';
     ctx.font='22px Georgia';
-    ctx.fillText('— Matthew 19:14', cx, 130);
-    hLine(158,'rgba(255,215,0,0.2)','rgba(255,215,0,0.8)');
+    ctx.fillText('Theme: Signet Ring  •  Haggai 2:23',cx,340);
 
-    // ── 4. CHURCH + VBS ──────────────────────
-    ctx.fillStyle='#FFD700';
-    ctx.font='bold 38px Georgia';
-    ctx.fillText('LEF Church, Magatapalli', cx, 208);
-    ctx.fillStyle='rgba(255,255,255,0.9)';
-    ctx.font='italic 30px Georgia';
-    ctx.fillText('VBS 2026', cx, 250);
-    hLine(275,'rgba(255,215,0,0.2)','rgba(255,215,0,0.8)');
+    // ── Second divider ──
+    ctx.strokeStyle=grad1; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(80,365); ctx.lineTo(W-80,365); ctx.stroke();
 
-    // ── 5. CERTIFICATE OF PARTICIPATION ──────
+    // ── Photo circle ──
+    const photoY = 390, photoR = 110;
     ctx.save();
-    ctx.shadowColor='rgba(255,180,0,0.6)'; ctx.shadowBlur=18;
-    const titleGrad=ctx.createLinearGradient(cx-380,0,cx+380,0);
-    titleGrad.addColorStop(0,'#FF9A3C'); titleGrad.addColorStop(0.35,'#FFD700');
-    titleGrad.addColorStop(0.65,'#FFF0A0'); titleGrad.addColorStop(1,'#FF9A3C');
-    ctx.fillStyle=titleGrad;
-    ctx.font='bold 52px Georgia';
-    ctx.fillText('Certificate of Participation', cx, 342);
-    ctx.restore();
-    hLine(368,'rgba(255,165,0,0.2)','rgba(255,165,0,0.7)');
-
-    // ── 6. THEME — no box, plain text ────────
-    ctx.fillStyle='rgba(255,230,120,0.9)';
-    ctx.font='italic 28px Georgia';
-    ctx.fillText('Theme:', cx, 410);
-
-    ctx.save();
-    ctx.shadowColor='rgba(255,220,0,0.8)'; ctx.shadowBlur=14;
-    ctx.fillStyle='#FFD700';
-    ctx.font='bold 60px Georgia';
-    ctx.fillText('Signet Ring', cx, 478);
-    ctx.restore();
-
-    ctx.fillStyle='rgba(180,255,200,0.9)';
-    ctx.font='italic 28px Georgia';
-    ctx.fillText('Haggai 2:23', cx, 518);
-    hLine(544,'rgba(255,215,0,0.2)','rgba(255,215,0,0.6)');
-
-    // ── 7. PHOTO ─────────────────────────────
-    const photoR=118, photoCX=cx, photoCY=690;
-    ctx.save();
-    ctx.shadowColor='rgba(255,215,0,0.5)'; ctx.shadowBlur=30;
-    ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR+10,0,Math.PI*2);
-    ctx.fillStyle='rgba(255,215,0,0.08)'; ctx.fill();
-    ctx.restore();
-
+    ctx.beginPath();
+    ctx.arc(cx, photoY+photoR, photoR, 0, Math.PI*2);
+    ctx.clip();
     if(certPhotoDataUrl){
-      // Draw photo circle only when photo is provided
-      ctx.save();
-      ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR,0,Math.PI*2); ctx.clip();
-      const img=new Image(); img.src=certPhotoDataUrl;
-      const iw=img.naturalWidth||img.width||300;
-      const ih=img.naturalHeight||img.height||300;
-      const scale=Math.max((photoR*2)/iw,(photoR*2)/ih);
-      ctx.drawImage(img, photoCX-(iw*scale)/2, photoCY-(ih*scale)/2, iw*scale, ih*scale);
-      ctx.restore();
-      ctx.strokeStyle='#FFD700'; ctx.lineWidth=5;
-      ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR+3,0,Math.PI*2); ctx.stroke();
-      ctx.strokeStyle='rgba(255,215,0,0.35)'; ctx.lineWidth=2;
-      ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR+11,0,Math.PI*2); ctx.stroke();
+      const img = new Image();
+      img.src = certPhotoDataUrl;
+      ctx.drawImage(img, cx-photoR, photoY, photoR*2, photoR*2);
+    } else {
+      ctx.fillStyle='#2d5a8e';
+      ctx.fillRect(cx-photoR, photoY, photoR*2, photoR*2);
+      ctx.fillStyle='rgba(255,255,255,0.3)';
+      ctx.font='80px Arial';
+      ctx.textAlign='center';
+      ctx.fillText('👤', cx, photoY+photoR+28);
     }
-    // If no photo — skip circle entirely, content moves up naturally
-
-    // ── 8. THIS IS TO CERTIFY ─────────────────
-    // Adjust Y position based on whether photo is present
-    const certifyY = certPhotoDataUrl ? 848 : 600;
-    hLine(certifyY,'rgba(255,255,255,0.1)','rgba(255,255,255,0.4)');
-    ctx.fillStyle='rgba(220,220,255,0.85)';
-    ctx.font='italic 30px Georgia';
-    ctx.fillText('This is to certify that', cx, certifyY+46);
-
-    // ── 9. PARTICIPANT NAME ───────────────────
-    // French Script MT → fallback chain for canvas
-    // Canvas doesn't load system fonts by default, but we try the full chain
-    const nameFontStack = "'French Script MT', 'Edwardian Script ITC', 'Monotype Corsiva', cursive";
-    ctx.save();
-    ctx.shadowColor='rgba(255,200,50,0.7)'; ctx.shadowBlur=12;
-    const nameGrad=ctx.createLinearGradient(cx-300,0,cx+300,0);
-    nameGrad.addColorStop(0,'#FFD580'); nameGrad.addColorStop(0.5,'#FFFFFF');
-    nameGrad.addColorStop(1,'#FFD580');
-    ctx.fillStyle=nameGrad;
-    ctx.font=`italic 80px ${nameFontStack}`;
-    ctx.fillText(certChildName, cx, nameY+74);
     ctx.restore();
+    // Photo ring
+    ctx.strokeStyle='#FFD700'; ctx.lineWidth=6;
+    ctx.beginPath(); ctx.arc(cx, photoY+photoR, photoR+5, 0, Math.PI*2); ctx.stroke();
 
-    // Underline with diamond dots
-    const nw=ctx.measureText(certChildName).width;
-    const nx=cx-nw/2;
-    ctx.strokeStyle='rgba(255,215,0,0.8)'; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(nx,nameY+88); ctx.lineTo(cx+nw/2,nameY+88); ctx.stroke();
-    [nx-6, cx+nw/2+6].forEach(px=>{
-      ctx.fillStyle='#FFD700';
-      ctx.beginPath(); ctx.arc(px,nameY+88,4,0,Math.PI*2); ctx.fill();
-    });
-
-    // ── 10. BODY TEXT — 3 separate lines ──────
-    ctx.font='27px Georgia';
-
-    // Line 1 — plain
-    ctx.fillStyle='rgba(220,230,255,0.92)';
-    const bodyY = nameY+140;
-    ctx.fillText('has successfully attended the Vacation Bible School 2026', cx, bodyY);
-
-    // Line 2 — "conducted by" plain + "LEF Church, Magatapalli" bold + " on"
-    // Draw in parts to make church name bold
-    ctx.font='27px Georgia';
-    const part1='conducted by ';
-    const part2='LEF Church, Magatapalli';
-    const part3=' on';
-    const w1=ctx.measureText(part1).width;
-    const w3=ctx.measureText(part3).width;
-    ctx.font='bold 27px Georgia';
-    const w2=ctx.measureText(part2).width;
-    const totalW=w1+w2+w3;
-    const lineX=cx-totalW/2;
-    ctx.font='27px Georgia';
-    ctx.fillStyle='rgba(220,230,255,0.92)';
-    ctx.textAlign='left';
-    ctx.fillText(part1, lineX, bodyY+48);
-    ctx.font='bold 27px Georgia';
-    ctx.fillStyle='#FFD700';
-    ctx.fillText(part2, lineX+w1, bodyY+48);
-    ctx.font='27px Georgia';
-    ctx.fillStyle='rgba(220,230,255,0.92)';
-    ctx.fillText(part3, lineX+w1+w2, bodyY+48);
+    // ── This is to certify ──
+    const bodyStartY = 645;
+    ctx.fillStyle='rgba(255,255,255,0.75)';
+    ctx.font='italic 24px Georgia';
     ctx.textAlign='center';
+    ctx.fillText('This is to certify that',cx, bodyStartY);
 
-    // Line 3 — date, highlighted
-    ctx.fillStyle='#FFD580';
-    ctx.font='italic 28px Georgia';
-    ctx.fillText('April 25, 26 & 27, 2026', cx, bodyY+96);
+    // ── Child Name ──
+    ctx.fillStyle='#FFD700';
+    ctx.font='bold 52px Georgia';
+    ctx.fillText(certChildName, cx, bodyStartY+62);
 
-    // ── 11. SIGNATURES ────────────────────────
-    // Teacher LEFT, Director RIGHT
-    hLine(1220,'rgba(255,255,255,0.1)','rgba(255,255,255,0.4)');
-    const teachX=cx-210, dirX=cx+210, sigY=1310;
+    // ── Underline name ──
+    const nameW = ctx.measureText(certChildName).width;
+    ctx.strokeStyle='#FFD700'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(cx-nameW/2,bodyStartY+72); ctx.lineTo(cx+nameW/2,bodyStartY+72); ctx.stroke();
 
-    ctx.strokeStyle='rgba(255,215,0,0.7)'; ctx.lineWidth=1.5;
-    ctx.beginPath(); ctx.moveTo(teachX-120,sigY); ctx.lineTo(teachX+120,sigY); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(dirX-120,sigY); ctx.lineTo(dirX+120,sigY); ctx.stroke();
+    // ── Body text ──
+    ctx.fillStyle='white';
+    ctx.font='24px Georgia';
+    const bodyText = `has successfully attended the Vacation Bible School 2026 conducted by LEF Church Magatapalli on April 25, 26 & 27, 2026.`;
+    wrapText(ctx, bodyText, cx, bodyStartY+120, W-140, 38);
 
-    ctx.fillStyle='rgba(255,230,150,0.9)'; ctx.font='italic 28px Georgia';
-    ctx.fillText('Teacher', teachX, sigY+40);
-    ctx.fillText('Director', dirX, sigY+40);
+    // ── Bible verse ──
+    ctx.strokeStyle=grad1; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(80,bodyStartY+270); ctx.lineTo(W-80,bodyStartY+270); ctx.stroke();
 
-    // ── 12. GOD BLESS ─────────────────────────
-    hLine(sigLineY+180,'rgba(255,255,255,0.1)','rgba(255,215,0,0.5)');
-    ctx.fillStyle='rgba(255,220,120,0.9)';
-    ctx.font='italic 28px Georgia';
-    ctx.fillText('May God bless you abundantly! 🙏', cx, sigLineY+228);
+    ctx.fillStyle='rgba(255,255,255,0.85)';
+    ctx.font='italic 26px Georgia';
+    ctx.fillText('"Let the little children come to me."', cx, bodyStartY+310);
+    ctx.font='22px Georgia';
+    ctx.fillStyle='#FFD700';
+    ctx.fillText('— Matthew 19:14', cx, bodyStartY+345);
 
-    // Done
-    document.getElementById('certPreviewWrap').style.display='block';
-    document.getElementById('certStep1').style.display='none';
-    document.getElementById('certModal').querySelector('.modal-box').scrollTop=0;
-    certReadyBlob=null;
+    // ── Divider ──
+    ctx.strokeStyle=grad1; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(80,bodyStartY+375); ctx.lineTo(W-80,bodyStartY+375); ctx.stroke();
+
+    // ── Signature section ──
+    const sigY = bodyStartY+430;
+    // Director
+    ctx.fillStyle='white'; ctx.font='22px Georgia'; ctx.textAlign='center';
+    ctx.beginPath(); ctx.moveTo(cx-250,sigY); ctx.lineTo(cx-50,sigY); ctx.strokeStyle='rgba(255,255,255,0.5)'; ctx.lineWidth=1.5; ctx.stroke();
+    ctx.fillText('Director', cx-150, sigY+28);
+
+    // Teacher
+    ctx.beginPath(); ctx.moveTo(cx+50,sigY); ctx.lineTo(cx+250,sigY); ctx.stroke();
+    ctx.fillText('Teacher', cx+150, sigY+28);
+
+    // ── God bless ──
+    ctx.fillStyle='rgba(255,215,0,0.8)';
+    ctx.font='italic 22px Georgia';
+    ctx.fillText('May God bless you abundantly! 🙏', cx, sigY+80);
+
+    // ── Bottom cross ──
+    ctx.fillStyle='#FFD700'; ctx.font='28px Arial';
+    ctx.fillText('✝  ✝  ✝', cx, sigY+120);
+
+    // Done — pre-generate blob immediately so Share button works instantly on iOS
+    document.getElementById('certPreviewWrap').style.display = 'block';
+    document.getElementById('certStep1').style.display = 'none';
+    document.getElementById('certModal').querySelector('.modal-box').scrollTop = 0;
+    // Reset old blob, prepare new one in background
+    certReadyBlob = null;
     prepareCertBlob().catch(()=>{});
   }
 
@@ -1861,445 +1702,6 @@
 
   // ══════ END CERTIFICATE MODULE ══════
 
-
-
-  // ══════════════════════════════════════════
-  // EDIT REGISTRATION
-  // ══════════════════════════════════════════
-  document.getElementById('editModalClose').addEventListener('click',()=>{
-    document.getElementById('editModal').classList.remove('active');
-  });
-
-  function openEditModal(id){
-    const r = allData.find(x=>x.id===id);
-    if(!r){ showToast('⚠️ Record not found'); return; }
-    document.getElementById('editRecordId').value   = id;
-    document.getElementById('editChildName').value  = r.childName||r.childFirst||'';
-    document.getElementById('editAge').value        = r.age||'';
-    document.getElementById('editGender').value     = r.gender||'';
-    document.getElementById('editParentName').value = r.parentName||'';
-    document.getElementById('editPhone').value      = r.phone||'';
-    document.getElementById('editEmail').value      = r.email||'';
-    document.getElementById('editAddress').value    = r.address||'';
-    document.getElementById('editChurch').value     = r.church||'';
-    document.getElementById('editDays').value       = r.days||'All 3 Days (Apr 25, 26 & 27)';
-    document.getElementById('editClass').value      = r.class||'';
-    document.getElementById('editErrMsg').style.display='none';
-    document.getElementById('editModal').classList.add('active');
-  }
-
-  document.getElementById('editSaveBtn').addEventListener('click', async()=>{
-    const id   = document.getElementById('editRecordId').value;
-    const name = document.getElementById('editChildName').value.trim();
-    const pn   = document.getElementById('editParentName').value.trim();
-    if(!name||!pn){
-      const e = document.getElementById('editErrMsg');
-      e.textContent='⚠️ Child Name and Parent Name are required.';
-      e.style.display='block'; return;
-    }
-    // Detect no changes
-    const orig = allData.find(x=>x.id===id);
-    const newVals = {
-      childName:  name,
-      age:        document.getElementById('editAge').value,
-      gender:     document.getElementById('editGender').value,
-      parentName: pn,
-      phone:      document.getElementById('editPhone').value.trim(),
-      email:      document.getElementById('editEmail').value.trim(),
-      address:    document.getElementById('editAddress').value.trim(),
-      church:     document.getElementById('editChurch').value.trim(),
-      days:       document.getElementById('editDays').value,
-      class:      document.getElementById('editClass').value,
-    };
-    const hasChanges = orig && Object.keys(newVals).some(k=>(newVals[k]||'')!==(orig[k]||''));
-    if(!hasChanges){
-      const e = document.getElementById('editErrMsg');
-      e.style.background='#FEF3C7'; e.style.color='#92400E';
-      e.textContent='ℹ️ No changes made. Please update a field to save.';
-      e.style.display='block'; return;
-    }
-    const btn = document.getElementById('editSaveBtn');
-    btn.disabled=true; btn.textContent='⏳ Saving…';
-    try{
-      const updates = {
-        childName:  name,
-        age:        document.getElementById('editAge').value,
-        gender:     document.getElementById('editGender').value,
-        parentName: pn,
-        phone:      document.getElementById('editPhone').value.trim(),
-        email:      document.getElementById('editEmail').value.trim(),
-        address:    document.getElementById('editAddress').value.trim(),
-        church:     document.getElementById('editChurch').value.trim(),
-        days:       document.getElementById('editDays').value,
-        class:      document.getElementById('editClass').value,
-      };
-      const {getFirestore,doc,updateDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-      await updateDoc(doc(getFirestore(), 'registrations', id), updates);
-      allData = allData.map(r => r.id===id ? {...r,...updates} : r);
-      refreshStats(); applyFilters();
-      document.getElementById('editModal').classList.remove('active');
-      showToast('✅ Record updated successfully!', 3000);
-    }catch(err){
-      const e = document.getElementById('editErrMsg');
-      e.textContent='❌ Failed to save: '+err.message;
-      e.style.display='block';
-    }finally{
-      btn.disabled=false; btn.textContent='💾 Save Changes';
-    }
-  });
-
-  // ══════════════════════════════════════════
-  // BULK DELETE WITH CHECKBOXES
-  // ══════════════════════════════════════════
-  function updateBulkBar(){
-    const checked = document.querySelectorAll('.rec-check:checked');
-    const bar = document.getElementById('bulkBar');
-    if(checked.length>0){
-      bar.classList.add('show');
-      document.getElementById('bulkCount').textContent = checked.length + ' selected';
-    } else {
-      bar.classList.remove('show');
-    }
-  }
-
-  // Select all checkbox
-  document.getElementById('selectAllCheck').addEventListener('change', function(){
-    document.querySelectorAll('.rec-check').forEach(cb=>{ cb.checked=this.checked; });
-    updateBulkBar();
-  });
-
-  // Cancel bulk selection
-  document.getElementById('bulkCancelBtn').addEventListener('click',()=>{
-    document.querySelectorAll('.rec-check').forEach(cb=>{ cb.checked=false; });
-    document.getElementById('selectAllCheck').checked=false;
-    document.getElementById('bulkBar').classList.remove('show');
-  });
-
-  // Bulk delete
-  document.getElementById('bulkDelBtn').addEventListener('click', async()=>{
-    const checked = [...document.querySelectorAll('.rec-check:checked')];
-    if(!checked.length) return;
-    const ok2 = await showConfirm(`Delete ${checked.length} Record(s)?`,`${checked.length} registration(s) will be permanently deleted.`,`🗑 Delete ${checked.length}`,'🗑️');
-    if(!ok2) return;
-    const btn = document.getElementById('bulkDelBtn');
-    btn.disabled=true; btn.textContent='⏳ Deleting…';
-    try{
-      const {getFirestore,doc,deleteDoc,writeBatch} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-      const db2=getFirestore();
-      const batch=writeBatch(db2);
-      const ids = checked.map(cb=>cb.dataset.id);
-      ids.forEach(id=>batch.delete(doc(db2,'registrations',id)));
-      await batch.commit();
-      allData=allData.filter(r=>!ids.includes(r.id));
-      refreshStats(); applyFilters();
-      document.getElementById('selectAllCheck').checked=false;
-      document.getElementById('bulkBar').classList.remove('show');
-      showToast(`✅ ${ids.length} record(s) deleted.`, 3000);
-    }catch(err){
-      showToast('❌ Delete failed: '+err.message, 4000);
-    }finally{
-      btn.disabled=false; btn.textContent='🗑 Delete Selected';
-    }
-  });
-
-  // ══════════════════════════════════════════
-  // IMPORT CSV
-  // ══════════════════════════════════════════
-  let importParsedRows = [];
-
-  document.getElementById('importBtn').addEventListener('click',()=>{
-    importParsedRows=[];
-    document.getElementById('importPreviewWrap').style.display='none';
-    document.getElementById('importResultMsg').style.display='none';
-    document.getElementById('importFileName').textContent='';
-    document.getElementById('importModal').classList.add('active');
-  });
-  document.getElementById('importModalClose').addEventListener('click',()=>{
-    document.getElementById('importModal').classList.remove('active');
-  });
-
-  function parseCSV(text){
-    const lines = text.split(/\r?\n/).filter(l=>l.trim());
-    if(lines.length<2) return [];
-    const headers = lines[0].split(',').map(h=>h.replace(/^"|"$/g,'').trim().toLowerCase());
-    return lines.slice(1).map(line=>{
-      const vals = [];
-      let inQ=false, cur='';
-      for(let c of line){
-        if(c==='"'){ inQ=!inQ; }
-        else if(c===','&&!inQ){ vals.push(cur.trim()); cur=''; }
-        else cur+=c;
-      }
-      vals.push(cur.trim());
-      const obj={};
-      headers.forEach((h,i)=>{ obj[h]=vals[i]||''; });
-      return obj;
-    }).filter(r=>r['child name']||r['childname']);
-  }
-
-  function handleImportFile(file){
-    if(!file) return;
-    document.getElementById('importFileName').textContent=file.name;
-    const reader=new FileReader();
-    reader.onload=e=>{
-      const rows=parseCSV(e.target.result);
-      importParsedRows=rows;
-      if(!rows.length){
-        document.getElementById('importPreviewWrap').style.display='none';
-        showToast('⚠️ No valid rows found in CSV', 3000);
-        return;
-      }
-      // Show preview
-      const cols=['child name','age','gender','parent','phone','email','address','church','days'];
-      const thead=document.getElementById('importPreviewHead');
-      const tbody=document.getElementById('importPreviewBody');
-      thead.innerHTML=cols.map(c=>`<th style="padding:6px 10px;border-bottom:2px solid #E2E8F0;font-size:0.75rem;color:#64748B;font-weight:800;white-space:nowrap;">${c}</th>`).join('');
-      tbody.innerHTML=rows.slice(0,20).map(r=>`<tr>${cols.map(c=>`<td style="padding:5px 10px;border-bottom:1px solid #F1F5F9;font-size:0.75rem;white-space:nowrap;">${r[c]||r[c.replace(' ','')]||''}</td>`).join('')}</tr>`).join('');
-      document.getElementById('importPreviewCount').textContent=`${rows.length} record(s) found${rows.length>20?' (showing first 20)':''}`;
-      document.getElementById('importPreviewWrap').style.display='block';
-    };
-    reader.readAsText(file);
-  }
-
-  document.getElementById('importFileInput').addEventListener('change', e=>handleImportFile(e.target.files[0]));
-  document.getElementById('importFileInput2').addEventListener('change', e=>handleImportFile(e.target.files[0]));
-
-  document.getElementById('importConfirmBtn').addEventListener('click', async()=>{
-    if(!importParsedRows.length) return;
-    const skipDups = document.getElementById('importSkipDups').checked;
-    const btn = document.getElementById('importConfirmBtn');
-    btn.disabled=true; btn.textContent='⏳ Importing…';
-
-    try{
-      const {getFirestore,collection,addDoc,serverTimestamp} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-      const db2=getFirestore();
-      let imported=0, skipped=0;
-      const existingPhones = new Set(allData.map(r=>r.phone||''));
-
-      for(const row of importParsedRows){
-        const phone = (row['phone']||'').replace(/\D/g,'');
-        if(skipDups && phone && existingPhones.has(phone)){ skipped++; continue; }
-        const rec = {
-          childName:  row['child name']||row['childname']||'',
-          age:        row['age']||'',
-          gender:     row['gender']||'',
-          parentName: row['parent']||row['parentname']||row['parent/guardian name']||'',
-          phone:      phone,
-          email:      row['email']||'',
-          address:    row['address']||row['village']||'',
-          church:     row['church']||'',
-          days:       row['days']||row['days attending']||'All 3 Days (Apr 25, 26 & 27)',
-          createdAt:  serverTimestamp(),
-        };
-        if(!rec.childName) continue;
-        await addDoc(collection(db2,'registrations'), rec);
-        existingPhones.add(phone);
-        imported++;
-      }
-
-      const msg = document.getElementById('importResultMsg');
-      msg.style.background='#DCFCE7'; msg.style.color='#166534';
-      msg.textContent=`✅ Imported ${imported} record(s).${skipped>0?' Skipped '+skipped+' duplicate(s).':''}`;
-      msg.style.display='block';
-      await loadData();
-      showToast(`✅ Imported ${imported} records!`, 3000);
-      document.getElementById('importPreviewWrap').style.display='none';
-    }catch(err){
-      const msg=document.getElementById('importResultMsg');
-      msg.style.background='#FEE2E2'; msg.style.color='#DC2626';
-      msg.textContent='❌ Import failed: '+err.message;
-      msg.style.display='block';
-    }finally{
-      btn.disabled=false; btn.textContent='✅ Import Records';
-    }
-  });
-  // ══════════════════════════════════════════
-
-
-  // ══════ CUSTOM CONFIRM DIALOG ══════
-  let confirmResolve = null;
-  document.getElementById('confirmCancelBtn').addEventListener('click',()=>{
-    document.getElementById('confirmOverlay').classList.remove('active');
-    if(confirmResolve) confirmResolve(false);
-  });
-  document.getElementById('confirmOkBtn').addEventListener('click',()=>{
-    document.getElementById('confirmOverlay').classList.remove('active');
-    if(confirmResolve) confirmResolve(true);
-  });
-  function showConfirm(title, msg, okText='🗑 Delete', icon='🗑️'){
-    return new Promise(res=>{
-      confirmResolve = res;
-      document.getElementById('confirmIcon').textContent  = icon;
-      document.getElementById('confirmTitle').textContent = title;
-      document.getElementById('confirmMsg').textContent   = msg;
-      document.getElementById('confirmOkBtn').textContent = okText;
-      document.getElementById('confirmOverlay').classList.add('active');
-    });
-  }
-
-  // ══════ TEACHER MANAGEMENT (Firestore-backed, works across devices) ══════
-  let cachedTeacherProfiles = {};
-
-  async function loadTeacherProfiles(){
-    try{
-      const {getFirestore,doc,getDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-      const snap = await getDoc(doc(getFirestore(),'teachers','profiles'));
-      cachedTeacherProfiles = snap.exists() ? (snap.data()||{}) : {};
-    }catch{
-      // Fallback to localStorage if Firestore fails
-      try{ cachedTeacherProfiles = JSON.parse(localStorage.getItem('vbs2026_teachers')||'{}'); }catch{}
-    }
-    return cachedTeacherProfiles;
-  }
-
-  async function saveTeacherProfiles(profiles){
-    try{
-      const {getFirestore,doc,setDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-      await setDoc(doc(getFirestore(),'teachers','profiles'), profiles);
-      cachedTeacherProfiles = profiles;
-      // Also cache locally as backup
-      localStorage.setItem('vbs2026_teachers', JSON.stringify(profiles));
-    }catch(e){
-      throw new Error('Could not save: '+e.message);
-    }
-  }
-
-  function syncTeacherMapFromProfiles(profiles){
-    for(let i=1;i<=7;i++){
-      const email=`teacher${i}@lefmagatapalli.com`;
-      const p = profiles[`teacher${i}`];
-      if(p){
-        TEACHER_MAP[email].label = p.name || `Teacher ${i}`;
-        if(p.class) TEACHER_MAP[email].class = p.class;
-      }
-    }
-    updateTeacherDropdown(profiles);
-  }
-
-  function updateTeacherDropdown(profiles){
-    const sel = document.getElementById('teacherRoleSelect');
-    if(!sel) return;
-    for(let i=1;i<=7;i++){
-      const opt = sel.querySelector(`option[value="teacher${i}"]`);
-      if(opt){
-        const name = (profiles||cachedTeacherProfiles)[`teacher${i}`]?.name;
-        // Show only name, no "(Teacher N)" suffix
-        opt.textContent = name || `Teacher ${i}`;
-      }
-    }
-  }
-
-  // Load profiles on startup and sync
-  loadTeacherProfiles().then(profiles=>{
-    syncTeacherMapFromProfiles(profiles);
-  });
-
-  // Remove photo button
-  document.getElementById('certRemovePhotoBtn').addEventListener('click',()=>{
-    certPhotoDataUrl = null;
-    document.getElementById('certPhotoPreview').style.display='none';
-    document.getElementById('certCameraInput').value='';
-    document.getElementById('certGalleryInput').value='';
-  });
-
-
-  // ══════ TEACHER MANAGEMENT UI ══════
-  function buildTeacherMgmt(){
-    // Reload from Firestore every time admin opens tab
-    loadTeacherProfiles().then(profiles=>{
-      cachedTeacherProfiles = profiles;
-      syncTeacherMapFromProfiles(profiles);
-      const list = document.getElementById('teacherMgmtList');
-      if(!list) return;
-      list.innerHTML = Array.from({length:7},(_,i)=>{
-        const key = `teacher${i+1}`;
-        const p   = profiles[key]||{};
-        const clsOpts = ['','1','2','3','4','5','6','7'].map(c=>
-          `<option value="${c}" ${(p.class||'')=== c?'selected':''}>${c?'Class '+c:'No class assigned'}</option>`
-        ).join('');
-        return `<div class="teacher-row">
-          <span class="teacher-num">T${i+1}</span>
-          <input class="teacher-name-input" data-key="${key}" placeholder="Teacher ${i+1} name" value="${p.name||''}">
-          <select class="teacher-class-sel" data-key="${key}">${clsOpts}</select>
-          <span class="teacher-saved-badge" id="badge-${key}" style="display:none;color:#16A34A;font-weight:700;font-size:0.8rem;">✅</span>
-        </div>`;
-      }).join('');
-
-      // Wire live duplicate class warning
-      document.querySelectorAll('.teacher-class-sel').forEach(sel=>{
-        sel.addEventListener('change', checkDuplicateClasses);
-      });
-    });
-  }
-
-  function checkDuplicateClasses(){
-    const classMap = {};
-    document.querySelectorAll('.teacher-class-sel').forEach(sel=>{
-      if(!sel.value) return;
-      if(!classMap[sel.value]) classMap[sel.value]=[];
-      classMap[sel.value].push(sel.dataset.key);
-    });
-    // Reset borders
-    document.querySelectorAll('.teacher-class-sel').forEach(sel=>{ sel.style.borderColor=''; });
-    let hasDup = false;
-    Object.entries(classMap).forEach(([cls,keys])=>{
-      if(keys.length>1){
-        hasDup = true;
-        // Get teacher names for warning
-        const names = keys.map(k=>{
-          const inp = document.querySelector(`.teacher-name-input[data-key="${k}"]`);
-          return inp?.value.trim() || k.replace('teacher','Teacher ');
-        });
-        keys.forEach(key=>{
-          const sel = document.querySelector(`.teacher-class-sel[data-key="${key}"]`);
-          if(sel) sel.style.borderColor='#DC2626';
-        });
-        // Show which teachers conflict
-        const otherNames = [...new Set(names)].join(' & ');
-        showToast(`⚠️ Class ${cls} already assigned to: ${otherNames}`, 4000);
-      }
-    });
-    return !hasDup;
-  }
-
-  document.getElementById('saveAllTeachersBtn').addEventListener('click', async()=>{
-    if(!checkDuplicateClasses()){
-      const msg = document.getElementById('teacherSaveMsg');
-      msg.style.cssText='background:#FEE2E2;color:#DC2626;display:block;';
-      msg.textContent='❌ Resolve duplicate class assignments before saving.';
-      setTimeout(()=>msg.style.display='none', 4000);
-      return;
-    }
-    const btn = document.getElementById('saveAllTeachersBtn');
-    btn.disabled=true; btn.textContent='⏳ Saving to server…';
-    const profiles = {...cachedTeacherProfiles};
-    document.querySelectorAll('.teacher-name-input').forEach(inp=>{
-      const key = inp.dataset.key;
-      const sel = document.querySelector(`.teacher-class-sel[data-key="${key}"]`);
-      if(!profiles[key]) profiles[key]={};
-      profiles[key].name  = inp.value.trim();
-      profiles[key].class = sel ? sel.value : '';
-    });
-    try{
-      await saveTeacherProfiles(profiles);
-      syncTeacherMapFromProfiles(profiles);
-      document.querySelectorAll('.teacher-saved-badge').forEach(b=>{
-        b.style.display='inline';
-        setTimeout(()=>b.style.display='none', 2500);
-      });
-      const msg = document.getElementById('teacherSaveMsg');
-      msg.style.cssText='background:#DCFCE7;color:#166534;display:block;';
-      msg.textContent='✅ Saved to server! Teacher names updated on all devices.';
-      setTimeout(()=>msg.style.display='none', 3500);
-    }catch(e){
-      const msg = document.getElementById('teacherSaveMsg');
-      msg.style.cssText='background:#FEE2E2;color:#DC2626;display:block;';
-      msg.textContent='❌ '+e.message;
-      setTimeout(()=>msg.style.display='none', 4000);
-    }finally{
-      btn.disabled=false; btn.textContent='💾 Save All Teachers';
-    }
-  });
 
   // ── ANALYTICS ──
   function renderAnalytics(){
@@ -2425,19 +1827,18 @@
 
       <!-- Step 1: Photo capture -->
       <div id="certStep1">
-        <p style="font-weight:700;color:var(--navy);margin-bottom:6px;">📸 Add a photo of the child <span style="font-weight:500;color:#888;font-size:0.82rem;">(optional)</span></p>
-        <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-          <label class="cert-photo-btn" for="certCameraInput">📷 Camera</label>
+        <p style="font-weight:700;color:var(--navy);margin-bottom:14px;">📸 Step 1: Add a photo of the child</p>
+        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+          <label class="cert-photo-btn" for="certCameraInput">📷 Take Photo</label>
           <input type="file" id="certCameraInput" accept="image/*" capture="user" style="display:none">
-          <label class="cert-photo-btn" for="certGalleryInput" style="background:#EDE9FE;color:#6D28D9;">🖼 Gallery</label>
+          <label class="cert-photo-btn" for="certGalleryInput" style="background:#EDE9FE;color:#6D28D9;">🖼 Choose from Gallery</label>
           <input type="file" id="certGalleryInput" accept="image/*" style="display:none">
         </div>
-        <div id="certPhotoPreview" style="display:none;text-align:center;margin-bottom:14px;">
-          <img id="certPhotoImg" style="width:100px;height:100px;object-fit:cover;border-radius:50%;border:3px solid var(--coral);box-shadow:0 3px 10px rgba(0,0,0,.15);" src="" alt="Child photo">
-          <p style="font-size:0.78rem;color:#16A34A;margin-top:5px;font-weight:700;">✅ Photo added</p>
-          <button id="certRemovePhotoBtn" style="background:none;border:none;color:#DC2626;font-size:0.75rem;font-weight:700;cursor:pointer;margin-top:2px;">✕ Remove photo</button>
+        <div id="certPhotoPreview" style="display:none;text-align:center;margin-bottom:16px;">
+          <img id="certPhotoImg" style="width:120px;height:120px;object-fit:cover;border-radius:50%;border:4px solid var(--navy);box-shadow:0 4px 12px rgba(0,0,0,.2);" src="" alt="Child photo">
+          <p style="font-size:0.78rem;color:#888;margin-top:6px;font-weight:600;">✅ Photo selected</p>
         </div>
-        <button class="cert-action-btn" id="certGenerateBtn" style="width:100%;">✨ Generate Certificate</button>
+        <button class="cert-action-btn" id="certGenerateBtn">✨ Generate Certificate</button>
       </div>
 
       <!-- Certificate Preview -->
@@ -2445,117 +1846,12 @@
         <p style="font-weight:700;color:var(--navy);margin-bottom:12px;">📄 Certificate Preview</p>
         <canvas id="certCanvas" style="width:100%;border-radius:12px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
         <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-          <button class="cert-action-btn" id="certShareBtn" style="background:var(--grass);color:var(--navy);flex:1;">📤 Share via WhatsApp</button>
+          <button class="cert-action-btn" id="certShareBtn" style="background:var(--grass);color:var(--navy);">📤 Share via WhatsApp</button>
           <button class="cert-action-btn" id="certDownloadBtn" style="background:var(--sky);color:var(--navy);">⬇ Download</button>
-          <button class="cert-action-btn" id="certRetakeBtn" style="background:#F1F5F9;color:var(--navy);" id="certRetakeBtn">📸 Change Photo</button>
+          <button class="cert-action-btn" id="certRetakeBtn" style="background:#F1F5F9;color:var(--navy);">🔄 Change Photo</button>
         </div>
       </div>
 
-    </div>
-  </div>
-</div>
-
-
-<!-- EDIT REGISTRATION MODAL -->
-<div class="modal-overlay" id="editModal">
-  <div class="modal-box" style="max-width:580px;max-height:90vh;overflow-y:auto;padding:0;">
-    <div style="background:linear-gradient(135deg,#1D4ED8,#1E40AF);padding:20px 24px;border-radius:21px 21px 0 0;display:flex;align-items:center;justify-content:space-between;">
-      <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:white;">✏️ Edit Registration</div>
-      <button id="editModalClose" style="background:rgba(255,255,255,.2);border:none;color:white;font-size:1.3rem;cursor:pointer;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;">✕</button>
-    </div>
-    <div style="padding:22px 24px;">
-      <input type="hidden" id="editRecordId">
-      <div class="edit-form-grid">
-        <div class="edit-form-group" style="grid-column:1/-1"><label>Child's Name *</label><input type="text" id="editChildName" placeholder="Full name"></div>
-        <div class="edit-form-group"><label>Age *</label>
-          <select id="editAge"><option value="">Select age</option>
-          <option>3</option><option>4</option><option>5</option><option>6</option><option>7</option>
-          <option>8</option><option>9</option><option>10</option><option>11</option><option>12</option>
-          <option>13</option><option>14</option><option>15</option><option>16</option><option>17</option>
-          <option>18</option><option>19</option><option>20</option><option>21</option><option>22</option>
-          <option>23</option><option>24</option><option>25</option><option>26</option><option>27</option>
-          <option>29</option><option>30</option><option>30+</option></select>
-        </div>
-        <div class="edit-form-group"><label>Gender</label>
-          <select id="editGender"><option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option></select>
-        </div>
-        <div class="edit-form-group"><label>Parent/Guardian Name *</label><input type="text" id="editParentName" placeholder="Full name"></div>
-        <div class="edit-form-group"><label>Phone Number</label><input type="tel" id="editPhone" placeholder="10-digit number" maxlength="10" inputmode="numeric"></div>
-        <div class="edit-form-group"><label>Email Address</label><input type="email" id="editEmail" placeholder="email@example.com"></div>
-        <div class="edit-form-group"><label>Address / Village</label><input type="text" id="editAddress" placeholder="Village / Town"></div>
-        <div class="edit-form-group"><label>Church / Denomination</label><input type="text" id="editChurch" placeholder="Church name"></div>
-        <div class="edit-form-group" style="grid-column:1/-1"><label>Days Attending</label>
-          <select id="editDays">
-            <option value="All 3 Days (Apr 25, 26 &amp; 27)">All 3 Days (Apr 25, 26 &amp; 27)</option>
-            <option value="Day 1 Only – April 25">Day 1 Only – April 25</option>
-            <option value="Day 2 Only – April 26">Day 2 Only – April 26</option>
-            <option value="Day 3 Only – April 27">Day 3 Only – April 27</option>
-            <option value="Day 1 &amp; 2 – April 25 &amp; 26">Day 1 &amp; 2 – April 25 &amp; 26</option>
-            <option value="Day 2 &amp; 3 – April 26 &amp; 27">Day 2 &amp; 3 – April 26 &amp; 27</option>
-          </select>
-        </div>
-        <div class="edit-form-group" style="grid-column:1/-1"><label>Class</label>
-          <select id="editClass">
-            <option value="">Unassigned</option>
-            <option value="1">Class 1</option><option value="2">Class 2</option>
-            <option value="3">Class 3</option><option value="4">Class 4</option>
-            <option value="5">Class 5</option><option value="6">Class 6</option>
-            <option value="7">Class 7</option>
-          </select>
-        </div>
-      </div>
-      <div id="editErrMsg" style="display:none;background:#FEE2E2;color:#DC2626;padding:10px;border-radius:10px;margin-top:10px;font-weight:700;font-size:0.85rem;"></div>
-      <button class="edit-save-btn" id="editSaveBtn">💾 Save Changes</button>
-    </div>
-  </div>
-</div>
-
-<!-- IMPORT CSV MODAL -->
-<div class="modal-overlay" id="importModal">
-  <div class="modal-box" style="max-width:680px;max-height:90vh;overflow-y:auto;padding:0;">
-    <div style="background:linear-gradient(135deg,#0369A1,#0284C7);padding:20px 24px;border-radius:21px 21px 0 0;display:flex;align-items:center;justify-content:space-between;">
-      <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:white;">⬆ Import CSV</div>
-      <button id="importModalClose" style="background:rgba(255,255,255,.2);border:none;color:white;font-size:1.3rem;cursor:pointer;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;">✕</button>
-    </div>
-    <div style="padding:22px 24px;">
-      <p style="color:#555;font-size:0.88rem;margin-bottom:16px;line-height:1.6;">Import registrations from a CSV file. Expected columns:<br>
-        <code style="background:#F1F5F9;padding:2px 6px;border-radius:4px;font-size:0.8rem;">Child Name, Age, Gender, Parent, Phone, Email, Address, Church, Days</code>
-      </p>
-      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
-        <label style="background:#0EA5E9;color:white;padding:10px 20px;border-radius:10px;font-weight:800;cursor:pointer;font-size:0.88rem;" for="importFileInput2">📂 Choose CSV File</label>
-        <input type="file" id="importFileInput2" accept=".csv" style="display:none">
-        <span id="importFileName" style="font-size:0.85rem;color:#64748B;font-weight:600;"></span>
-      </div>
-      <div id="importPreviewWrap" style="display:none;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
-          <span id="importPreviewCount" style="font-weight:800;color:var(--navy);font-size:0.9rem;"></span>
-          <label style="display:flex;align-items:center;gap:6px;font-size:0.82rem;font-weight:700;color:#555;cursor:pointer;">
-            <input type="checkbox" id="importSkipDups" checked style="accent-color:var(--coral);"> Skip duplicates (by phone)
-          </label>
-        </div>
-        <div style="overflow-x:auto;max-height:260px;overflow-y:auto;border:2px solid #E2E8F0;border-radius:10px;margin-bottom:14px;">
-          <table style="width:100%;border-collapse:collapse;font-size:0.78rem;">
-            <thead><tr id="importPreviewHead" style="background:#F8FAFC;"></tr></thead>
-            <tbody id="importPreviewBody"></tbody>
-          </table>
-        </div>
-        <button id="importConfirmBtn" style="width:100%;background:#16A34A;color:white;border:2px solid var(--navy);border-radius:12px;padding:13px;font-family:'Fredoka One',cursive;font-size:1.1rem;cursor:pointer;box-shadow:3px 3px 0 var(--navy);">✅ Import Records</button>
-      </div>
-      <div id="importResultMsg" style="display:none;margin-top:12px;padding:12px;border-radius:10px;font-weight:700;font-size:0.88rem;"></div>
-    </div>
-  </div>
-</div>
-
-
-<!-- CUSTOM CONFIRM DIALOG -->
-<div class="confirm-overlay" id="confirmOverlay">
-  <div class="confirm-box">
-    <div class="confirm-icon" id="confirmIcon">🗑️</div>
-    <h3 id="confirmTitle">Are you sure?</h3>
-    <p id="confirmMsg">This action cannot be undone.</p>
-    <div class="confirm-btns">
-      <button class="confirm-cancel" id="confirmCancelBtn">✕ Cancel</button>
-      <button class="confirm-ok" id="confirmOkBtn">🗑 Delete</button>
     </div>
   </div>
 </div>
