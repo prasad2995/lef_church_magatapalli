@@ -71,8 +71,6 @@
   .star{position:absolute;font-size:1.5rem;animation:twinkle 2s ease-in-out infinite;}
   @keyframes twinkle{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
   .hero-content{position:relative;z-index:5;padding:20px;}
-  .bible-verse-hero{font-family:'Pacifico',cursive;font-size:clamp(0.85rem,2vw,1.1rem);color:var(--navy);background:rgba(255,255,255,0.85);padding:10px 22px;border-radius:30px;margin-bottom:22px;font-style:italic;border:2px solid rgba(255,215,0,0.5);box-shadow:0 2px 12px rgba(0,0,0,.1);}
-  body.lang-te .bible-verse-hero{font-family:'Noto Sans Telugu',sans-serif;}
   .vbs-badge{display:inline-block;background:var(--sun);color:var(--navy);font-family:'Fredoka One',cursive;font-size:1rem;padding:8px 24px;border-radius:30px;margin-bottom:20px;letter-spacing:2px;box-shadow:3px 3px 0 rgba(0,0,0,.15);}
   .theme-banner{background:linear-gradient(135deg,#1a5276,#2471a3);border:3px solid var(--sun);border-radius:20px;padding:18px 32px;margin-bottom:16px;box-shadow:4px 4px 0 rgba(0,0,0,.25);display:inline-block;}
   .theme-label{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.75rem;letter-spacing:3px;color:var(--sun);margin-bottom:4px;}
@@ -277,10 +275,7 @@
   .no-data{text-align:center;padding:50px;color:#94A3B8;font-weight:700;}
   .no-data .ni{font-size:3rem;display:block;margin-bottom:10px;}
   .loading-row{text-align:center;padding:40px;color:#94A3B8;font-weight:700;}
-  .del-btn{background:#FEE2E2;color:#DC2626;border:none;padding:5px 8px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:700;}
-  .share-btn{background:#EDE9FE;color:#6D28D9;border:none;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:700;}
-  .share-btn:hover{background:#DDD6FE;}
-  .del-btn:hover{background:#FECACA;}
+  .del-btn{background:#FEE2E2;color:#DC2626;border:none;padding:5px 11px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:700;}
   .del-btn:hover{background:#FECACA;}
   .viewer-notice{background:#EFF6FF;border:2px solid #93C5FD;border-radius:12px;padding:14px 20px;margin-bottom:20px;color:#1E40AF;font-weight:700;font-size:0.9rem;display:none;align-items:center;gap:10px;}
   .viewer-notice.show{display:flex;}
@@ -313,11 +308,6 @@
   .tl-label{font-size:0.65rem;font-weight:700;color:#94A3B8;white-space:nowrap;}
   .tl-num{font-size:0.7rem;font-weight:800;color:var(--navy);}
   .empty-analytics{text-align:center;padding:40px;color:#94A3B8;font-weight:700;font-size:0.9rem;}
-
-  /* CERTIFICATE MODAL */
-  .cert-photo-btn{display:inline-block;background:var(--coral);color:white;padding:10px 20px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;border:2px solid var(--navy);}
-  .cert-action-btn{background:var(--coral);color:white;border:2px solid var(--navy);border-radius:12px;padding:12px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;transition:transform .15s;box-shadow:3px 3px 0 var(--navy);}
-  .cert-action-btn:hover{transform:translate(-2px,-2px);}
 </style>
 </head>
 <body>
@@ -363,7 +353,6 @@
     </div>
     <p class="hero-sub" data-en="🌟 Spend this summer joyfully at VBS!" data-te="ఈ వేసవి సెలవులను VBS లో ఆనందంగా గడపండి">🌟 Spend this summer joyfully at VBS!</p>
     <p class="church-name">LEF Church Magatapalli</p>
-    <div class="bible-verse-hero" data-en="&ldquo;Let the little children come to me.&rdquo; — Matthew 19:14" data-te="&ldquo;చిన్న పిల్లలను నా యొద్దకు రానియ్యండి.&rdquo; — మత్తయి 19:14">&ldquo;Let the little children come to me.&rdquo; — Matthew 19:14</div>
     <div class="date-banner">
       <div class="date-chip"><div class="day">25</div><div class="month" data-en="APRIL" data-te="ఏప్రిల్">APRIL</div><div class="weekday" data-en="Saturday" data-te="శనివారం">Saturday</div></div>
       <div class="date-chip"><div class="day">26</div><div class="month" data-en="APRIL" data-te="ఏప్రిల్">APRIL</div><div class="weekday" data-en="Sunday" data-te="ఆదివారం">Sunday</div></div>
@@ -513,7 +502,7 @@
         </div>
         <div class="form-group">
           <label>Gender</label>
-          <select id="childGender"><option value="" data-en="Select" data-te="ఎంచుకోండి">Select</option><option value="Male" data-en="Male" data-te="పురుషుడు">Male</option><option value="Female" data-en="Female" data-te="స్త్రీ">Female</option></select>
+          <select id="childGender"><option value="" data-en="Select" data-te="ఎంచుకోండి">Select</option><option data-en="Male" data-te="పురుషుడు">Male</option><option data-en="Female" data-te="స్త్రీ">Female</option></select>
         </div>
       </div>
       <div class="form-row">
@@ -526,12 +515,12 @@
       <div class="form-group">
         <label>Days Attending</label>
         <select id="days">
-          <option value="All 3 Days (Apr 25, 26 & 27)" data-en="All 3 Days (Apr 25, 26 & 27)" data-te="మూడు రోజులూ (ఏప్రి 25, 26 & 27)">All 3 Days (Apr 25, 26 & 27)</option>
-          <option value="Day 1 Only – April 25" data-en="Day 1 Only – April 25" data-te="రోజు 1 మాత్రమే – ఏప్రిల్ 25">Day 1 Only – April 25</option>
-          <option value="Day 2 Only – April 26" data-en="Day 2 Only – April 26" data-te="రోజు 2 మాత్రమే – ఏప్రిల్ 26">Day 2 Only – April 26</option>
-          <option value="Day 3 Only – April 27" data-en="Day 3 Only – April 27" data-te="రోజు 3 మాత్రమే – ఏప్రిల్ 27">Day 3 Only – April 27</option>
-          <option value="Day 1 & 2 – April 25 & 26" data-en="Day 1 & 2 – April 25 & 26" data-te="రోజు 1 & 2 – ఏప్రిల్ 25 & 26">Day 1 & 2 – April 25 & 26</option>
-          <option value="Day 2 & 3 – April 26 & 27" data-en="Day 2 & 3 – April 26 & 27" data-te="రోజు 2 & 3 – ఏప్రిల్ 26 & 27">Day 2 & 3 – April 26 & 27</option>
+          <option>All 3 Days (Apr 25, 26 & 27)</option>
+          <option>Day 1 Only – April 25</option>
+          <option>Day 2 Only – April 26</option>
+          <option>Day 3 Only – April 27</option>
+          <option>Day 1 & 2 – April 25 & 26</option>
+          <option>Day 2 & 3 – April 26 & 27</option>
         </select>
       </div>
       <button class="submit-btn" id="submitBtn" data-en="🙏 Complete Registration" data-te="🙏 రిజిస్ట్రేషన్ పూర్తి చేయండి">🙏 Complete Registration</button>
@@ -589,27 +578,18 @@
     <div style="font-size:2.5rem;margin-bottom:12px">🔐</div>
     <h2>Secure Login</h2>
     <p>Select your role and enter your password.</p>
-    <div class="role-select-group" style="flex-wrap:wrap;">
+    <div class="role-select-group">
       <button class="role-pick-btn active" id="roleAdminBtn" data-role="admin">
         <span class="role-pick-icon">🔴</span>
         <span class="role-pick-label">Admin</span>
+        <span class="role-pick-email">admin@lefmagatapalli.com</span>
       </button>
       <button class="role-pick-btn" id="roleViewerBtn" data-role="viewer">
         <span class="role-pick-icon">🟡</span>
         <span class="role-pick-label">Viewer</span>
+        <span class="role-pick-email">viewer@lefmagatapalli.com</span>
       </button>
     </div>
-    <div style="margin:10px 0 6px;font-weight:700;font-size:0.8rem;color:#16A34A;letter-spacing:1px;">👩‍🏫 TEACHER LOGIN</div>
-    <select id="teacherRoleSelect" class="modal-input" style="margin-bottom:4px;cursor:pointer;">
-      <option value="">— Select Teacher —</option>
-      <option value="teacher1">Teacher 1</option>
-      <option value="teacher2">Teacher 2</option>
-      <option value="teacher3">Teacher 3</option>
-      <option value="teacher4">Teacher 4</option>
-      <option value="teacher5">Teacher 5</option>
-      <option value="teacher6">Teacher 6</option>
-      <option value="teacher7">Teacher 7</option>
-    </select>
     <input type="password" class="modal-input" id="loginPass" placeholder="Enter password" style="margin-top:4px;">
     <button class="modal-btn" id="loginBtn">🔓 Sign In</button>
     <div class="modal-err" id="loginErr"></div>
@@ -659,19 +639,11 @@
         <button class="filter-btn" data-filter="25">Day 1 (Apr 25)</button>
         <button class="filter-btn" data-filter="26">Day 2 (Apr 26)</button>
         <button class="filter-btn" data-filter="27">Day 3 (Apr 27)</button>
-        <button class="filter-btn" data-filter="cls-1">Class 1</button>
-        <button class="filter-btn" data-filter="cls-2">Class 2</button>
-        <button class="filter-btn" data-filter="cls-3">Class 3</button>
-        <button class="filter-btn" data-filter="cls-4">Class 4</button>
-        <button class="filter-btn" data-filter="cls-5">Class 5</button>
-        <button class="filter-btn" data-filter="cls-6">Class 6</button>
-        <button class="filter-btn" data-filter="cls-7">Class 7</button>
-        <button class="filter-btn" data-filter="cls-unassigned">Unassigned</button>
       </div>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th>Class</th><th>Parent</th><th>Phone</th><th>Village</th><th>Days</th><th>Registered On</th><th id="actionsHead"></th></tr>
+            <tr><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th>Parent</th><th>Phone</th><th>Village</th><th>Days</th><th>Registered On</th><th id="deleteColHead"></th></tr>
           </thead>
           <tbody id="tableBody">
             <tr><td colspan="10" class="loading-row">⏳ Loading…</td></tr>
@@ -816,26 +788,21 @@
     const rh = document.querySelector('#regModal .modal-box > div:first-child div:first-child div:first-child');
     if(rh) rh.textContent = L.regHeader;
     // Days select options
-    // Days dropdown — change visible text only, value stays English
     const daysEl = document.getElementById('days');
     if(daysEl){
-      daysEl.querySelectorAll('option').forEach(opt=>{
-        const translated = opt.getAttribute('data-'+lang);
-        if(translated) opt.textContent = translated;
-      });
-    }
-    // Gender dropdown — change visible text only, value stays English
-    const genDropEl = document.getElementById('childGender');
-    if(genDropEl){
-      genDropEl.querySelectorAll('option').forEach(opt=>{
-        const translated = opt.getAttribute('data-'+lang);
-        if(translated) opt.textContent = translated;
-      });
+      const opts = daysEl.querySelectorAll('option');
+      const vals = [L.allDays, L.day1only, L.day2only, L.day3only, L.day12, L.day23];
+      opts.forEach((o,i)=>{ if(vals[i]) o.textContent = vals[i]; });
     }
     // Age/gender placeholder options
     const ageEl = document.getElementById('childAge');
     if(ageEl) ageEl.options[0].textContent = L.selectAge;
-    // Gender options handled by data-te attributes above
+    const genEl = document.getElementById('childGender');
+    if(genEl){
+      genEl.options[0].textContent = L.selectGender;
+      if(genEl.options[1]) genEl.options[1].textContent = lang==='en' ? 'Male' : 'పురుషుడు';
+      if(genEl.options[2]) genEl.options[2].textContent = lang==='en' ? 'Female' : 'స్త్రీ';
+    }
     // Why VBS feature card paragraphs
     const featureTexts = {
       en: [
@@ -952,7 +919,7 @@
   const auth = getAuth(app);
   const db   = getFirestore(app);
 
-  let allData = [], activeFilter = 'all', currentRole = null, teacherClass = null;
+  let allData = [], activeFilter = 'all', currentRole = null;
 
   // ── Wire up buttons via addEventListener (no onclick= needed) ──
   document.getElementById('adminBtn').addEventListener('click', openModal);
@@ -1006,127 +973,53 @@
     document.getElementById('loginLoading').style.display='none';
     document.getElementById('loginBtn').disabled=false;
     // Reset to admin role
-    pickRole('admin');
-    const tSelR = document.getElementById('teacherRoleSelect');
-    if(tSelR) tSelR.value='';
+    selectedRole='admin';
+    document.getElementById('roleAdminBtn').classList.add('active');
+    document.getElementById('roleViewerBtn').classList.remove('active');
   }
 
   // Role picker state
   let selectedRole = 'admin';
-  // Teacher email → class mapping (Firebase authenticated)
-  const TEACHER_MAP = {
-    'teacher1@lefmagatapalli.com': {class:'1', label:'Teacher 1'},
-    'teacher2@lefmagatapalli.com': {class:'2', label:'Teacher 2'},
-    'teacher3@lefmagatapalli.com': {class:'3', label:'Teacher 3'},
-    'teacher4@lefmagatapalli.com': {class:'4', label:'Teacher 4'},
-    'teacher5@lefmagatapalli.com': {class:'5', label:'Teacher 5'},
-    'teacher6@lefmagatapalli.com': {class:'6', label:'Teacher 6'},
-    'teacher7@lefmagatapalli.com': {class:'7', label:'Teacher 7'},
-  };
-  // role → email map for login
-  const ROLE_EMAIL_MAP = {
-    admin:    'admin@lefmagatapalli.com',
-    viewer:   'viewer@lefmagatapalli.com',
-    teacher1: 'teacher1@lefmagatapalli.com',
-    teacher2: 'teacher2@lefmagatapalli.com',
-    teacher3: 'teacher3@lefmagatapalli.com',
-    teacher4: 'teacher4@lefmagatapalli.com',
-    teacher5: 'teacher5@lefmagatapalli.com',
-    teacher6: 'teacher6@lefmagatapalli.com',
-    teacher7: 'teacher7@lefmagatapalli.com',
-  };
-
-  function pickRole(role){
-    selectedRole = role;
-    document.querySelectorAll('.role-pick-btn').forEach(btn=>{
-      btn.classList.toggle('active', btn.dataset.role===role);
-    });
-    const tSel = document.getElementById('teacherRoleSelect');
-    if(tSel && !role.startsWith('teacher')) tSel.value = '';
+  document.getElementById('roleAdminBtn').addEventListener('click',()=>{
+    selectedRole='admin';
+    document.getElementById('roleAdminBtn').classList.add('active');
+    document.getElementById('roleViewerBtn').classList.remove('active');
     document.getElementById('loginPass').focus();
-  }
-  document.querySelectorAll('.role-pick-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>pickRole(btn.dataset.role));
   });
-  document.getElementById('teacherRoleSelect').addEventListener('change', function(){
-    if(this.value){
-      selectedRole = this.value;
-      document.querySelectorAll('.role-pick-btn').forEach(b=>b.classList.remove('active'));
-      document.getElementById('loginPass').focus();
-    }
+  document.getElementById('roleViewerBtn').addEventListener('click',()=>{
+    selectedRole='viewer';
+    document.getElementById('roleViewerBtn').classList.add('active');
+    document.getElementById('roleAdminBtn').classList.remove('active');
+    document.getElementById('loginPass').focus();
   });
 
   async function doLogin(){
-    const email = ROLE_EMAIL_MAP[selectedRole] || '';
+    const email = selectedRole==='admin' ? ADMIN_EMAIL : VIEWER_EMAIL;
     const pass  = document.getElementById('loginPass').value;
     const errEl = document.getElementById('loginErr');
     errEl.style.display='none';
 
     if(!pass){ errEl.innerHTML='⚠️ Please enter your password.'; errEl.style.display='block'; return; }
-    if(!email){ errEl.innerHTML='⚠️ Please select a role.'; errEl.style.display='block'; return; }
 
     document.getElementById('loginBtn').disabled=true;
     document.getElementById('loginLoading').style.display='block';
 
     try {
       await signInWithEmailAndPassword(auth, email, pass);
+      currentRole = (email===ADMIN_EMAIL) ? 'admin' : 'viewer';
       closeModal();
-
-      if(email === ADMIN_EMAIL){
-        currentRole = 'admin';
-        openDashboard();
-      } else if(email === VIEWER_EMAIL){
-        currentRole = 'viewer';
-        openDashboard();
-      } else if(TEACHER_MAP[email]){
-        // Firebase-authenticated teacher
-        openTeacherDashboard(TEACHER_MAP[email]);
-      }
+      openDashboard();
     } catch(e){
       document.getElementById('loginLoading').style.display='none';
       document.getElementById('loginBtn').disabled=false;
       const c=e.code||'';
-      let msg='❌ Login failed. Please check your password.';
+      let msg='❌ Login failed. Please check your email and password.';
       if(c.includes('wrong-password')||c.includes('invalid-credential')||c.includes('invalid-login')) msg='❌ Wrong password. Please try again.';
       else if(c.includes('too-many-requests')) msg='⏳ Too many attempts. Please wait a few minutes.';
       else if(c.includes('network')) msg='🌐 Network error. Check your internet connection.';
-      else if(c.includes('unauthorized-domain')) msg='🚫 Domain not authorised. Add <strong>lefchurchmagatapalli.org</strong> to Firebase Authorized Domains.';
+      else if(c.includes('unauthorized-domain')) msg='🚫 Domain not authorised in Firebase. Add <strong>prasad2995.github.io</strong> to Authorized Domains.';
       errEl.innerHTML=msg; errEl.style.display='block';
     }
-  }
-
-  function openTeacherDashboard(tc){
-    currentRole  = 'teacher';
-    teacherClass = tc.class;
-    activeFilter = 'cls-'+tc.class;  // e.g. cls-1 through cls-7
-
-    const badge = document.getElementById('roleBadge');
-    badge.textContent = '🟢 '+tc.label;
-    badge.className   = 'role-badge';
-    badge.style.cssText = 'background:#DCFCE7;color:#166534;';
-
-    document.getElementById('loggedInEmail').textContent = tc.label;
-    document.getElementById('viewerNotice').innerHTML =
-      `👩‍🏫 <strong>${tc.label}</strong> — Showing Class ${tc.class} students only.`;
-    document.getElementById('viewerNotice').classList.add('show');
-    document.getElementById('exportBtn').style.display   = 'none';
-    document.getElementById('actionsHead').textContent   = 'Certificate';
-
-    // Hide class filter buttons for teachers
-    document.querySelectorAll('.filter-btn').forEach(b=>{
-      if(b.dataset.filter && b.dataset.filter.startsWith('cls-')) b.style.display='none';
-    });
-
-    // Show only registrations tab
-    document.querySelectorAll('.dash-tab').forEach(t=>{
-      t.classList.remove('active');
-      t.style.display = t.dataset.tab==='registrations' ? '' : 'none';
-    });
-    document.querySelectorAll('.dash-view').forEach(v=>v.classList.remove('active'));
-    document.getElementById('view-registrations').classList.add('active');
-    document.getElementById('adminPanel').classList.add('active');
-    document.body.style.overflow='hidden';
-    loadData();
   }
 
   function openDashboard(){
@@ -1134,11 +1027,31 @@
     document.getElementById('roleBadge').textContent = isAdmin?'🔴 Admin':'🟡 Viewer';
     document.getElementById('roleBadge').className   = 'role-badge '+(isAdmin?'role-admin':'role-viewer');
     document.getElementById('loggedInEmail').textContent = auth.currentUser?.email||'';
-    document.getElementById('viewerNotice').classList.remove('show'); // viewer has full access
-    document.getElementById('exportBtn').style.display   = (isAdmin||currentRole==='viewer')?'block':'none';
-    document.getElementById('actionsHead').textContent = 'Actions';
+    document.getElementById('viewerNotice').classList.toggle('show',!isAdmin);
+    document.getElementById('exportBtn').style.display   = isAdmin?'block':'none';
+    document.getElementById('deleteColHead').textContent = isAdmin?'Delete':'';
 
-    // Admin + Viewer: show all tabs, default to registrations
+    // Viewer: show only Analytics tab, hide Registrations tab
+    if(!isAdmin){
+      document.getElementById('adminPanel').classList.add('active');
+      document.body.style.overflow='hidden';
+      // Hide registrations tab, lock to analytics
+      document.querySelectorAll('.dash-tab').forEach(t=>{
+        if(t.dataset.tab==='registrations') t.style.display='none';
+        if(t.dataset.tab==='analytics'){
+          t.classList.add('active');
+        }
+      });
+      document.querySelectorAll('.dash-view').forEach(v=>v.classList.remove('active'));
+      document.getElementById('view-analytics').classList.add('active');
+      document.getElementById('adminPanel').classList.add('active');
+      document.body.style.overflow='hidden';
+      loadData();
+      return;
+    }
+
+    // Admin: show all tabs, default to registrations
+    document.querySelectorAll('.dash-tab').forEach(t=>t.style.display='');
     document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
     document.querySelectorAll('.dash-view').forEach(v=>v.classList.remove('active'));
     document.querySelector('[data-tab="registrations"]').classList.add('active');
@@ -1149,57 +1062,31 @@
   }
 
   async function doLogout(){
-    await signOut(auth).catch(()=>{});
+    await signOut(auth);
     currentRole=null;
-    teacherClass=null;
-    selectedRole='admin';
-    activeFilter='all';
-    allData=[];
-    // Reset tabs & class filter buttons
-    document.querySelectorAll('.dash-tab').forEach(t=>{ t.style.display=''; t.classList.remove('active'); });
-    document.querySelector('[data-tab="registrations"]').classList.add('active');
-    document.querySelectorAll('.filter-btn').forEach(b=>{ b.style.display=''; });
-    document.querySelector('.c-total .s-label').textContent='Total Registrations';
     document.getElementById('adminPanel').classList.remove('active');
     document.body.style.overflow='';
   }
 
   async function loadData(){
-    document.getElementById('tableBody').innerHTML='<tr><td colspan="11" class="loading-row">⏳ Loading registrations…</td></tr>';
+    document.getElementById('tableBody').innerHTML='<tr><td colspan="10" class="loading-row">⏳ Loading registrations…</td></tr>';
     try{
       const snap=await getDocs(query(collection(db,'registrations'),orderBy('createdAt','desc')));
       allData=snap.docs.map(d=>({id:d.id,...d.data()}));
-      // Teacher: further filter by class only
-      if(currentRole==='teacher' && teacherClass){
-        allData = allData.filter(r=>r.class===teacherClass);
-      }
       refreshStats(); applyFilters();
+      // Re-render analytics if that tab is active
       if(document.getElementById('view-analytics').classList.contains('active')) renderAnalytics();
-    }catch(err){
-      const isTeacher = currentRole==='teacher';
-      const msg = isTeacher
-        ? `<span class="ni">⚠️</span>Could not load data.<br><small>Please update Firestore rules:<br><code>allow read: if true;</code></small>`
-        : `<span class="ni">⚠️</span>Could not load data. Check Firestore rules.`;
-      document.getElementById('tableBody').innerHTML=`<tr><td colspan="11" class="no-data">${msg}</td></tr>`;
+    }catch{
+      document.getElementById('tableBody').innerHTML='<tr><td colspan="10" class="no-data"><span class="ni">⚠️</span>Could not load data. Check Firestore rules.</td></tr>';
     }
   }
 
   function refreshStats(){
-    const today = new Date().toDateString();
-    // For teacher: allData is already filtered to their class in loadData
-    const statsData = allData;
-    document.getElementById('stat-total').textContent = statsData.length;
-    document.getElementById('stat-boys').textContent  = statsData.filter(r=>r.gender==='Male').length;
-    document.getElementById('stat-girls').textContent = statsData.filter(r=>r.gender==='Female').length;
-    document.getElementById('stat-today').textContent = statsData.filter(r=>{
-      try{ return new Date(r.createdAt.toDate()).toDateString()===today; }catch{ return false; }
-    }).length;
-    // Update stat card labels for teacher
-    if(currentRole==='teacher' && teacherClass){
-      document.querySelector('.c-total .s-label').textContent = 'Class '+teacherClass+' Students';
-    } else {
-      document.querySelector('.c-total .s-label').textContent = 'Total Registrations';
-    }
+    const today=new Date().toDateString();
+    document.getElementById('stat-total').textContent = allData.length;
+    document.getElementById('stat-boys').textContent  = allData.filter(r=>r.gender==='Male').length;
+    document.getElementById('stat-girls').textContent = allData.filter(r=>r.gender==='Female').length;
+    document.getElementById('stat-today').textContent = allData.filter(r=>{ try{ return new Date(r.createdAt.toDate()).toDateString()===today; }catch{ return false; } }).length;
   }
 
   function applyFilters(){
@@ -1208,74 +1095,36 @@
     if(activeFilter==='Male') d=d.filter(r=>r.gender==='Male');
     else if(activeFilter==='Female') d=d.filter(r=>r.gender==='Female');
     else if(['25','26','27'].includes(activeFilter)) d=d.filter(r=>(r.days||'').includes(activeFilter));
-    else if(activeFilter==='cls-unassigned') d=d.filter(r=>!r.class);
-    else if(activeFilter.startsWith('cls-')) d=d.filter(r=>r.class===activeFilter.replace('cls-',''));
     if(q) d=d.filter(r=>[r.childName,r.childFirst,r.childLast,r.phone,r.parentName,r.address].join(' ').toLowerCase().includes(q));
     renderRows(d);
   }
 
-  const CLASS_OPTIONS = ['—','1','2','3','4','5','6','7'];
-
   function renderRows(data){
     const tb=document.getElementById('tableBody');
-    if(!data.length){ tb.innerHTML='<tr><td colspan="11" class="no-data"><span class="ni">📋</span>No registrations found.</td></tr>'; return; }
-    const isAdmin  = currentRole==='admin';
-    const isTeacher= currentRole==='teacher';
+    if(!data.length){ tb.innerHTML='<tr><td colspan="10" class="no-data"><span class="ni">📋</span>No registrations found.</td></tr>'; return; }
+    const isAdmin=currentRole==='admin';
     tb.innerHTML=data.map((r,i)=>{
       let ds='—'; try{ ds=r.createdAt.toDate().toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }catch{}
       const days=(r.days||'—').replace('All 3 Days (Apr 25, 26 & 27)','All 3 Days');
-      const cls = r.class||'';
-      const canManage = isAdmin || currentRole==='viewer';
-      const clsSelect = canManage
-        ? `<select class="class-sel" data-id="${r.id}" style="border:2px solid #E2E8F0;border-radius:8px;padding:4px 8px;font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;outline:none;background:#F8FAFC;">
-            ${CLASS_OPTIONS.map(c=>`<option value="${c==='—'?'':c}" ${(cls===(c==='—'?'':c))?'selected':''}>${c==='—'?'Unassigned':'Class '+c}</option>`).join('')}
-           </select>`
-        : `<span class="badge b-days">${cls?'Class '+cls:'—'}</span>`;
-      const childName = r.childName||((r.childFirst||'')+(r.childLast?' '+r.childLast:''));
-      const shareBtn  = `<button class="share-btn" data-id="${r.id}" data-name="${childName}" data-days="${r.days||''}" data-age="${r.age||''}" title="Share Certificate">📜 Share</button>`;
-      const delBtn    = `<button class="del-btn" data-id="${r.id}" style="margin-left:4px">🗑</button>`;
-      const actionBtns = isAdmin ? shareBtn + delBtn : shareBtn;
       return `<tr>
         <td><strong style="color:#94A3B8">${i+1}</strong></td>
-        <td><strong>${childName}</strong></td>
+        <td><strong>${r.childName||r.childFirst||''} ${r.childName?'':(r.childLast||'')}</strong></td>
         <td>${r.age||'—'}</td>
         <td><span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span></td>
-        <td>${clsSelect}</td>
         <td>${r.parentName||'—'}</td>
         <td><a href="tel:${r.phone}" style="color:var(--navy);font-weight:700;text-decoration:none">${r.phone||'—'}</a></td>
         <td>${r.address||'—'}</td>
         <td><span class="badge b-days">${days}</span></td>
         <td style="font-size:0.76rem;color:#94A3B8">${ds}</td>
-        <td style="white-space:nowrap">${actionBtns}</td>
+        <td>${isAdmin?`<button class="del-btn" data-id="${r.id}">🗑 Del</button>`:''}</td>
       </tr>`;
     }).join('');
-
-    // Wire class selector — save to Firestore
-    document.querySelectorAll('.class-sel').forEach(sel=>{
-      sel.addEventListener('change', async()=>{
-        try{
-          await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js").then(async({getFirestore,doc,updateDoc})=>{
-            const db2=getFirestore();
-            await updateDoc(doc(db2,'registrations',sel.dataset.id),{class:sel.value});
-            allData=allData.map(r=>r.id===sel.dataset.id?{...r,class:sel.value}:r);
-          });
-        }catch(e){ alert('Could not save class. Try again.'); }
-      });
-    });
-
     // Wire delete buttons
     document.querySelectorAll('.del-btn').forEach(btn=>{
-      btn.addEventListener('click', async()=>{
+      btn.addEventListener('click', async ()=>{
         if(!confirm('Delete this registration? This cannot be undone.')) return;
         try{ await deleteDoc(doc(db,'registrations',btn.dataset.id)); allData=allData.filter(r=>r.id!==btn.dataset.id); refreshStats(); applyFilters(); }
         catch{ alert('Error deleting. Please try again.'); }
-      });
-    });
-
-    // Wire share/certificate buttons
-    document.querySelectorAll('.share-btn').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        openCertModal(btn.dataset.id, btn.dataset.name, btn.dataset.days, btn.dataset.age);
       });
     });
   }
@@ -1328,23 +1177,17 @@
     document.getElementById('errorMsg').style.display = 'none';
 
     try{
-      // Always save English values regardless of current language
-      const genderEl   = document.getElementById('childGender');
-      const daysEl2    = document.getElementById('days');
-      const genderVal  = genderEl.options[genderEl.selectedIndex]?.value || genderEl.value;
-      const daysVal    = daysEl2.options[daysEl2.selectedIndex]?.value  || daysEl2.value;
-
       await addDoc(collection(db,'registrations'),{
-        childName:  cn,
+        childName: cn,
         age,
-        gender:     genderVal,    // always English: Male / Female
+        gender: document.getElementById('childGender').value,
         parentName: pn,
-        phone:      ph,
-        email:      document.getElementById('parentEmail').value.trim(),
-        address:    document.getElementById('address').value.trim(),
-        church:     document.getElementById('church').value.trim(),
-        days:       daysVal,      // always English: Day 1 Only – April 25 etc.
-        createdAt:  serverTimestamp()
+        phone: ph,
+        email:   document.getElementById('parentEmail').value.trim(),
+        address: document.getElementById('address').value.trim(),
+        church:  document.getElementById('church').value.trim(),
+        days:    document.getElementById('days').value,
+        createdAt: serverTimestamp()
       });
 
       // Show success popup — bilingual
@@ -1386,267 +1229,6 @@
       btn.disabled = false; btn.textContent = '🙏 Complete Registration';
     }
   }
-
-
-
-  // ══════ CERTIFICATE MODULE ══════
-  let certRecordId = '', certChildName = '', certDays = '', certAge = '';
-  let certPhotoDataUrl = null;
-
-  function openCertModal(id, name, days, age){
-    certRecordId = id;
-    certChildName = name;
-    certDays = days;
-    certAge = age;
-    certPhotoDataUrl = null;
-    document.getElementById('certStep1').style.display = 'block';
-    document.getElementById('certPreviewWrap').style.display = 'none';
-    document.getElementById('certPhotoPreview').style.display = 'none';
-    document.getElementById('certCameraInput').value = '';
-    document.getElementById('certGalleryInput').value = '';
-    document.getElementById('certModal').classList.add('active');
-  }
-
-  document.getElementById('certModalClose').addEventListener('click',()=>{
-    document.getElementById('certModal').classList.remove('active');
-  });
-
-  // Photo capture handlers
-  function handlePhotoFile(file){
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-      certPhotoDataUrl = e.target.result;
-      document.getElementById('certPhotoImg').src = certPhotoDataUrl;
-      document.getElementById('certPhotoPreview').style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-  }
-  document.getElementById('certCameraInput').addEventListener('change', e => handlePhotoFile(e.target.files[0]));
-  document.getElementById('certGalleryInput').addEventListener('change', e => handlePhotoFile(e.target.files[0]));
-
-  document.getElementById('certRetakeBtn').addEventListener('click',()=>{
-    document.getElementById('certStep1').style.display = 'block';
-    document.getElementById('certPreviewWrap').style.display = 'none';
-    certPhotoDataUrl = null;
-    document.getElementById('certPhotoPreview').style.display = 'none';
-  });
-
-  // Generate certificate on canvas
-  document.getElementById('certGenerateBtn').addEventListener('click', ()=>{
-    generateCertificate();
-  });
-
-  function wrapText(ctx, text, x, y, maxWidth, lineHeight){
-    const words = text.split(' ');
-    let line = '';
-    let yPos = y;
-    for(let n=0; n<words.length; n++){
-      const testLine = line + words[n] + ' ';
-      const metrics = ctx.measureText(testLine);
-      if(metrics.width > maxWidth && n > 0){
-        ctx.fillText(line.trim(), x, yPos);
-        line = words[n] + ' ';
-        yPos += lineHeight;
-      } else { line = testLine; }
-    }
-    ctx.fillText(line.trim(), x, yPos);
-    return yPos;
-  }
-
-  function generateCertificate(){
-    const canvas = document.getElementById('certCanvas');
-    // 9:16 portrait — good for WhatsApp status / mobile share
-    canvas.width  = 900;
-    canvas.height = 1400;
-    const ctx = canvas.getContext('2d');
-    const W = canvas.width, H = canvas.height;
-    const cx = W/2;
-
-    // ── Background gradient ──
-    const bg = ctx.createLinearGradient(0,0,W,H);
-    bg.addColorStop(0,'#0D2748');
-    bg.addColorStop(0.5,'#1E3A5F');
-    bg.addColorStop(1,'#0D2748');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0,0,W,H);
-
-    // ── Gold border outer ──
-    ctx.strokeStyle = '#FFD700';
-    ctx.lineWidth = 18;
-    ctx.strokeRect(18,18,W-36,H-36);
-
-    // ── Gold border inner ──
-    ctx.strokeStyle = 'rgba(255,215,0,0.4)';
-    ctx.lineWidth = 4;
-    ctx.strokeRect(36,36,W-72,H-72);
-
-    // ── Corner ornaments ──
-    function drawCorner(x,y,r1,r2){
-      ctx.strokeStyle='#FFD700'; ctx.lineWidth=3;
-      ctx.beginPath(); ctx.arc(x,y,r1,0,Math.PI*2); ctx.stroke();
-      ctx.beginPath(); ctx.arc(x,y,r2,0,Math.PI*2); ctx.stroke();
-    }
-    drawCorner(60,60,18,10); drawCorner(W-60,60,18,10);
-    drawCorner(60,H-60,18,10); drawCorner(W-60,H-60,18,10);
-
-    // ── Top cross ──
-    ctx.fillStyle='#FFD700';
-    ctx.font='bold 52px Arial';
-    ctx.textAlign='center';
-    ctx.fillText('✝',cx,115);
-
-    // ── Church name ──
-    ctx.fillStyle='#FFD700';
-    ctx.font='bold 32px Georgia';
-    ctx.fillText('LEF Church Magatapalli',cx,165);
-
-    // ── Divider line ──
-    const grad1=ctx.createLinearGradient(80,0,W-80,0);
-    grad1.addColorStop(0,'transparent'); grad1.addColorStop(0.5,'#FFD700'); grad1.addColorStop(1,'transparent');
-    ctx.strokeStyle=grad1; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(80,185); ctx.lineTo(W-80,185); ctx.stroke();
-
-    // ── Certificate of Participation ──
-    ctx.fillStyle='white';
-    ctx.font='italic 28px Georgia';
-    ctx.fillText('Certificate of Participation',cx,228);
-
-    // ── VBS 2026 ──
-    ctx.fillStyle='#FFD700';
-    ctx.font='bold 58px Georgia';
-    ctx.fillText('VBS 2026',cx,300);
-
-    // ── Theme ──
-    ctx.fillStyle='rgba(255,255,255,0.85)';
-    ctx.font='22px Georgia';
-    ctx.fillText('Theme: Signet Ring  •  Haggai 2:23',cx,340);
-
-    // ── Second divider ──
-    ctx.strokeStyle=grad1; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(80,365); ctx.lineTo(W-80,365); ctx.stroke();
-
-    // ── Photo circle ──
-    const photoY = 390, photoR = 110;
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(cx, photoY+photoR, photoR, 0, Math.PI*2);
-    ctx.clip();
-    if(certPhotoDataUrl){
-      const img = new Image();
-      img.src = certPhotoDataUrl;
-      ctx.drawImage(img, cx-photoR, photoY, photoR*2, photoR*2);
-    } else {
-      ctx.fillStyle='#2d5a8e';
-      ctx.fillRect(cx-photoR, photoY, photoR*2, photoR*2);
-      ctx.fillStyle='rgba(255,255,255,0.3)';
-      ctx.font='80px Arial';
-      ctx.textAlign='center';
-      ctx.fillText('👤', cx, photoY+photoR+28);
-    }
-    ctx.restore();
-    // Photo ring
-    ctx.strokeStyle='#FFD700'; ctx.lineWidth=6;
-    ctx.beginPath(); ctx.arc(cx, photoY+photoR, photoR+5, 0, Math.PI*2); ctx.stroke();
-
-    // ── This is to certify ──
-    const bodyStartY = 645;
-    ctx.fillStyle='rgba(255,255,255,0.75)';
-    ctx.font='italic 24px Georgia';
-    ctx.textAlign='center';
-    ctx.fillText('This is to certify that',cx, bodyStartY);
-
-    // ── Child Name ──
-    ctx.fillStyle='#FFD700';
-    ctx.font='bold 52px Georgia';
-    ctx.fillText(certChildName, cx, bodyStartY+62);
-
-    // ── Underline name ──
-    const nameW = ctx.measureText(certChildName).width;
-    ctx.strokeStyle='#FFD700'; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(cx-nameW/2,bodyStartY+72); ctx.lineTo(cx+nameW/2,bodyStartY+72); ctx.stroke();
-
-    // ── Body text ──
-    ctx.fillStyle='white';
-    ctx.font='24px Georgia';
-    const bodyText = `has successfully attended the Vacation Bible School 2026 conducted by LEF Church Magatapalli on April 25, 26 & 27, 2026.`;
-    wrapText(ctx, bodyText, cx, bodyStartY+120, W-140, 38);
-
-    // ── Bible verse ──
-    ctx.strokeStyle=grad1; ctx.lineWidth=1.5;
-    ctx.beginPath(); ctx.moveTo(80,bodyStartY+270); ctx.lineTo(W-80,bodyStartY+270); ctx.stroke();
-
-    ctx.fillStyle='rgba(255,255,255,0.85)';
-    ctx.font='italic 26px Georgia';
-    ctx.fillText('"Let the little children come to me."', cx, bodyStartY+310);
-    ctx.font='22px Georgia';
-    ctx.fillStyle='#FFD700';
-    ctx.fillText('— Matthew 19:14', cx, bodyStartY+345);
-
-    // ── Divider ──
-    ctx.strokeStyle=grad1; ctx.lineWidth=1.5;
-    ctx.beginPath(); ctx.moveTo(80,bodyStartY+375); ctx.lineTo(W-80,bodyStartY+375); ctx.stroke();
-
-    // ── Signature section ──
-    const sigY = bodyStartY+430;
-    // Director
-    ctx.fillStyle='white'; ctx.font='22px Georgia'; ctx.textAlign='center';
-    ctx.beginPath(); ctx.moveTo(cx-250,sigY); ctx.lineTo(cx-50,sigY); ctx.strokeStyle='rgba(255,255,255,0.5)'; ctx.lineWidth=1.5; ctx.stroke();
-    ctx.fillText('Director', cx-150, sigY+28);
-
-    // Teacher
-    ctx.beginPath(); ctx.moveTo(cx+50,sigY); ctx.lineTo(cx+250,sigY); ctx.stroke();
-    ctx.fillText('Teacher', cx+150, sigY+28);
-
-    // ── God bless ──
-    ctx.fillStyle='rgba(255,215,0,0.8)';
-    ctx.font='italic 22px Georgia';
-    ctx.fillText('May God bless you abundantly! 🙏', cx, sigY+80);
-
-    // ── Bottom cross ──
-    ctx.fillStyle='#FFD700'; ctx.font='28px Arial';
-    ctx.fillText('✝  ✝  ✝', cx, sigY+120);
-
-    // Done
-    document.getElementById('certPreviewWrap').style.display = 'block';
-    document.getElementById('certStep1').style.display = 'none';
-    document.getElementById('certModal').querySelector('.modal-box').scrollTop = 0;
-  }
-
-  // Download
-  document.getElementById('certDownloadBtn').addEventListener('click',()=>{
-    const canvas = document.getElementById('certCanvas');
-    const a = document.createElement('a');
-    a.download = `VBS2026_Certificate_${certChildName.replace(/\s+/g,'_')}.png`;
-    a.href = canvas.toDataURL('image/png');
-    a.click();
-  });
-
-  // Share via WhatsApp
-  document.getElementById('certShareBtn').addEventListener('click', async()=>{
-    const canvas = document.getElementById('certCanvas');
-    try{
-      canvas.toBlob(async(blob)=>{
-        const file = new File([blob], `VBS2026_${certChildName.replace(/\s+/g,'_')}.png`, {type:'image/png'});
-        if(navigator.canShare && navigator.canShare({files:[file]})){
-          await navigator.share({
-            files:[file],
-            title:`VBS 2026 Certificate — ${certChildName}`,
-            text:`Congratulations to ${certChildName} for attending VBS 2026 at LEF Church Magatapalli! 🙏✝️`
-          });
-        } else {
-          // Fallback: download + open WhatsApp
-          const a = document.createElement('a');
-          a.download = `VBS2026_Certificate_${certChildName}.png`;
-          a.href = canvas.toDataURL('image/png');
-          a.click();
-          setTimeout(()=>{ window.open('https://wa.me/?text='+encodeURIComponent(`VBS 2026 Certificate for ${certChildName} — LEF Church Magatapalli 🙏`)); },1000);
-        }
-      },'image/png');
-    }catch(err){ console.error('Share error:',err); alert('Download the certificate and share it manually.'); }
-  });
-  // ══════ END CERTIFICATE MODULE ══════
-
 
   // ── ANALYTICS ──
   function renderAnalytics(){
@@ -1760,46 +1342,5 @@
 
 </script>
 <div class="toast" id="toastMsg"></div>
-
-<!-- CERTIFICATE MODAL -->
-<div class="modal-overlay" id="certModal">
-  <div class="modal-box" style="max-width:520px;padding:0;overflow:hidden;max-height:95vh;overflow-y:auto;">
-    <div style="background:linear-gradient(135deg,#1E3A5F,#2471a3);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;">
-      <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:#FFD700;">📜 Share Certificate</div>
-      <button id="certModalClose" style="background:rgba(255,255,255,.2);border:none;color:white;font-size:1.2rem;cursor:pointer;border-radius:50%;width:32px;height:32px;">✕</button>
-    </div>
-    <div style="padding:24px;">
-
-      <!-- Step 1: Photo capture -->
-      <div id="certStep1">
-        <p style="font-weight:700;color:var(--navy);margin-bottom:14px;">📸 Step 1: Add a photo of the child</p>
-        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
-          <label class="cert-photo-btn" for="certCameraInput">📷 Take Photo</label>
-          <input type="file" id="certCameraInput" accept="image/*" capture="user" style="display:none">
-          <label class="cert-photo-btn" for="certGalleryInput" style="background:#EDE9FE;color:#6D28D9;">🖼 Choose from Gallery</label>
-          <input type="file" id="certGalleryInput" accept="image/*" style="display:none">
-        </div>
-        <div id="certPhotoPreview" style="display:none;text-align:center;margin-bottom:16px;">
-          <img id="certPhotoImg" style="width:120px;height:120px;object-fit:cover;border-radius:50%;border:4px solid var(--navy);box-shadow:0 4px 12px rgba(0,0,0,.2);" src="" alt="Child photo">
-          <p style="font-size:0.78rem;color:#888;margin-top:6px;font-weight:600;">✅ Photo selected</p>
-        </div>
-        <button class="cert-action-btn" id="certGenerateBtn">✨ Generate Certificate</button>
-      </div>
-
-      <!-- Certificate Preview -->
-      <div id="certPreviewWrap" style="display:none;">
-        <p style="font-weight:700;color:var(--navy);margin-bottom:12px;">📄 Certificate Preview</p>
-        <canvas id="certCanvas" style="width:100%;border-radius:12px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
-        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-          <button class="cert-action-btn" id="certShareBtn" style="background:var(--grass);color:var(--navy);">📤 Share via WhatsApp</button>
-          <button class="cert-action-btn" id="certDownloadBtn" style="background:var(--sky);color:var(--navy);">⬇ Download</button>
-          <button class="cert-action-btn" id="certRetakeBtn" style="background:#F1F5F9;color:var(--navy);">🔄 Change Photo</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
