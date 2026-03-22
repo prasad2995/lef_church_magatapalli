@@ -4,18 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VBS 2026 – LEF Church Magatapalli</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Pacifico&family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=Tiro+Telugu:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
 <style>
   :root{--sun:#FFD700;--sky:#38BDF8;--grass:#4ADE80;--coral:#FF6B6B;--purple:#A855F7;--orange:#FB923C;--navy:#1E3A5F;--cream:#FFF8E7;}
   *{margin:0;padding:0;box-sizing:border-box;}
-  :lang(te), [lang="te"], .te-text { font-family: 'Noto Sans Telugu', sans-serif !important; }
-  body.lang-te { font-family: 'Noto Sans Telugu', sans-serif; }
   html{scroll-behavior:smooth;}
   body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--navy);overflow-x:hidden;}
-  /* TOAST NOTIFICATION */
-  .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:#DC2626;color:white;padding:14px 24px;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.95rem;z-index:9999;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.25);max-width:90vw;}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-  body.lang-te .toast{font-family:'Noto Sans Telugu',sans-serif;}
 
   nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(255,253,247,0.95);backdrop-filter:blur(10px);border-bottom:3px solid var(--sun);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
   .nav-logo{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--coral);}
@@ -28,33 +22,7 @@
   .nav-btn:hover{background:var(--orange);transform:scale(1.05);}
   .admin-nav-btn{background:var(--navy);color:#fff;border:none;padding:9px 16px;border-radius:25px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.82rem;transition:transform .2s;white-space:nowrap;}
   .admin-nav-btn:hover{background:#2d5a8e;transform:scale(1.05);}
-  /* LANG TOGGLE SWITCH */
-  .lang-switch-wrap{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;}
-  .lang-switch-label{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.78rem;color:var(--navy);white-space:nowrap;min-width:20px;text-align:center;}
-  .lang-switch-label.active{color:var(--coral);}
-  .lang-switch-track{width:44px;height:24px;background:#E2E8F0;border-radius:12px;position:relative;transition:background .3s;border:2px solid #CBD5E1;flex-shrink:0;}
-  .lang-switch-track.te{background:linear-gradient(135deg,#FF9933,#138808);}
-  .lang-switch-thumb{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:white;transition:transform .3s;box-shadow:0 1px 4px rgba(0,0,0,.2);}
-  .lang-switch-track.te .lang-switch-thumb{transform:translateX(20px);}
-  @media(max-width:400px){.lang-switch-label{display:none;}}
-  @media(max-width:700px){
-    .nav-links{display:none;}
-    .nav-right{gap:5px;}
-    .nav-btn{padding:7px 10px;font-size:0.75rem;}
-    .admin-nav-btn{padding:7px 8px;font-size:0.72rem;}
-    .lang-toggle-btn{padding:7px 8px;font-size:0.72rem;}
-    .nav-logo{font-size:1.1rem;}
-  }
-  @media(max-width:400px){
-    .nav-btn .btn-text-full{display:none;}
-    .nav-btn .btn-text-short{display:inline;}
-    .admin-nav-btn .btn-text-full{display:none;}
-    .admin-nav-btn .btn-text-short{display:inline;}
-  }
-  @media(min-width:401px){
-    .btn-text-short{display:none;}
-    .btn-text-full{display:inline;}
-  }
+  @media(max-width:700px){.nav-links{display:none;}}
 
   .hero{min-height:100vh;background:linear-gradient(180deg,#87CEEB 0%,#B0E0FF 45%,#7EC850 45%,#5DBB3F 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;padding-top:80px;text-align:center;}
   .cloud{position:absolute;background:white;border-radius:50px;opacity:0.85;animation:drift linear infinite;}
@@ -72,10 +40,8 @@
   @keyframes twinkle{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
   .hero-content{position:relative;z-index:5;padding:20px;}
   .vbs-badge{display:inline-block;background:var(--sun);color:var(--navy);font-family:'Fredoka One',cursive;font-size:1rem;padding:8px 24px;border-radius:30px;margin-bottom:20px;letter-spacing:2px;box-shadow:3px 3px 0 rgba(0,0,0,.15);}
-  .theme-banner{background:linear-gradient(135deg,#1a5276,#2471a3);border:3px solid var(--sun);border-radius:20px;padding:18px 32px;margin-bottom:16px;box-shadow:4px 4px 0 rgba(0,0,0,.25);display:inline-block;}
-  .theme-label{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.75rem;letter-spacing:3px;color:var(--sun);margin-bottom:4px;}
-  .theme-title{font-family:'Pacifico',cursive;font-size:clamp(2rem,6vw,3.5rem);color:var(--sun);text-shadow:2px 2px 0 rgba(0,0,0,.3);line-height:1.1;}
-  .theme-verse{font-weight:800;color:white;font-size:0.95rem;margin-top:6px;opacity:.9;}
+  .hero h1{font-family:'Fredoka One',cursive;font-size:clamp(3rem,8vw,6rem);line-height:1.1;color:white;text-shadow:4px 4px 0 rgba(0,0,0,.2);margin-bottom:10px;}
+  .hero h1 .highlight{color:var(--sun);display:block;}
   .hero-sub{font-size:clamp(1rem,2.5vw,1.4rem);color:var(--navy);font-weight:800;margin-bottom:8px;}
   .church-name{font-family:'Pacifico',cursive;font-size:clamp(1.2rem,3vw,1.8rem);color:var(--navy);margin-bottom:30px;}
   .date-banner{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:36px;}
@@ -107,23 +73,6 @@
 
   .section-tag{display:inline-block;background:var(--grass);color:var(--navy);font-weight:800;font-size:0.8rem;letter-spacing:2px;padding:6px 18px;border-radius:20px;margin-bottom:14px;border:2px solid var(--navy);}
   .section-title{font-family:'Fredoka One',cursive;font-size:clamp(2rem,4vw,2.8rem);color:var(--navy);margin-bottom:16px;line-height:1.2;}
-  body.lang-te .section-title{font-family:'Noto Sans Telugu',sans-serif;font-weight:800;}
-  body.lang-te .theme-title{font-family:'Tiro Telugu',serif !important;font-size:clamp(2rem,6vw,3.5rem);}
-  body.lang-te .feature-card h3{font-family:'Noto Sans Telugu',sans-serif;font-weight:700;}
-  body.lang-te .feature-card p{font-family:'Noto Sans Telugu',sans-serif;}
-  body.lang-te .about-card h3{font-family:'Noto Sans Telugu',sans-serif;font-weight:700;}
-  body.lang-te .section-tag{font-family:'Noto Sans Telugu',sans-serif;}
-  body.lang-te .section-body{font-family:'Noto Sans Telugu',sans-serif;}
-  body.lang-te .info-item .label, body.lang-te .info-item .value{font-family:'Noto Sans Telugu',sans-serif;}
-  body.lang-te li, body.lang-te .time-slot .a{font-family:'Noto Sans Telugu',sans-serif;}
-  body.lang-te .hero-sub, body.lang-te .church-name{font-family:'Noto Sans Telugu',sans-serif;}
-  body.lang-te .vbs-badge, body.lang-te .theme-label, body.lang-te .theme-verse, body.lang-te .h2{font-family:'Noto Sans Telugu',sans-serif;}
-  body.lang-te .count-label{font-family:'Noto Sans Telugu',sans-serif;}
-  body.lang-te .date-chip .month, body.lang-te .date-chip .weekday{font-family:'Noto Sans Telugu',sans-serif;}
-  body.lang-te .nav-links a, body.lang-te .nav-btn, body.lang-te .btn-primary, body.lang-te .btn-secondary{font-family:'Noto Sans Telugu',sans-serif;}
-  body.lang-te footer p, body.lang-te .copyright, body.lang-te .footer-links a{font-family:'Noto Sans Telugu',sans-serif;}
-  body.lang-te .material-box h3, body.lang-te .material-box p, body.lang-te .material-link{font-family:'Noto Sans Telugu',sans-serif;}
-  body.lang-te .view-sched-btn{font-family:'Noto Sans Telugu',sans-serif;}
   .section-body{font-size:1rem;line-height:1.8;color:#444;}
   .about-section{padding:80px 20px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
   @media(max-width:700px){.about-section{grid-template-columns:1fr;gap:30px;}}
@@ -136,10 +85,6 @@
   .info-item .value{font-weight:800;font-size:1rem;color:var(--navy);}
 
   .schedule-section{background:linear-gradient(135deg,#F0F9FF,#EEF2FF);padding:80px 20px;text-align:center;}
-  .view-sched-btn{margin-top:14px;background:var(--navy);color:white;padding:8px 20px;border-radius:20px;font-weight:800;font-size:0.82rem;display:inline-block;cursor:pointer;}
-  .sched-btn{cursor:pointer;transition:transform .2s;}
-  .sched-btn:hover{transform:translate(-3px,-3px);}
-  .sched-btn:hover .view-sched-btn{background:var(--coral);}
   .schedule-inner{max-width:900px;margin:0 auto;}
   .schedule-days{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
   @media(max-width:600px){.schedule-days{grid-template-columns:1fr;}}
@@ -151,8 +96,8 @@
   .day-card:nth-child(3) .day-header{background:var(--sky);color:var(--navy);}
   .day-body{padding:20px;}
   .time-slot{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;text-align:left;}
-  .time-slot .t{font-weight:700;font-size:0.75rem;color:#888;min-width:90px;padding-top:2px;white-space:nowrap;}
-  .time-slot .a{font-weight:700;font-size:0.82rem;color:var(--navy);}
+  .time-slot .t{font-weight:700;font-size:0.78rem;color:#888;min-width:55px;padding-top:2px;}
+  .time-slot .a{font-weight:700;font-size:0.88rem;color:var(--navy);}
 
   .why-section{background:var(--navy);padding:80px 20px;text-align:center;}
   .why-section .section-title{color:white;margin-bottom:40px;}
@@ -228,13 +173,6 @@
   .modal-close:hover{color:var(--coral);}
   .modal-err{color:#DC2626;font-weight:700;font-size:0.85rem;margin-top:12px;display:none;background:#FEE2E2;padding:10px 14px;border-radius:10px;text-align:left;line-height:1.6;}
   .modal-loading{color:#64748B;font-size:0.85rem;margin-top:10px;display:none;font-weight:600;}
-  .role-select-group{display:flex;gap:10px;margin-bottom:14px;}
-  .role-pick-btn{flex:1;background:#F8FAFC;border:2.5px solid #E2E8F0;border-radius:14px;padding:12px 10px;cursor:pointer;text-align:center;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:3px;}
-  .role-pick-btn.active{border-color:var(--navy);background:#EFF6FF;box-shadow:0 0 0 3px rgba(30,58,95,.1);}
-  .role-pick-btn:hover{border-color:var(--navy);background:#EFF6FF;}
-  .role-pick-icon{font-size:1.4rem;}
-  .role-pick-label{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--navy);}
-  .role-pick-email{font-size:0.68rem;color:#94A3B8;font-weight:600;word-break:break-all;}
 
   /* DASHBOARD */
   .admin-panel{display:none;position:fixed;inset:0;background:#F1F5F9;z-index:999;overflow-y:auto;}
@@ -316,21 +254,14 @@
 <nav>
   <div class="nav-logo">✝ LEF Church <span> Magatapalli </span></div>
   <ul class="nav-links">
-    <li><a href="#about" data-en="About" data-te="పరిచయం">About</a></li>
-    <li><a href="#schedule" data-en="Schedule" data-te="కార్యక్రమం">Schedule</a></li>
-    <li><a href="#register" data-en="Register" data-te="నమోదు">Register</a></li>
-    <li><a href="#materials" data-en="Materials" data-te="పుస్తకాలు">Materials</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#schedule">Schedule</a></li>
+    <li><a href="#register">Register</a></li>
+    <li><a href="#materials">Materials</a></li>
   </ul>
   <div class="nav-right">
-    <button class="nav-btn" id="navRegBtn" data-en="🎒 Register" data-te="🎒 నమోదు"><span class="btn-text-full">🎒 Register</span><span class="btn-text-short">🎒</span></button>
-    <div class="lang-switch-wrap" id="langToggle" title="Switch Language">
-      <span class="lang-switch-label" id="enLabel">EN</span>
-      <div class="lang-switch-track" id="langTrack">
-        <div class="lang-switch-thumb"></div>
-      </div>
-      <span class="lang-switch-label active" id="teLabel">తె</span>
-    </div>
-    <button class="admin-nav-btn" id="adminBtn"><span class="btn-text-full">🔐 Admin</span><span class="btn-text-short">🔐</span></button>
+    <a href="#register" class="nav-btn">🎒 Register</a>
+    <button class="admin-nav-btn" id="adminBtn">🔐 Admin</button>
   </div>
 </nav>
 
@@ -344,23 +275,18 @@
   <span class="star" style="top:30%;right:12%;animation-delay:1.5s">⭐</span>
   <div class="balloons"><div class="balloon b1"></div><div class="balloon b2"></div><div class="balloon b3"></div></div>
   <div class="hero-content">
-    <div class="vbs-badge" data-en="✝ VACATION BIBLE SCHOOL 2026 ✝" data-te="✝ వేసవి బైబిల్ పాఠశాల 2026 ✝">✝ VACATION BIBLE SCHOOL 2026 ✝</div>
-    <br>
-    <div class="theme-banner" style="margin-top:0;">
-      <div class="theme-label" data-en="THEME FOR VBS 2026" data-te="VBS 2026 ఇతివృత్తం">THEME FOR VBS 2026</div>
-      <div class="theme-title" data-en="Signet Ring" data-te="ముద్ర ఉంగరం">Signet Ring</div>
-      <div class="theme-verse" data-en="📖 Haggai 2:23" data-te="📖 హగ్గయి 2:23">📖 Haggai 2:23</div>
-    </div>
-    <p class="hero-sub" data-en="🌟 Spend this summer joyfully at VBS!" data-te="ఈ వేసవి సెలవులను VBS లో ఆనందంగా గడపండి">🌟 Spend this summer joyfully at VBS!</p>
+    <div class="vbs-badge">✝ VACATION BIBLE SCHOOL 2026 ✝</div>
+    <h1>Fun, Faith<span class="highlight">&amp; Friends!</span></h1>
+    <p class="hero-sub">Join us for an incredible summer adventure</p>
     <p class="church-name">LEF Church Magatapalli</p>
     <div class="date-banner">
-      <div class="date-chip"><div class="day">25</div><div class="month" data-en="APRIL" data-te="ఏప్రిల్">APRIL</div><div class="weekday" data-en="Saturday" data-te="శనివారం">Saturday</div></div>
-      <div class="date-chip"><div class="day">26</div><div class="month" data-en="APRIL" data-te="ఏప్రిల్">APRIL</div><div class="weekday" data-en="Sunday" data-te="ఆదివారం">Sunday</div></div>
-      <div class="date-chip"><div class="day">27</div><div class="month" data-en="APRIL" data-te="ఏప్రిల్">APRIL</div><div class="weekday" data-en="Monday" data-te="సోమవారం">Monday</div></div>
+      <div class="date-chip"><div class="day">25</div><div class="month">APRIL</div><div class="weekday">Friday</div></div>
+      <div class="date-chip"><div class="day">26</div><div class="month">APRIL</div><div class="weekday">Saturday</div></div>
+      <div class="date-chip"><div class="day">27</div><div class="month">APRIL</div><div class="weekday">Sunday</div></div>
     </div>
     <div class="hero-btns">
-      <button class="btn-primary" id="heroRegBtn" data-en="🎒 Register Your Child" data-te="🎒 మీ పిల్లవాడిని నమోదు చేయండి" style="border:3px solid var(--navy);box-shadow:4px 4px 0 var(--navy);cursor:pointer;">🎒 Register Your Child</button>
-      <a href="#schedule" class="btn-secondary" data-en="📅 View Schedule" data-te="📅 కార్యక్రమం చూడండి">📅 View Schedule</a>
+      <a href="#register" class="btn-primary">🎒 Register Your Child</a>
+      <a href="#schedule" class="btn-secondary">📅 View Schedule</a>
     </div>
   </div>
   <div class="ground-deco">
@@ -372,12 +298,12 @@
 
 <!-- COUNTDOWN -->
 <section class="countdown-section">
-  <h2 data-en="⏳ Counting Down to VBS!" data-te="⏳ VBS కోసం కౌంట్‌డౌన్!">⏳ Counting Down to VBS!</h2>
+  <h2>⏳ Counting Down to VBS!</h2>
   <div class="countdown-grid" id="countdownGrid">
-    <div class="count-box"><div class="count-num" id="cnt-days">--</div><div class="count-label" data-en="DAYS" data-te="రోజులు">DAYS</div></div>
-    <div class="count-box"><div class="count-num" id="cnt-hours">--</div><div class="count-label" data-en="HOURS" data-te="గంటలు">HOURS</div></div>
-    <div class="count-box"><div class="count-num" id="cnt-mins">--</div><div class="count-label" data-en="MINUTES" data-te="నిమిషాలు">MINUTES</div></div>
-    <div class="count-box"><div class="count-num" id="cnt-secs">--</div><div class="count-label" data-en="SECONDS" data-te="సెకండ్లు">SECONDS</div></div>
+    <div class="count-box"><div class="count-num" id="cnt-days">--</div><div class="count-label">DAYS</div></div>
+    <div class="count-box"><div class="count-num" id="cnt-hours">--</div><div class="count-label">HOURS</div></div>
+    <div class="count-box"><div class="count-num" id="cnt-mins">--</div><div class="count-label">MINUTES</div></div>
+    <div class="count-box"><div class="count-num" id="cnt-secs">--</div><div class="count-label">SECONDS</div></div>
   </div>
   <div class="vbs-live-banner" id="vbsLive">🎉 VBS is Happening NOW — God bless you all! 🙏</div>
 </section>
@@ -386,26 +312,26 @@
 <section id="about">
   <div class="about-section">
     <div>
-      <div class="section-tag" data-en="ABOUT VBS 2026" data-te="VBS 2026 పరిచయం">ABOUT VBS 2026</div>
-      <h2 class="section-title" data-en="Three Days of<br>Adventure & Faith!" data-te="విశ్వాసం & సాహసంతో<br>మూడు రోజులు!">Three Days of<br>Adventure & Faith!</h2>
-      <p class="section-body" data-en="Vacation Bible School at LEF Church Magatapalli is a fun-filled, faith-building experience for children of all ages! Over three amazing days, kids will learn Bible stories, sing uplifting songs, make new friends, and discover the love of God in exciting ways. Whether your child is coming for the first time or returning, VBS 2026 will be unforgettable. All are welcome! 🎉" data-te="మగటపల్లి LEF చర్చ్‌లో నిర్వహించే వేసవి బైబిల్ పాఠశాల (VBS) అన్ని వయసుల పిల్లలకు ఆనందంతో నిండిన మరియు విశ్వాసాన్ని పెంపొందించే అద్భుతమైన అనుభవాన్ని అందిస్తుంది. ఈ మూడు రోజులలో పిల్లలు బైబిల్ కథలు నేర్చుకుంటారు, పాటలు పాడతారు, కొత్త స్నేహితులను సంపాదిస్తారు మరియు దేవుని ప్రేమను మరింతగా తెలుసుకుంటారు. మీ బిడ్డ మొదటిసారి వస్తున్నా లేదా తిరిగి వస్తున్నా, VBS 2026 ప్రతి పిల్లవాడికి మరపురాని అనుభవంగా ఉంటుంది. అందరికీ హృదయపూర్వక స్వాగతం! 🎉">Vacation Bible School at <strong>LEF Church Magatapalli</strong> is a fun-filled, faith-building experience for children of all ages! Over three amazing days, kids will learn Bible stories, sing uplifting songs, make new friends, and discover the love of God in exciting ways.<br><br>Whether your child is coming for the first time or returning, VBS 2026 will be unforgettable. All are welcome! 🎉</p>
+      <div class="section-tag">ABOUT VBS 2026</div>
+      <h2 class="section-title">Three Days of<br>Adventure & Faith!</h2>
+      <p class="section-body">Vacation Bible School at <strong>LEF Church Magatapalli</strong> is a fun-filled, faith-building experience for children of all ages! Over three amazing days, kids will learn Bible stories, sing uplifting songs, make new friends, and discover the love of God in exciting ways.<br><br>Whether your child is coming for the first time or returning, VBS 2026 will be unforgettable. All are welcome! 🎉</p>
       <div class="info-grid">
-        <div class="info-item"><div class="icon">📍</div><div class="label" data-en="Location" data-te="స్థలం">Location</div><div class="value" data-en="LEF Magatapalli" data-te="LEF మగటపల్లి">LEF Magatapalli</div></div>
-        <div class="info-item"><div class="icon">📅</div><div class="label" data-en="Dates" data-te="తేదీలు">Dates</div><div class="value" data-en="Apr 25, 26 & 27" data-te="ఏప్రిల్ 25, 26 & 27">April 25, 26 & 27</div></div>
-        <div class="info-item"><div class="icon">👶</div><div class="label" data-en="Ages" data-te="వయసు">Ages</div><div class="value" data-en="3 – 15 Years" data-te="3 – 15 సంవత్సరాలు">3 – 15 Years</div></div>
-        <div class="info-item"><div class="icon">💰</div><div class="label" data-en="Cost" data-te="ఫీజు">Cost</div><div class="value" data-en="Free of Charge" data-te="ఉచితం">Free of Charge</div></div>
+        <div class="info-item"><div class="icon">📍</div><div class="label">Location</div><div class="value">LEF Magatapalli</div></div>
+        <div class="info-item"><div class="icon">📅</div><div class="label">Dates</div><div class="value">Apr 25, 26 & 27</div></div>
+        <div class="info-item"><div class="icon">👶</div><div class="label">Ages</div><div class="value">3 – 15 Years</div></div>
+        <div class="info-item"><div class="icon">💰</div><div class="label">Cost</div><div class="value">Free of Charge</div></div>
       </div>
     </div>
     <div class="about-card">
       <div class="emoji-row">🙏 📖 🎵 🎨 🤝</div>
-      <h3 style="font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:12px" data-en="What to Expect" data-te="ఏమి అందిస్తున్నాం">What to Expect</h3>
+      <h3 style="font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:12px">What to Expect</h3>
       <ul style="list-style:none;padding:0;">
-        <li style="padding:10px 0;border-bottom:2px dashed #eee;font-weight:700" data-en="🎵 &nbsp;Worship Songs &amp; Praise" data-te="🎵 &nbsp;ఆరాధన పాటలు &amp; స్తోత్రాలు">🎵 &nbsp;Worship Songs &amp; Praise</li>
-        <li style="padding:10px 0;border-bottom:2px dashed #eee;font-weight:700" data-en="📖 &nbsp;Exciting Bible Lessons" data-te="📖 &nbsp;బైబిల్ పాఠాలు">📖 &nbsp;Exciting Bible Lessons</li>
-        <li style="padding:10px 0;border-bottom:2px dashed #eee;font-weight:700" data-en="🎨 &nbsp;Creative Arts &amp; Crafts" data-te="🎨 &nbsp;చేతిపని &amp; హస్తకళలు">🎨 &nbsp;Creative Arts &amp; Crafts</li>
-        <li style="padding:10px 0;border-bottom:2px dashed #eee;font-weight:700" data-en="🎮 &nbsp;Fun Games &amp; Activities" data-te="🎮 &nbsp;సరదా ఆటలు">🎮 &nbsp;Fun Games &amp; Activities</li>
-        <li style="padding:10px 0;border-bottom:2px dashed #eee;font-weight:700" data-en="🍪 &nbsp;Snacks &amp; Fellowship" data-te="🍪 &nbsp;అల్పాహారం &amp; సహవాసం">🍪 &nbsp;Snacks &amp; Fellowship</li>
-        <li style="padding:10px 0;font-weight:700" data-en="🏆 &nbsp;Prizes &amp; Certificates" data-te="🏆 &nbsp;బహుమతులు &amp; సర్టిఫికెట్లు">🏆 &nbsp;Prizes &amp; Certificates</li>
+        <li style="padding:10px 0;border-bottom:2px dashed #eee;font-weight:700">🎵 &nbsp;Worship Songs & Praise</li>
+        <li style="padding:10px 0;border-bottom:2px dashed #eee;font-weight:700">📖 &nbsp;Exciting Bible Lessons</li>
+        <li style="padding:10px 0;border-bottom:2px dashed #eee;font-weight:700">🎨 &nbsp;Creative Arts & Crafts</li>
+        <li style="padding:10px 0;border-bottom:2px dashed #eee;font-weight:700">🎮 &nbsp;Fun Games & Activities</li>
+        <li style="padding:10px 0;border-bottom:2px dashed #eee;font-weight:700">🍪 &nbsp;Snacks & Fellowship</li>
+        <li style="padding:10px 0;font-weight:700">🏆 &nbsp;Prizes & Certificates</li>
       </ul>
     </div>
   </div>
@@ -414,87 +340,71 @@
 <!-- SCHEDULE -->
 <section id="schedule" class="schedule-section">
   <div class="schedule-inner">
-    <div class="section-tag" data-en="DAILY PROGRAM" data-te="రోజువారీ కార్యక్రమం">DAILY PROGRAM</div>
-    <h2 class="section-title" data-en="3-Day Schedule" data-te="3 రోజుల కార్యక్రమం">3-Day Schedule</h2>
-    <p style="color:#555;margin-bottom:28px;font-size:1rem" data-en="Click on a day to see the full schedule" data-te="పూర్తి కార్యక్రమం చూడటానికి రోజుపై క్లిక్ చేయండి">Click on a day to see the full schedule</p>
+    <div class="section-tag">DAILY PROGRAM</div>
+    <h2 class="section-title">3-Day Schedule</h2>
     <div class="schedule-days">
-      <div class="day-card sched-btn" data-day="1">
-        <div class="day-header">🌅 Day 1</div>
-        <div class="day-body" style="padding:20px;text-align:center;">
-          <div style="font-size:2rem;margin-bottom:8px;">📅</div>
-          <div style="font-weight:800;font-size:1rem;color:var(--navy)" data-en="April 25" data-te="ఏప్రిల్ 25">April 25</div>
-          <div style="font-weight:700;font-size:0.85rem;color:#888;margin-bottom:12px" data-en="Saturday" data-te="శనివారం">Saturday</div>
-          <div style="font-size:0.82rem;color:#555" data-en="9:00 AM – 4:30 PM" data-te="9:00 AM – 4:30 PM">9:00 AM – 4:30 PM</div>
-          <div class="view-sched-btn" data-en="👁 View Schedule" data-te="👁 కార్యక్రమం చూడండి">👁 View Schedule</div>
+      <div class="day-card">
+        <div class="day-header">🌅 Day 1 – April 25</div>
+        <div class="day-body">
+          <div class="time-slot"><span class="t">9:00 AM</span><span class="a">Welcome & Registration</span></div>
+          <div class="time-slot"><span class="t">9:30 AM</span><span class="a">Opening Worship & Prayer</span></div>
+          <div class="time-slot"><span class="t">10:00 AM</span><span class="a">Bible Lesson – Creation</span></div>
+          <div class="time-slot"><span class="t">11:00 AM</span><span class="a">Arts & Crafts</span></div>
+          <div class="time-slot"><span class="t">11:30 AM</span><span class="a">Snack Time</span></div>
+          <div class="time-slot"><span class="t">12:00 PM</span><span class="a">Games & Activities</span></div>
+          <div class="time-slot"><span class="t">1:00 PM</span><span class="a">Closing Prayer</span></div>
         </div>
       </div>
-      <div class="day-card sched-btn" data-day="2">
-        <div class="day-header">☀️ Day 2</div>
-        <div class="day-body" style="padding:20px;text-align:center;">
-          <div style="font-size:2rem;margin-bottom:8px;">📅</div>
-          <div style="font-weight:800;font-size:1rem;color:var(--navy)" data-en="April 26" data-te="ఏప్రిల్ 26">April 26</div>
-          <div style="font-weight:700;font-size:0.85rem;color:#888;margin-bottom:12px" data-en="Sunday" data-te="ఆదివారం">Sunday</div>
-          <div style="font-size:0.82rem;color:#555" data-en="11:00 AM – 4:30 PM" data-te="11:00 AM – 4:30 PM">11:00 AM – 4:30 PM</div>
-          <div class="view-sched-btn" data-en="👁 View Schedule" data-te="👁 కార్యక్రమం చూడండి">👁 View Schedule</div>
+      <div class="day-card">
+        <div class="day-header">☀️ Day 2 – April 26</div>
+        <div class="day-body">
+          <div class="time-slot"><span class="t">9:00 AM</span><span class="a">Praise & Worship Songs</span></div>
+          <div class="time-slot"><span class="t">9:30 AM</span><span class="a">Scripture Memory Time</span></div>
+          <div class="time-slot"><span class="t">10:00 AM</span><span class="a">Bible Lesson – Salvation</span></div>
+          <div class="time-slot"><span class="t">11:00 AM</span><span class="a">Drama & Storytelling</span></div>
+          <div class="time-slot"><span class="t">11:30 AM</span><span class="a">Snack Time</span></div>
+          <div class="time-slot"><span class="t">12:00 PM</span><span class="a">Team Games & Fun</span></div>
+          <div class="time-slot"><span class="t">1:00 PM</span><span class="a">Group Prayer</span></div>
         </div>
       </div>
-      <div class="day-card sched-btn" data-day="3">
-        <div class="day-header">🌟 Day 3</div>
-        <div class="day-body" style="padding:20px;text-align:center;">
-          <div style="font-size:2rem;margin-bottom:8px;">📅</div>
-          <div style="font-weight:800;font-size:1rem;color:var(--navy)" data-en="April 27" data-te="ఏప్రిల్ 27">April 27</div>
-          <div style="font-weight:700;font-size:0.85rem;color:#888;margin-bottom:12px" data-en="Monday" data-te="సోమవారం">Monday</div>
-          <div style="font-size:0.82rem;color:#555" data-en="9:00 AM – 4:30 PM" data-te="9:00 AM – 4:30 PM">9:00 AM – 4:30 PM</div>
-          <div class="view-sched-btn" data-en="👁 View Schedule" data-te="👁 కార్యక్రమం చూడండి">👁 View Schedule</div>
+      <div class="day-card">
+        <div class="day-header">🌟 Day 3 – April 27</div>
+        <div class="day-body">
+          <div class="time-slot"><span class="t">9:00 AM</span><span class="a">Grand Worship Celebration</span></div>
+          <div class="time-slot"><span class="t">9:30 AM</span><span class="a">Children's Presentations</span></div>
+          <div class="time-slot"><span class="t">10:00 AM</span><span class="a">Bible Lesson – God's Love</span></div>
+          <div class="time-slot"><span class="t">11:00 AM</span><span class="a">Awards & Certificates</span></div>
+          <div class="time-slot"><span class="t">11:30 AM</span><span class="a">Special Lunch Together</span></div>
+          <div class="time-slot"><span class="t">12:30 PM</span><span class="a">Closing Service</span></div>
+          <div class="time-slot"><span class="t">1:00 PM</span><span class="a">Farewell & Blessings</span></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SCHEDULE MODAL -->
-<div class="modal-overlay" id="scheduleModal">
-  <div class="modal-box" style="max-width:520px;max-height:85vh;overflow-y:auto;text-align:left;padding:0;">
-    <div id="schedModalHeader" style="padding:20px 24px 16px;position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;">
-      <div id="schedModalTitle" style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:white;"></div>
-      <button id="schedModalClose" style="background:rgba(255,255,255,.2);border:none;color:white;font-size:1.2rem;cursor:pointer;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;">✕</button>
-    </div>
-    <div id="schedModalBody" style="padding:0 24px 24px;"></div>
-  </div>
-</div>
-
 <!-- WHY VBS -->
 <section class="why-section">
-  <div class="section-tag" style="background:var(--sun)" data-en="WHY VBS?" data-te="VBS ఎందుకు?">WHY VBS?</div>
-  <h2 class="section-title" data-en="Why Send Your Child to VBS?" data-te="మీ పిల్లలను VBSకు ఎందుకు పంపాలి?">Why Send Your Child to VBS?</h2>
+  <div class="section-tag" style="background:var(--sun)">WHY VBS?</div>
+  <h2 class="section-title">Why Send Your Child to VBS?</h2>
   <div class="features-grid">
-    <div class="feature-card"><div class="icon">✝️</div><h3 data-en="Grow in Faith" data-te="విశ్వాసంలో ఎదుగుదల">Grow in Faith</h3><p>Children learn biblical truths through stories and songs that stay with them for life.</p></div>
-    <div class="feature-card"><div class="icon">👯</div><h3 data-en="Make Friends" data-te="స్నేహితులు">Make Friends</h3><p>A safe, welcoming community where children bond and build lasting friendships in Christ.</p></div>
-    <div class="feature-card"><div class="icon">🧠</div><h3 data-en="Learn & Grow" data-te="నేర్చుకోండి & ఎదుగుదల">Learn & Grow</h3><p>Creative lessons that engage young minds and make learning about God exciting.</p></div>
-    <div class="feature-card"><div class="icon">🎉</div><h3 data-en="Have Fun!" data-te="సరదాగా!">Have Fun!</h3><p>Games, crafts, music, snacks — VBS is the highlight of any child's year!</p></div>
+    <div class="feature-card"><div class="icon">✝️</div><h3>Grow in Faith</h3><p>Children learn biblical truths through stories and songs that stay with them for life.</p></div>
+    <div class="feature-card"><div class="icon">👯</div><h3>Make Friends</h3><p>A safe, welcoming community where children bond and build lasting friendships in Christ.</p></div>
+    <div class="feature-card"><div class="icon">🧠</div><h3>Learn & Grow</h3><p>Creative lessons that engage young minds and make learning about God exciting.</p></div>
+    <div class="feature-card"><div class="icon">🎉</div><h3>Have Fun!</h3><p>Games, crafts, music, snacks — VBS is the highlight of any child's year!</p></div>
   </div>
 </section>
 
 <!-- REGISTRATION -->
-<section id="register" class="reg-section" style="text-align:center;padding:80px 20px;">
-  <div class="section-tag" data-en="REGISTER NOW" data-te="ఇప్పుడే నమోదు చేయండి">REGISTER NOW</div>
-  <h2 class="section-title" data-en="Secure Your Child's Spot!" data-te="మీ పిల్లవాడిని వెంటనే నమోదు చేయండి!">Secure Your Child's Spot!</h2>
-  <p style="color:#555;margin-bottom:28px;max-width:500px;margin-left:auto;margin-right:auto;" data-en="April 25, 26 & 27, 2026 · Free of Charge · Ages 3–15" data-te="ఏప్రిల్ 25, 26 & 27, 2026 · ఉచితం · వయసు 3–15">April 25, 26 & 27, 2026 · Free of Charge · Ages 3–15</p>
-  <button class="btn-primary" id="openRegBtn" data-en="📋 Register Your Child Now" data-te="📋 ఇప్పుడే నమోదు చేయండి" style="font-size:1.1rem;cursor:pointer;border:3px solid var(--navy);box-shadow:4px 4px 0 var(--navy);">📋 Register Your Child Now</button>
-</section>
-
-<!-- REGISTRATION POPUP -->
-<div class="modal-overlay" id="regModal">
-  <div class="modal-box" style="max-width:600px;max-height:90vh;overflow-y:auto;padding:0;text-align:left;">
-    <div style="background:linear-gradient(135deg,var(--coral),var(--orange));padding:24px 28px;border-radius:21px 21px 0 0;display:flex;align-items:center;justify-content:space-between;">
-      <div>
-        <div style="font-family:'Fredoka One',cursive;font-size:1.6rem;color:white;">📋 Register Now!</div>
-        <div style="color:rgba(255,255,255,.9);font-size:0.85rem;font-weight:600;margin-top:2px;">April 25, 26 & 27, 2026</div>
-      </div>
-      <button id="closeRegBtn" style="background:rgba(255,255,255,.2);border:none;color:white;font-size:1.3rem;cursor:pointer;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;">✕</button>
+<section id="register" class="reg-section">
+  <div class="reg-card">
+    <div class="reg-header">
+      <div style="font-size:2.5rem;margin-bottom:10px">📋</div>
+      <h2>Register Now!</h2>
+      <p>Secure your child's spot — April 25, 26 & 27, 2025</p>
     </div>
-    <div class="reg-body" style="padding:24px 28px;">
-      <div class="form-group"><label data-en="Child's Name *" data-te="పేరు *">Child's Name *</label><input type="text" id="childName" placeholder="Enter child's full name"></div>
+    <div class="reg-body">
+      <div class="form-group"><label>Child's Name *</label><input type="text" id="childName" placeholder="Enter child's full name"></div>
       <div class="form-row">
         <div class="form-group">
           <label>Age *</label>
@@ -502,7 +412,7 @@
         </div>
         <div class="form-group">
           <label>Gender</label>
-          <select id="childGender"><option value="" data-en="Select" data-te="ఎంచుకోండి">Select</option><option data-en="Male" data-te="పురుషుడు">Male</option><option data-en="Female" data-te="స్త్రీ">Female</option></select>
+          <select id="childGender"><option value="">Select</option><option>Male</option><option>Female</option></select>
         </div>
       </div>
       <div class="form-row">
@@ -523,18 +433,19 @@
           <option>Day 2 & 3 – April 26 & 27</option>
         </select>
       </div>
-      <button class="submit-btn" id="submitBtn" data-en="🙏 Complete Registration" data-te="🙏 రిజిస్ట్రేషన్ పూర్తి చేయండి">🙏 Complete Registration</button>
+      <!--div class="form-group"><label>Special Needs or Allergies</label><textarea id="special" placeholder="Any medical conditions, allergies, or special requirements..."></textarea></div-->
+      <button class="submit-btn" id="submitBtn">🙏 Complete Registration</button>
       <div class="error-msg" id="errorMsg">⚠️ Something went wrong. Please try again.</div>
     </div>
   </div>
-</div>
+</section>
 
 <!-- MATERIALS -->
 <section id="materials" class="materials-section">
   <div class="materials-inner">
-    <div class="section-tag" data-en="VBS RESOURCES" data-te="VBS వనరులు">VBS RESOURCES</div>
-    <h2 class="section-title" data-en="VBS Materials & Books" data-te="VBS మెటీరియల్ & పుస్తకాలు">VBS Materials & Books</h2>
-    <p class="section-body" style="max-width:600px;margin:0 auto;color:#555" data-en="Find quality VBS curriculum, books, activity sheets, and teaching materials." data-te="ఉత్తమమైన VBS పాఠ్యపుస్తకాలు, కార్యకలాప పత్రాలు మరియు బోధన సామగ్రిని పొందండి.">Find quality VBS curriculum, books, activity sheets, and teaching materials.</p>
+    <div class="section-tag">VBS RESOURCES</div>
+    <h2 class="section-title">VBS Materials & Books</h2>
+    <p class="section-body" style="max-width:600px;margin:0 auto;color:#555">Find quality VBS curriculum, books, activity sheets, and teaching materials.</p>
     <div class="material-box">
       <div class="big-emoji">📚</div>
       <div>
@@ -549,24 +460,22 @@
 <!-- FOOTER -->
 <footer>
   <div class="church-logo">✝ LEF Church Magatapalli</div>
-  <p data-en="Vacation Bible School 2026 | April 25–27" data-te="వేసవి బైబిల్ పాఠశాల 2026 | ఏప్రిల్ 25–27">Vacation Bible School 2026 &nbsp;|&nbsp; April 25–27</p>
-  <p data-en="Magatapalli, Andhra Pradesh, India" data-te="మగటపల్లి, ఆంధ్రప్రదేశ్, భారతదేశం">Magatapalli, Andhra Pradesh, India</p>
+  <p>Vacation Bible School 2025 &nbsp;|&nbsp; April 25–27</p>
+  <p>Magatapalli, Andhra Pradesh, India</p>
   <div class="footer-links">
     <a href="#about">About</a><a href="#schedule">Schedule</a><a href="#register">Register</a><a href="#materials">Materials</a>
   </div>
-  <p data-en="📞 Contact: 9000912358 | 9949307671" data-te="📞 సంప్రదించండి: 9000912358 | 9949307671">📞 Contact: 9000912358 | 9949307671</p>
-  <div class="copyright" data-en="© 2026 LEF Church Magatapalli. All rights reserved. | Built with ❤️ & Faith" data-te="© 2026 LEF చర్చ్ మగటపల్లి. సర్వ హక్కులు పరిరక్షించబడినవి. | విశ్వాసం & ❤️ తో నిర్మించబడింది">© 2026 LEF Church Magatapalli. All rights reserved. | Built with ❤️ & Faith</div>
+  <p>📞 Contact your local church leader for more information</p>
+  <div class="copyright">© 2025 LEF Church Magatapalli. All rights reserved. | Built with ❤️ & Faith</div>
 </footer>
 
 <!-- SUCCESS POPUP -->
 <div class="success-overlay" id="successOverlay">
   <div class="success-popup">
     <span class="pop-emoji">🎉</span>
-    <h3 id="successTitle">Registration Submitted!</h3>
-    <p id="successMsg1">We look forward to seeing</p>
-    <strong id="regChildName" style="color:var(--coral);font-size:1.1rem;display:block;margin:6px 0"></strong>
-    <p id="successMsg2">at VBS 2026!</p>
-    <p class="bless" id="successBless">God bless you! 🙏</p>
+    <h3>Registration Submitted!</h3>
+    <p>We look forward to seeing<br><strong id="regChildName" style="color:var(--coral);font-size:1.1rem"></strong><br>at VBS 2026!</p>
+    <p class="bless">God bless you! 🙏</p>
     <button class="close-pop" id="closeSuccessBtn">✅ Close</button>
   </div>
 </div>
@@ -577,20 +486,9 @@
     <button class="modal-close" id="modalCloseBtn">✕</button>
     <div style="font-size:2.5rem;margin-bottom:12px">🔐</div>
     <h2>Secure Login</h2>
-    <p>Select your role and enter your password.</p>
-    <div class="role-select-group">
-      <button class="role-pick-btn active" id="roleAdminBtn" data-role="admin">
-        <span class="role-pick-icon">🔴</span>
-        <span class="role-pick-label">Admin</span>
-        <span class="role-pick-email">admin@lefmagatapalli.com</span>
-      </button>
-      <button class="role-pick-btn" id="roleViewerBtn" data-role="viewer">
-        <span class="role-pick-icon">🟡</span>
-        <span class="role-pick-label">Viewer</span>
-        <span class="role-pick-email">viewer@lefmagatapalli.com</span>
-      </button>
-    </div>
-    <input type="password" class="modal-input" id="loginPass" placeholder="Enter password" style="margin-top:4px;">
+    <p>Sign in with your authorised email to access the dashboard.</p>
+    <input type="email" class="modal-input" id="loginEmail" placeholder="Email address" autocomplete="email">
+    <input type="password" class="modal-input" id="loginPass" placeholder="Password">
     <button class="modal-btn" id="loginBtn">🔓 Sign In</button>
     <div class="modal-err" id="loginErr"></div>
     <div class="modal-loading" id="loginLoading">⏳ Signing in…</div>
@@ -678,9 +576,6 @@
   </div><!-- /admin-content -->
 </div><!-- /admin-panel -->
 
-<!-- Schedule data stored safely as JSON -->
-<script type="application/json" id="schedDataJson">{"1": {"title": "🌅 Day 1 – April 25 (శనివారం)", "color": "#FF6B6B", "html": "<div style=\"font-weight:800;font-size:0.78rem;color:var(--coral);margin:10px 0 8px;padding:6px 10px;border-radius:8px;\">☀️ ఉదయం వేళలు</div><div class=\"time-slot\"><span class=\"t\">9:00 - 9:15</span><span class=\"a\">ఉపాధ్యాయుల ప్రార్ధన కూడిక</span></div><div class=\"time-slot\"><span class=\"t\">9:15 - 9:20</span><span class=\"a\">ప్రారంభ ప్రార్ధన</span></div><div class=\"time-slot\"><span class=\"t\">9:20 - 9:50</span><span class=\"a\">పాటల సమయం</span></div><div class=\"time-slot\"><span class=\"t\">9:50 - 10:00</span><span class=\"a\">తరగతి విభజన</span></div><div class=\"time-slot\"><span class=\"t\">10:00 - 11:00</span><span class=\"a\">మొదటి పాఠం, చేతిపని పుస్తకం</span></div><div class=\"time-slot\"><span class=\"t\">11:00 - 11:15</span><span class=\"a\">విరామం</span></div><div class=\"time-slot\"><span class=\"t\">11:15 - 12:15</span><span class=\"a\">రెండో పాఠం, చేతిపని పుస్తకం</span></div><div class=\"time-slot\"><span class=\"t\">12:15 - 12:30</span><span class=\"a\">పాటల సమయం</span></div><div class=\"time-slot\"><span class=\"t\">12:30 - 1:30</span><span class=\"a\">భోజన సమయం</span></div><div style=\"font-weight:800;font-size:0.78rem;color:var(--purple);margin:10px 0 8px;background:#EDE9FE;padding:6px 10px;border-radius:8px;\">🌤️ మధ్యాహ్నం వేళలు</div><div class=\"time-slot\"><span class=\"t\">1:30 - 1:45</span><span class=\"a\">పాటల సమయం</span></div><div class=\"time-slot\"><span class=\"t\">1:45 - 2:45</span><span class=\"a\">మొదటి పాఠం, చేతిపని పుస్తకం</span></div><div class=\"time-slot\"><span class=\"t\">2:45 - 3:00</span><span class=\"a\">విరామం</span></div><div class=\"time-slot\"><span class=\"t\">3:00 - 4:00</span><span class=\"a\">రెండో పాఠం, చేతిపని పుస్తకం</span></div><div class=\"time-slot\"><span class=\"t\">4:00 - 4:15</span><span class=\"a\">పాటల సమయం</span></div><div class=\"time-slot\"><span class=\"t\">4:15 - 4:30</span><span class=\"a\">ముగింపు ప్రార్థన</span></div>", "te_title": "🌅 1వ రోజు – ఏప్రిల్ 25 (శనివారం)"}, "2": {"title": "☀️ Day 2 – April 26 (ఆదివారం)", "color": "#A855F7", "html": "<div style=\"font-weight:800;font-size:0.78rem;color:#92400E;margin:10px 0 8px;background:#FEF3C7;padding:6px 10px;border-radius:8px;\">⛪ ఆదివారం సంఘారాధన తర్వాత మొదలవుతుంది</div><div style=\"font-weight:800;font-size:0.78rem;color:var(--coral);margin:10px 0 8px;padding:6px 10px;border-radius:8px;\">☀️ ఉదయం వేళలు</div><div class=\"time-slot\"><span class=\"t\">11:00 - 11:15</span><span class=\"a\">పాటల సమయం</span></div><div class=\"time-slot\"><span class=\"t\">11:15 - 12:15</span><span class=\"a\">రెండో పాఠం, చేతిపని పుస్తకం</span></div><div class=\"time-slot\"><span class=\"t\">12:15 - 12:30</span><span class=\"a\">పాటల సమయం</span></div><div class=\"time-slot\"><span class=\"t\">12:30 - 1:30</span><span class=\"a\">భోజన సమయం</span></div><div style=\"font-weight:800;font-size:0.78rem;color:var(--purple);margin:10px 0 8px;background:#EDE9FE;padding:6px 10px;border-radius:8px;\">🌤️ మధ్యాహ్నం వేళలు</div><div class=\"time-slot\"><span class=\"t\">1:30 - 1:45</span><span class=\"a\">పాటల సమయం</span></div><div class=\"time-slot\"><span class=\"t\">1:45 - 2:45</span><span class=\"a\">మొదటి పాఠం, చేతిపని పుస్తకం</span></div><div class=\"time-slot\"><span class=\"t\">2:45 - 3:00</span><span class=\"a\">విరామం</span></div><div class=\"time-slot\"><span class=\"t\">3:00 - 4:00</span><span class=\"a\">రెండో పాఠం, చేతిపని పుస్తకం</span></div><div class=\"time-slot\"><span class=\"t\">4:00 - 4:15</span><span class=\"a\">పాటల సమయం</span></div><div class=\"time-slot\"><span class=\"t\">4:15 - 4:30</span><span class=\"a\">ముగింపు ప్రార్థన</span></div>", "te_title": "☀️ 2వ రోజు – ఏప్రిల్ 26 (ఆదివారం)"}, "3": {"title": "🌟 Day 3 – April 27 (సోమవారం)", "color": "#38BDF8", "html": "<div style=\"font-weight:800;font-size:0.78rem;color:var(--coral);margin:10px 0 8px;padding:6px 10px;border-radius:8px;\">☀️ ఉదయం వేళలు</div><div class=\"time-slot\"><span class=\"t\">9:00 - 9:15</span><span class=\"a\">ఉపాధ్యాయుల ప్రార్ధన కూడిక</span></div><div class=\"time-slot\"><span class=\"t\">9:15 - 9:20</span><span class=\"a\">ప్రారంభ ప్రార్ధన</span></div><div class=\"time-slot\"><span class=\"t\">9:20 - 9:50</span><span class=\"a\">పాటల సమయం</span></div><div class=\"time-slot\"><span class=\"t\">9:50 - 10:00</span><span class=\"a\">తరగతి విభజన</span></div><div class=\"time-slot\"><span class=\"t\">10:00 - 11:00</span><span class=\"a\">మొదటి పాఠం, చేతిపని పుస్తకం</span></div><div class=\"time-slot\"><span class=\"t\">11:00 - 11:15</span><span class=\"a\">విరామం</span></div><div class=\"time-slot\"><span class=\"t\">11:15 - 12:15</span><span class=\"a\">రెండో పాఠం, చేతిపని పుస్తకం</span></div><div class=\"time-slot\"><span class=\"t\">12:15 - 12:30</span><span class=\"a\">పాటల సమయం</span></div><div class=\"time-slot\"><span class=\"t\">12:30 - 1:30</span><span class=\"a\">భోజన సమయం</span></div><div style=\"font-weight:800;font-size:0.78rem;color:var(--purple);margin:10px 0 8px;background:#EDE9FE;padding:6px 10px;border-radius:8px;\">🌤️ మధ్యాహ్నం వేళలు</div><div class=\"time-slot\"><span class=\"t\">1:30 - 1:45</span><span class=\"a\">పాటల సమయం</span></div><div class=\"time-slot\"><span class=\"t\">1:45 - 2:45</span><span class=\"a\">మొదటి పాఠం, చేతిపని పుస్తకం</span></div><div class=\"time-slot\"><span class=\"t\">2:45 - 3:00</span><span class=\"a\">విరామం</span></div><div class=\"time-slot\"><span class=\"t\">3:00 - 4:00</span><span class=\"a\">🎮 ఆటలు (Games)</span></div><div class=\"time-slot\"><span class=\"t\">4:00 - 4:30</span><span class=\"a\">🏆 బహుమతుల పంపిణీ (Prize Distribution)</span></div><div class=\"time-slot\"><span class=\"t\">4:30</span><span class=\"a\">ముగింపు ప్రార్థన</span></div>", "te_title": "🌟 3వ రోజు – ఏప్రిల్ 27 (సోమవారం)"}}</script>
-
 <!-- ✅ NON-MODULE: Countdown + Scroll (works everywhere) -->
 <script>
   // Countdown
@@ -710,189 +605,10 @@
   }
   tick(); setInterval(tick,1000);
 
-  // Toast notification
-  function showToast(msg, duration=3000){
-    const t = document.getElementById('toastMsg');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'), duration);
-  }
-
   // Smooth scroll
   document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
     e.preventDefault(); document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth',block:'start'});
   }));
-
-  // ── Language Toggle ──
-  let currentLang = 'en';
-  function applyLang(lang){
-    // Apply Telugu font to body
-    document.body.classList.toggle('lang-te', lang==='te');
-    currentLang = lang;
-    // Update all elements with data-en / data-te
-    document.querySelectorAll('[data-en]').forEach(el=>{
-      const val = el.getAttribute('data-' + lang);
-      if(val) el.innerHTML = val;
-    });
-    // Toggle button label
-    // lang toggle switch updated above
-    // Update form labels
-    const labels = {
-      en: {
-        childName:"Child's Name *", // en age:"Age *", gender:"Gender",
-        parentName:"Parent/Guardian Name *", phone:"Phone Number *",
-        email:"Email Address", address:"Address / Village",
-        church:"Church / Denomination", days:"Days Attending",
-        submit:"🙏 Complete Registration",
-        regHeader:"📋 Register Now!", regSub:"April 25, 26 & 27, 2026",
-        allDays:"All 3 Days (Apr 25, 26 & 27)",
-        day1only:"Day 1 Only – April 25", day2only:"Day 2 Only – April 26",
-        day3only:"Day 3 Only – April 27",
-        day12:"Day 1 & 2 – April 25 & 26", day23:"Day 2 & 3 – April 26 & 27",
-        selectAge:"Select age", selectGender:"Select",
-      },
-      te: {
-        childName:"పేరు *", age:"వయసు *", gender:"లింగం",
-        parentName:"తల్లిదండ్రుల పేరు *", phone:"ఫోన్ నంబర్ *",
-        email:"ఇమెయిల్", address:"చిరునామా / గ్రామం",
-        church:"చర్చ్ / సంస్థ", days:"హాజరయ్యే రోజులు",
-        submit:"🙏 నమోదు పూర్తి చేయండి",
-        regHeader:"📋 ఇప్పుడే నమోదు చేయండి!", regSub:"ఏప్రిల్ 25, 26 & 27, 2026",
-        allDays:"మూడు రోజులూ (ఏప్రి 25, 26 & 27)",
-        day1only:"రోజు 1 మాత్రమే – ఏప్రిల్ 25", day2only:"రోజు 2 మాత్రమే – ఏప్రిల్ 26",
-        day3only:"రోజు 3 మాత్రమే – ఏప్రిల్ 27",
-        day12:"రోజు 1 & 2 – ఏప్రిల్ 25 & 26", day23:"రోజు 2 & 3 – ఏప్రిల్ 26 & 27",
-        selectAge:"వయసు ఎంచుకోండి", selectGender:"ఎంచుకోండి",
-      }
-    };
-    const L = labels[lang];
-    // Cost label via data-te (handled by querySelectorAll('[data-en]'))
-    // Form labels
-    const labelMap = {  // (cost handled via data-te)
-      'childName': L.childName, 'childAge': L.age, 'childGender': L.gender,
-      'parentName': L.parentName, 'parentPhone': L.phone,
-      'parentEmail': L.email, 'address': L.address,
-      'church': L.church, 'days': L.days,
-    };
-    Object.entries(labelMap).forEach(([id, text])=>{
-      const el = document.getElementById(id);
-      if(el){
-        const lbl = el.closest('.form-group')?.querySelector('label');
-        if(lbl) lbl.textContent = text;
-      }
-    });
-    // Submit button
-    const sb = document.getElementById('submitBtn');
-    if(sb) sb.innerHTML = lang==='en' ? '🙏 Complete Registration' : '🙏 రిజిస్ట్రేషన్ పూర్తి చేయండి';
-    // Reg modal header
-    const rh = document.querySelector('#regModal .modal-box > div:first-child div:first-child div:first-child');
-    if(rh) rh.textContent = L.regHeader;
-    // Days select options
-    const daysEl = document.getElementById('days');
-    if(daysEl){
-      const opts = daysEl.querySelectorAll('option');
-      const vals = [L.allDays, L.day1only, L.day2only, L.day3only, L.day12, L.day23];
-      opts.forEach((o,i)=>{ if(vals[i]) o.textContent = vals[i]; });
-    }
-    // Age/gender placeholder options
-    const ageEl = document.getElementById('childAge');
-    if(ageEl) ageEl.options[0].textContent = L.selectAge;
-    const genEl = document.getElementById('childGender');
-    if(genEl){
-      genEl.options[0].textContent = L.selectGender;
-      if(genEl.options[1]) genEl.options[1].textContent = lang==='en' ? 'Male' : 'పురుషుడు';
-      if(genEl.options[2]) genEl.options[2].textContent = lang==='en' ? 'Female' : 'స్త్రీ';
-    }
-    // Why VBS feature card paragraphs
-    const featureTexts = {
-      en: [
-        'Children learn biblical truths through stories and songs that stay with them for life.',
-        'A safe, welcoming community where children bond and build lasting friendships in Christ.',
-        'Creative lessons that engage young minds and make learning about God exciting.',
-        'Games, crafts, music, snacks — VBS is the highlight of any childs year!'
-      ],
-      te: [
-        'పిల్లలు జీవితాంతం గుర్తుండిపోయే బైబిల్ సత్యాలను కథలు మరియు పాటల ద్వారా నేర్చుకుంటారు.',
-        'క్రీస్తులో శాశ్వత స్నేహాలు ఏర్పడే సురక్షితమైన మరియు ఆప్యాయమైన వాతావరణం.',
-        'దేవుని గురించి నేర్చుకోవడాన్ని సరదాగా మరియు ఉత్తేజకరంగా చేసే సృజనాత్మక పాఠాలు.',
-        'ఆటలు, హస్తకళలు, సంగీతం, అల్పాహారం — VBS ప్రతి పిల్లవాడికి మరపురాని అనుభవం!'
-      ]
-    };
-    document.querySelectorAll('.feature-card p').forEach((p,i)=>{
-      if(featureTexts[lang][i]) p.textContent = featureTexts[lang][i];
-    });
-    // Materials
-    // Schedule day card labels
-    const schedCards = [{day:'1',en:'9:00 AM – 4:30 PM',te:'9:00 AM – 4:30 PM'},{day:'2',en:'11:00 AM – 4:30 PM',te:'11:00 AM – 4:30 PM'},{day:'3',en:'9:00 AM – 4:30 PM',te:'9:00 AM – 4:30 PM'}];
-    const matLink = document.querySelector('.material-link');
-    if(matLink) matLink.textContent = lang==='en' ? '🌐 Visit VBSMinistries.org →' : '🌐 VBSMinistries.org సందర్శించండి →';
-    const matP = document.querySelector('.material-box p');
-    if(matP) matP.textContent = lang==='en'
-      ? 'Complete VBS kits, Bible story books, activity books, crafts, music, and more.'
-      : 'ఉత్తమమైన VBS పాఠ్యపుస్తకాలు, కార్యకలాప పత్రాలు మరియు బోధన సామగ్రిని పొందండి.';
-    const matH = document.querySelector('.material-box h3');
-    if(matH) matH.textContent = lang==='en' ? 'VBS Books & Curriculum' : 'VBS పుస్తకాలు & పాఠ్యాంశాలు';
-    // Footer church name
-    const footer = document.querySelector('footer .church-logo');
-    if(footer) footer.textContent = lang==='en' ? '✝ LEF Church Magatapalli' : '✝ LEF చర్చ్ మగటపల్లి';
-    // Update toggle switch state
-    const track = document.getElementById('langTrack');
-    const enLbl = document.getElementById('enLabel');
-    const teLbl = document.getElementById('teLabel');
-    if(track){ track.classList.toggle('te', lang==='te'); }
-    if(enLbl){ enLbl.classList.toggle('active', lang==='en'); }
-    if(teLbl){ teLbl.classList.toggle('active', lang==='te'); }
-    const footerLinks = document.querySelectorAll('.footer-links a');
-    const footerLinksTE = ['పరిచయం','కార్యక్రమం','నమోదు','పుస్తకాలు'];
-    const footerLinksEN = ['About','Schedule','Register','Materials'];
-    footerLinks.forEach((a,i)=>{ a.textContent = lang==='en' ? footerLinksEN[i] : footerLinksTE[i]; });
-    // Success popup if visible
-    const st2 = document.getElementById('successTitle');
-    if(st2 && document.getElementById('successOverlay').classList.contains('active')){
-      const isTe2 = lang==='te';
-      if(st2) st2.textContent = isTe2 ? 'నమోదు విజయవంతంగా పూర్తైంది! 🎉' : 'Registration Submitted!';
-    }
-    // Admin button
-    const adminBtn = document.getElementById('adminBtn');
-    if(adminBtn) adminBtn.textContent = lang==='en' ? '🔐 Admin / Viewer' : '🔐 నిర్వాహకుడు';
-  }
-
-  // Single click listener on wrapper — prevents double-fire from child clicks
-  document.getElementById('langToggle').addEventListener('click',()=>{
-    applyLang(currentLang==='en' ? 'te' : 'en');
-  });
-
-  // Schedule modal data — loaded from safe JSON script tag
-  const schedData = JSON.parse(document.getElementById('schedDataJson').textContent);
-
-
-  document.querySelectorAll('.sched-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const d = schedData[btn.dataset.day];
-      document.getElementById('schedModalHeader').style.background = d.color;
-      document.getElementById('schedModalTitle').textContent = currentLang==='te' ? d.te_title : d.title;
-      document.getElementById('schedModalBody').innerHTML = d.html;
-      document.getElementById('scheduleModal').classList.add('active');
-    });
-  });
-  document.getElementById('schedModalClose').addEventListener('click',()=>{
-    document.getElementById('scheduleModal').classList.remove('active');
-  });
-  document.getElementById('scheduleModal').addEventListener('click',e=>{
-    if(e.target===document.getElementById('scheduleModal')) document.getElementById('scheduleModal').classList.remove('active');
-  });
-
-  // Registration modal — all open buttons
-  function openRegModal(){ document.getElementById('regModal').classList.add('active'); }
-  document.getElementById('openRegBtn').addEventListener('click', openRegModal);
-  if(document.getElementById('navRegBtn')) document.getElementById('navRegBtn').addEventListener('click', openRegModal);
-  if(document.getElementById('heroRegBtn')) document.getElementById('heroRegBtn').addEventListener('click', openRegModal);
-  document.getElementById('closeRegBtn').addEventListener('click',()=>{
-    document.getElementById('regModal').classList.remove('active');
-  });
-  document.getElementById('regModal').addEventListener('click',e=>{
-    if(e.target===document.getElementById('regModal')) document.getElementById('regModal').classList.remove('active');
-  });
 </script>
 
 <!-- ✅ MODULE: Firebase logic only -->
@@ -964,42 +680,25 @@
 
   function openModal(){
     document.getElementById('loginModal').classList.add('active');
-    setTimeout(()=>document.getElementById('loginPass').focus(), 100);
+    setTimeout(()=>document.getElementById('loginEmail').focus(), 100);
   }
   function closeModal(){
     document.getElementById('loginModal').classList.remove('active');
+    document.getElementById('loginEmail').value='';
     document.getElementById('loginPass').value='';
     document.getElementById('loginErr').style.display='none';
     document.getElementById('loginLoading').style.display='none';
     document.getElementById('loginBtn').disabled=false;
-    // Reset to admin role
-    selectedRole='admin';
-    document.getElementById('roleAdminBtn').classList.add('active');
-    document.getElementById('roleViewerBtn').classList.remove('active');
   }
 
-  // Role picker state
-  let selectedRole = 'admin';
-  document.getElementById('roleAdminBtn').addEventListener('click',()=>{
-    selectedRole='admin';
-    document.getElementById('roleAdminBtn').classList.add('active');
-    document.getElementById('roleViewerBtn').classList.remove('active');
-    document.getElementById('loginPass').focus();
-  });
-  document.getElementById('roleViewerBtn').addEventListener('click',()=>{
-    selectedRole='viewer';
-    document.getElementById('roleViewerBtn').classList.add('active');
-    document.getElementById('roleAdminBtn').classList.remove('active');
-    document.getElementById('loginPass').focus();
-  });
-
   async function doLogin(){
-    const email = selectedRole==='admin' ? ADMIN_EMAIL : VIEWER_EMAIL;
+    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
     const pass  = document.getElementById('loginPass').value;
     const errEl = document.getElementById('loginErr');
     errEl.style.display='none';
 
-    if(!pass){ errEl.innerHTML='⚠️ Please enter your password.'; errEl.style.display='block'; return; }
+    if(!email||!pass){ errEl.innerHTML='⚠️ Please enter both email and password.'; errEl.style.display='block'; return; }
+    if(email!==ADMIN_EMAIL && email!==VIEWER_EMAIL){ errEl.innerHTML='🚫 This email is not authorised to access the dashboard.'; errEl.style.display='block'; return; }
 
     document.getElementById('loginBtn').disabled=true;
     document.getElementById('loginLoading').style.display='block';
@@ -1146,7 +845,6 @@
   // Close success popup
   document.getElementById('closeSuccessBtn').addEventListener('click', ()=>{
     document.getElementById('successOverlay').classList.remove('active');
-    document.getElementById('regModal').classList.remove('active');
   });
 
   async function submitReg(){
@@ -1156,24 +854,16 @@
     const ph  = document.getElementById('parentPhone').value.trim();
 
     // Validation
-    if(!cn || !age || !pn){
-      showToast(currentLang==='te'
-        ? '⚠️ దయచేసి అన్ని తప్పనిసరి ఫీల్డ్‌లు (*) పూరించండి'
-        : '⚠️ Please fill all required fields (*)');
-      return;
-    }
+    if(!cn || !age || !pn){ alert('Please fill all required fields (*)'); return; }
     if(ph.length !== 10){
       document.getElementById('phoneErr').style.display = 'block';
       document.getElementById('parentPhone').focus();
-      showToast(currentLang==='te'
-        ? '⚠️ చెల్లుబాటు అయ్యే 10 అంకెల మొబైల్ నంబర్ నమోదు చేయండి'
-        : '⚠️ Please enter a valid 10-digit mobile number');
       return;
     }
     document.getElementById('phoneErr').style.display = 'none';
 
     const btn = document.getElementById('submitBtn');
-    btn.disabled = true; btn.textContent = currentLang==='te' ? '⏳ సమర్పిస్తున్నాము…' : '⏳ Submitting…';
+    btn.disabled = true; btn.textContent = '⏳ Submitting…';
     document.getElementById('errorMsg').style.display = 'none';
 
     try{
@@ -1190,19 +880,8 @@
         createdAt: serverTimestamp()
       });
 
-      // Show success popup — bilingual
+      // Show success popup
       document.getElementById('regChildName').textContent = cn;
-      const isTe = currentLang==='te';
-      const st = document.getElementById('successTitle');
-      const sm1 = document.getElementById('successMsg1');
-      const sm2 = document.getElementById('successMsg2');
-      const sb2 = document.getElementById('successBless');
-      const cp = document.querySelector('.close-pop');
-      if(st) st.textContent = isTe ? 'నమోదు విజయవంతంగా పూర్తైంది! 🎉' : 'Registration Submitted!';
-      if(sm1) sm1.textContent = isTe ? 'VBS 2026 లో' : 'We look forward to seeing';
-      if(sm2) sm2.textContent = isTe ? 'పాల్గొనబోతున్నందుకు మేము సంతోషిస్తున్నాము.' : 'at VBS 2026!';
-      if(sb2) sb2.textContent = isTe ? 'దేవుని కృప మీపై ఉండునుగాక! 🙏' : 'God bless you! 🙏';
-      if(cp) cp.textContent = isTe ? '✅ మూసివేయండి' : '✅ Close';
       document.getElementById('successOverlay').classList.add('active');
 
       // Clear form
@@ -1341,6 +1020,5 @@
   }
 
 </script>
-<div class="toast" id="toastMsg"></div>
 </body>
 </html>
