@@ -1232,7 +1232,7 @@
            </select>`
         : `<span class="badge b-days">${cls?'Class '+cls:'—'}</span>`;
       const childName = r.childName||((r.childFirst||'')+(r.childLast?' '+r.childLast:''));
-      const shareBtn  = `<button class="share-btn" data-id="${r.id}" data-name="${childName}" data-days="${r.days||''}" data-age="${r.age||''}" data-phone="${r.phone||''}" title="Share Certificate">📜 Share</button>`;
+      const shareBtn  = `<button class="share-btn" data-id="${r.id}" data-name="${childName}" data-days="${r.days||''}" data-age="${r.age||''}" title="Share Certificate">📜 Share</button>`;
       const delBtn    = `<button class="del-btn" data-id="${r.id}" style="margin-left:4px">🗑</button>`;
       const actionBtns = isAdmin ? shareBtn + delBtn : shareBtn;
       return `<tr>
@@ -1275,7 +1275,7 @@
     // Wire share/certificate buttons
     document.querySelectorAll('.share-btn').forEach(btn=>{
       btn.addEventListener('click',()=>{
-        openCertModal(btn.dataset.id, btn.dataset.name, btn.dataset.days, btn.dataset.age, btn.dataset.phone);
+        openCertModal(btn.dataset.id, btn.dataset.name, btn.dataset.days, btn.dataset.age);
       });
     });
   }
@@ -1390,15 +1390,14 @@
 
 
   // ══════ CERTIFICATE MODULE ══════
-  let certRecordId = '', certChildName = '', certDays = '', certAge = '', certPhone = '';
+  let certRecordId = '', certChildName = '', certDays = '', certAge = '';
   let certPhotoDataUrl = null;
 
-  function openCertModal(id, name, days, age, phone=''){
+  function openCertModal(id, name, days, age){
     certRecordId = id;
     certChildName = name;
     certDays = days;
     certAge = age;
-    certPhone = phone;
     certPhotoDataUrl = null;
     document.getElementById('certStep1').style.display = 'block';
     document.getElementById('certPreviewWrap').style.display = 'none';
@@ -1608,13 +1607,10 @@
     ctx.fillStyle='#FFD700'; ctx.font='28px Arial';
     ctx.fillText('✝  ✝  ✝', cx, sigY+120);
 
-    // Done — pre-generate blob immediately so Share button works instantly on iOS
+    // Done
     document.getElementById('certPreviewWrap').style.display = 'block';
     document.getElementById('certStep1').style.display = 'none';
     document.getElementById('certModal').querySelector('.modal-box').scrollTop = 0;
-    // Reset old blob, prepare new one in background
-    certReadyBlob = null;
-    prepareCertBlob().catch(()=>{});
   }
 
   // Download
@@ -1626,80 +1622,29 @@
     a.click();
   });
 
-  // ── Certificate blob cache (same pattern as Rani Gold — iOS compatible) ──
-  let certReadyBlob = null;
-
-  // Pre-generate blob when certificate is generated (so share is instant)
-  const origGenerate = document.getElementById('certGenerateBtn');
-
-  async function prepareCertBlob(){
-    const canvas = document.getElementById('certCanvas');
-    certReadyBlob = await new Promise((res, rej) =>
-      canvas.toBlob(b => b ? res(b) : rej(new Error('toBlob failed')), 'image/png', 1.0)
-    );
-  }
-
-  // Share via WhatsApp — iOS 15 / iPhone 15 compatible
-  // Key fix: navigator.share() called DIRECTLY in click handler (same gesture stack)
-  // blob is pre-prepared before click, not inside async callback
+  // Share via WhatsApp
   document.getElementById('certShareBtn').addEventListener('click', async()=>{
-    const btn = document.getElementById('certShareBtn');
-    const origHTML = btn.innerHTML;
-    const phone   = certPhone ? certPhone.replace(/\D/g,'') : '';
-    const waPhone = phone.length===10 ? '91'+phone : phone;
-    const waMsg   = encodeURIComponent(
-      `🙏 Congratulations to *${certChildName}* for attending *VBS 2026* at LEF Church Magatapalli! ✝️\n\nTheme: Signet Ring — Haggai 2:23\n\n"Let the little children come to me." — Matthew 19:14`
-    );
-    const waUrl = waPhone
-      ? `https://wa.me/${waPhone}?text=${waMsg}`
-      : `https://wa.me/?text=${waMsg}`;
-
-    // If blob not ready yet (shouldn't happen but safety net)
-    if(!certReadyBlob){
-      btn.innerHTML = '⏳ Preparing…';
-      btn.style.pointerEvents = 'none';
-      try{
-        await prepareCertBlob();
-      }catch(e){
-        btn.innerHTML = origHTML;
-        btn.style.pointerEvents = '';
-        downloadCert();
-        return;
-      }
-      btn.innerHTML = origHTML;
-      btn.style.pointerEvents = '';
-    }
-
-    const fileName = `VBS2026_Certificate_${certChildName.replace(/\s+/g,'_')}.png`;
-    const file = new File([certReadyBlob], fileName, {type:'image/png'});
-
-    // navigator.share called directly here — same synchronous gesture stack (iOS requirement)
-    if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
-      navigator.share({
-        title: `VBS 2026 Certificate — ${certChildName}`,
-        files: [file]
-      }).catch(err=>{
-        if(err.name !== 'AbortError') downloadCert();
-      });
-    } else {
-      downloadCert();
-    }
-
-    function downloadCert(){
-      // Fallback: save image + open WhatsApp with number
-      const url = URL.createObjectURL(certReadyBlob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(()=> URL.revokeObjectURL(url), 2000);
-      showToast('📥 Saved! Opening WhatsApp…', 3500);
-      setTimeout(()=>{ window.location.href = waUrl; }, 1500);
-    }
+    const canvas = document.getElementById('certCanvas');
+    try{
+      canvas.toBlob(async(blob)=>{
+        const file = new File([blob], `VBS2026_${certChildName.replace(/\s+/g,'_')}.png`, {type:'image/png'});
+        if(navigator.canShare && navigator.canShare({files:[file]})){
+          await navigator.share({
+            files:[file],
+            title:`VBS 2026 Certificate — ${certChildName}`,
+            text:`Congratulations to ${certChildName} for attending VBS 2026 at LEF Church Magatapalli! 🙏✝️`
+          });
+        } else {
+          // Fallback: download + open WhatsApp
+          const a = document.createElement('a');
+          a.download = `VBS2026_Certificate_${certChildName}.png`;
+          a.href = canvas.toDataURL('image/png');
+          a.click();
+          setTimeout(()=>{ window.open('https://wa.me/?text='+encodeURIComponent(`VBS 2026 Certificate for ${certChildName} — LEF Church Magatapalli 🙏`)); },1000);
+        }
+      },'image/png');
+    }catch(err){ console.error('Share error:',err); alert('Download the certificate and share it manually.'); }
   });
-
   // ══════ END CERTIFICATE MODULE ══════
 
 
