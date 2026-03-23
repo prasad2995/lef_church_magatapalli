@@ -1839,10 +1839,7 @@
     );
   }
 
-  // ── Share Image button ─────────────────────────────────────────
-  // Strategy:
-  //  1. Try Web Share API (works on HTTPS + Chrome Android / iOS Safari)
-  //  2. If unavailable or fails → download image + open WhatsApp + show overlay guide
+  // ── Share Image button — uses Web Share API to share certificate image ──
   document.getElementById('certShareBtn').addEventListener('click', async()=>{
     const btn = document.getElementById('certShareBtn');
     const origHTML = btn.innerHTML;
@@ -1864,122 +1861,29 @@
 
     const fileName = `VBS2026_Certificate_${certChildName.replace(/\s+/g,'_')}.png`;
     const file = new File([certReadyBlob], fileName, {type:'image/png'});
+    const shareText = `🙏 Congratulations to *${certChildName}* for attending *VBS 2026* at LEF Church Magatapalli! ✝️\n\nTheme: Signet Ring — Haggai 2:23\n\n"Let the little children come to me." — Matthew 19:14`;
 
-    // Try native Web Share API first (HTTPS + Chrome Android / iOS Safari)
+    // Web Share API — shares image + text natively via device share sheet (WhatsApp, etc.)
     if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
       try{
         await navigator.share({
           title: `VBS 2026 Certificate — ${certChildName}`,
+          text: shareText,
           files: [file]
         });
-        return; // success — done
       }catch(err){
-        if(err.name === 'AbortError') return; // user cancelled — do nothing
-        // Other error — fall through to download+guide approach
+        // User cancelled or share failed — fall back to download
+        if(err.name !== 'AbortError'){
+          downloadCertFallback(fileName, shareText);
+        }
       }
+    } else {
+      // Browser doesn't support file sharing — download image instead
+      downloadCertFallback(fileName, shareText);
     }
-
-    // Fallback: download image then open WhatsApp, show attach guide overlay
-    downloadAndGuide(fileName);
   });
 
-  function downloadAndGuide(fileName){
-    // 1. Trigger image download to device
-    const url = URL.createObjectURL(certReadyBlob);
-    const a = document.createElement('a');
-    a.href = url; a.download = fileName;
-    document.body.appendChild(a); a.click();
-    document.body.removeChild(a);
-    setTimeout(()=> URL.revokeObjectURL(url), 3000);
-
-    // 2. Build WhatsApp URL (with phone if available)
-    const phone   = certPhone ? certPhone.replace(/\D/g,'') : '';
-    const waPhone = phone.length===10 ? '91'+phone : '';
-    const waMsg   = encodeURIComponent(
-      `🙏 Congratulations to *${certChildName}* for attending *VBS 2026* at LEF Church Magatapalli! ✝️\n\nTheme: Signet Ring — Haggai 2:23\n\n"Let the little children come to me." — Matthew 19:14`
-    );
-    const waUrl = waPhone
-      ? `https://wa.me/${waPhone}?text=${waMsg}`
-      : `https://wa.me/?text=${waMsg}`;
-
-    // 3. Show step-by-step overlay guide
-    showShareGuide(waUrl, fileName);
-  }
-
-  function showShareGuide(waUrl, fileName){
-    // Remove any existing overlay
-    const existing = document.getElementById('shareGuideOverlay');
-    if(existing) existing.remove();
-
-    const overlay = document.createElement('div');
-    overlay.id = 'shareGuideOverlay';
-    overlay.style.cssText = `
-      position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:9999;
-      display:flex;align-items:flex-end;justify-content:center;
-      animation:fadeInOverlay .25s ease;
-    `;
-
-    overlay.innerHTML = `
-      <style>
-        @keyframes fadeInOverlay{from{opacity:0}to{opacity:1}}
-        @keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
-        #shareGuideBox{
-          background:white;border-radius:24px 24px 0 0;padding:28px 24px 36px;
-          width:100%;max-width:480px;
-          animation:slideUp .3s cubic-bezier(.4,0,.2,1);
-          font-family:'Nunito',sans-serif;
-        }
-        .sg-title{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#1E3A5F;margin-bottom:6px;text-align:center;}
-        .sg-sub{font-size:0.82rem;color:#64748B;text-align:center;margin-bottom:20px;line-height:1.5;}
-        .sg-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;}
-        .sg-step{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:14px;background:#F8FAFC;border:2px solid #E2E8F0;}
-        .sg-num{background:#1E3A5F;color:white;font-family:'Fredoka One',cursive;font-size:1rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-        .sg-step-text{font-size:0.85rem;color:#334155;font-weight:700;line-height:1.5;}
-        .sg-step-text span{color:#64748B;font-weight:600;}
-        .sg-step.highlight{background:#DCFCE7;border-color:#86EFAC;}
-        .sg-wa-btn{width:100%;background:#25D366;color:white;border:none;border-radius:14px;padding:15px;font-family:'Fredoka One',cursive;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;}
-        .sg-cancel{width:100%;background:none;border:2px solid #E2E8F0;border-radius:14px;padding:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;color:#64748B;cursor:pointer;}
-      </style>
-      <div id="shareGuideBox">
-        <div class="sg-title">📤 Share Certificate on WhatsApp</div>
-        <div class="sg-sub">The certificate image has been saved to your device.<br>Follow these steps to share it:</div>
-        <div class="sg-steps">
-          <div class="sg-step highlight">
-            <div class="sg-num">✓</div>
-            <div class="sg-step-text">Certificate image saved to your <span>Downloads / Gallery</span></div>
-          </div>
-          <div class="sg-step">
-            <div class="sg-num">1</div>
-            <div class="sg-step-text">Tap <span>"Open WhatsApp"</span> below — it will open with the congratulations message ready</div>
-          </div>
-          <div class="sg-step">
-            <div class="sg-num">2</div>
-            <div class="sg-step-text">Tap the <span>📎 attachment icon</span> in WhatsApp and choose <span>Gallery</span></div>
-          </div>
-          <div class="sg-step">
-            <div class="sg-num">3</div>
-            <div class="sg-step-text">Select the saved certificate and tap <span>Send</span></div>
-          </div>
-        </div>
-        <button class="sg-wa-btn" id="sgOpenWaBtn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Open WhatsApp
-        </button>
-        <button class="sg-cancel" id="sgCancelBtn">✕ Close</button>
-      </div>
-    `;
-
-    document.body.appendChild(overlay);
-
-    document.getElementById('sgOpenWaBtn').addEventListener('click',()=>{
-      window.open(waUrl, '_blank');
-      overlay.remove();
-    });
-    document.getElementById('sgCancelBtn').addEventListener('click',()=> overlay.remove());
-    overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.remove(); });
-  }
-
-  // ── WhatsApp Text button — opens WhatsApp with congratulations message ──
+  // ── WhatsApp Text button — opens WhatsApp with congratulations text only ──
   document.getElementById('certWaTextBtn').addEventListener('click',()=>{
     const phone   = certPhone ? certPhone.replace(/\D/g,'') : '';
     const waPhone = phone.length===10 ? '91'+phone : '';
@@ -1991,6 +1895,17 @@
       : `https://wa.me/?text=${waMsg}`;
     window.open(waUrl, '_blank');
   });
+
+  // Fallback: download image and show instructions
+  function downloadCertFallback(fileName, shareText){
+    const url = URL.createObjectURL(certReadyBlob);
+    const a = document.createElement('a');
+    a.href = url; a.download = fileName;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(()=> URL.revokeObjectURL(url), 2000);
+    showToast('📥 Certificate downloaded! Use "WhatsApp Text" to send the message.', 4000);
+  }
 
   // ══════ END CERTIFICATE MODULE ══════
 
