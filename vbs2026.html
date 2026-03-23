@@ -1839,31 +1839,20 @@
     );
   }
 
-  // Share via WhatsApp — iOS 15 / iPhone 15 compatible
-  // Key fix: navigator.share() called DIRECTLY in click handler (same gesture stack)
-  // blob is pre-prepared before click, not inside async callback
+  // ── Share Image button — uses Web Share API to share certificate image ──
   document.getElementById('certShareBtn').addEventListener('click', async()=>{
     const btn = document.getElementById('certShareBtn');
     const origHTML = btn.innerHTML;
-    const phone   = certPhone ? certPhone.replace(/\D/g,'') : '';
-    const waPhone = phone.length===10 ? '91'+phone : phone;
-    const waMsg   = encodeURIComponent(
-      `🙏 Congratulations to *${certChildName}* for attending *VBS 2026* at LEF Church Magatapalli! ✝️\n\nTheme: Signet Ring — Haggai 2:23\n\n"Let the little children come to me." — Matthew 19:14`
-    );
-    const waUrl = waPhone
-      ? `https://wa.me/${waPhone}?text=${waMsg}`
-      : `https://wa.me/?text=${waMsg}`;
 
-    // If blob not ready yet (shouldn't happen but safety net)
+    // Ensure blob is ready
     if(!certReadyBlob){
       btn.innerHTML = '⏳ Preparing…';
       btn.style.pointerEvents = 'none';
-      try{
-        await prepareCertBlob();
-      }catch(e){
+      try{ await prepareCertBlob(); }
+      catch(e){
         btn.innerHTML = origHTML;
         btn.style.pointerEvents = '';
-        downloadCert();
+        showToast('❌ Could not prepare image.', 3000);
         return;
       }
       btn.innerHTML = origHTML;
@@ -1872,33 +1861,51 @@
 
     const fileName = `VBS2026_Certificate_${certChildName.replace(/\s+/g,'_')}.png`;
     const file = new File([certReadyBlob], fileName, {type:'image/png'});
+    const shareText = `🙏 Congratulations to *${certChildName}* for attending *VBS 2026* at LEF Church Magatapalli! ✝️\n\nTheme: Signet Ring — Haggai 2:23\n\n"Let the little children come to me." — Matthew 19:14`;
 
-    // navigator.share called directly here — same synchronous gesture stack (iOS requirement)
+    // Web Share API — shares image + text natively via device share sheet (WhatsApp, etc.)
     if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
-      navigator.share({
-        title: `VBS 2026 Certificate — ${certChildName}`,
-        files: [file]
-      }).catch(err=>{
-        if(err.name !== 'AbortError') downloadCert();
-      });
+      try{
+        await navigator.share({
+          title: `VBS 2026 Certificate — ${certChildName}`,
+          text: shareText,
+          files: [file]
+        });
+      }catch(err){
+        // User cancelled or share failed — fall back to download
+        if(err.name !== 'AbortError'){
+          downloadCertFallback(fileName, shareText);
+        }
+      }
     } else {
-      downloadCert();
-    }
-
-    function downloadCert(){
-      // Fallback: save image + open WhatsApp with number
-      const url = URL.createObjectURL(certReadyBlob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(()=> URL.revokeObjectURL(url), 2000);
-      showToast('📥 Saved! Opening WhatsApp…', 3500);
-      setTimeout(()=>{ window.location.href = waUrl; }, 1500);
+      // Browser doesn't support file sharing — download image instead
+      downloadCertFallback(fileName, shareText);
     }
   });
+
+  // ── WhatsApp Text button — opens WhatsApp with congratulations text only ──
+  document.getElementById('certWaTextBtn').addEventListener('click',()=>{
+    const phone   = certPhone ? certPhone.replace(/\D/g,'') : '';
+    const waPhone = phone.length===10 ? '91'+phone : '';
+    const waMsg   = encodeURIComponent(
+      `🙏 Congratulations to *${certChildName}* for attending *VBS 2026* at LEF Church Magatapalli! ✝️\n\nTheme: Signet Ring — Haggai 2:23\n\n"Let the little children come to me." — Matthew 19:14`
+    );
+    const waUrl = waPhone
+      ? `https://wa.me/${waPhone}?text=${waMsg}`
+      : `https://wa.me/?text=${waMsg}`;
+    window.open(waUrl, '_blank');
+  });
+
+  // Fallback: download image and show instructions
+  function downloadCertFallback(fileName, shareText){
+    const url = URL.createObjectURL(certReadyBlob);
+    const a = document.createElement('a');
+    a.href = url; a.download = fileName;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(()=> URL.revokeObjectURL(url), 2000);
+    showToast('📥 Certificate downloaded! Use "WhatsApp Text" to send the message.', 4000);
+  }
 
   // ══════ END CERTIFICATE MODULE ══════
 
@@ -2631,10 +2638,15 @@
         <p style="font-weight:700;color:var(--navy);margin-bottom:12px;">📄 Certificate Preview</p>
         <canvas id="certCanvas" style="width:100%;border-radius:12px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
         <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-          <button class="cert-action-btn" id="certShareBtn" style="background:var(--grass);color:var(--navy);flex:1;">📤 Share via WhatsApp</button>
+          <button class="cert-action-btn" id="certShareBtn" style="background:#25D366;color:white;flex:1;">📤 Share Image</button>
+          <button class="cert-action-btn" id="certWaTextBtn" style="background:#128C7E;color:white;flex:1;">💬 WhatsApp Text</button>
           <button class="cert-action-btn" id="certDownloadBtn" style="background:var(--sky);color:var(--navy);">⬇ Download</button>
           <button class="cert-action-btn" id="certRetakeBtn" style="background:#F1F5F9;color:var(--navy);" id="certRetakeBtn">📸 Change Photo</button>
         </div>
+        <p style="font-size:0.75rem;color:#94A3B8;margin-top:8px;text-align:center;">
+          <strong>Share Image</strong> — opens your device's share sheet to send the certificate image via WhatsApp or any app.<br>
+          <strong>WhatsApp Text</strong> — opens WhatsApp with a congratulations message (text only).
+        </p>
       </div>
 
     </div>
