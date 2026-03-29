@@ -346,6 +346,20 @@
     .dash-view{display:none;}
     .dash-view.active{display:block;}
 
+    /* ATTENDANCE VIEW */
+    .attendance-header{background:white;border-radius:18px;border:2px solid #E2E8F0;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+    .day-selector{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+    .day-selector > div{display:flex;align-items:center;gap:8px;}
+    .day-selector label{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--navy);white-space:nowrap;}
+    .day-dropdown{padding:10px 16px;border:2px solid #E2E8F0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;outline:none;cursor:pointer;background:white;}
+    .day-dropdown:focus{border-color:var(--coral);}
+    .attendance-table-card{background:white;border-radius:18px;border:2px solid #E2E8F0;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;}
+    .attendance-table-card .table-header{padding:18px 22px;border-bottom:2px solid #F1F5F9;}
+    .attendance-table-card h3{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--navy);}
+    .att-table-simple{width:100%;}
+    .att-table-simple th{background:#F8FAFC;padding:14px 16px;text-align:left;font-weight:800;font-size:0.85rem;color:#64748B;}
+    .att-table-simple td{padding:14px 16px;border-bottom:1px solid #F1F5F9;font-size:0.9rem;}
+
     /* ANALYTICS */
     .analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;margin-bottom:24px;}
     .chart-card{background:white;border-radius:18px;border:2px solid #E2E8F0;box-shadow:0 2px 8px rgba(0,0,0,.06);padding:24px;}
@@ -565,17 +579,29 @@
           <select id="childAge"><option value="">Select age</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>29</option><option>30</option><option>30+</option></select>
         </div>
         <div class="form-group">
-          <label>Gender</label>
+          <label>Gender *</label>
           <select id="childGender"><option value="" data-en="Select" data-te="ఎంచుకోండి">Select</option><option value="Male" data-en="Male" data-te="పురుషుడు">Male</option><option value="Female" data-en="Female" data-te="స్త్రీ">Female</option></select>
         </div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Parent/Guardian Name *</label><input type="text" id="parentName" placeholder="Full name"></div>
-        <div class="form-group"><label>Phone Number *</label><input type="tel" id="parentPhone" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" pattern="[0-9]*"><div class="field-err" id="phoneErr">⚠️ Please enter a valid 10-digit mobile number</div></div>
+        <div class="form-group"><label>Parent/Guardian Name</label><input type="text" id="parentName" placeholder="Full name"></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="parentPhone" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" pattern="[0-9]*"><div class="field-err" id="phoneErr">⚠️ Please enter a valid 10-digit mobile number</div></div>
       </div>
       <div class="form-group"><label>Email Address</label><input type="email" id="parentEmail" placeholder="your@email.com"></div>
-      <div class="form-group"><label>Address / Village</label><input type="text" id="address" placeholder="Village / Town name"></div>
+      <div class="form-group"><label>Address / Village *</label><input type="text" id="address" placeholder="Village / Town name"></div>
       <div class="form-group"><label>Church / Denomination</label><input type="text" id="church" placeholder="e.g. LEF Church, Magatapalli"></div>
+      <div class="form-group">
+        <label>Class</label>
+        <select id="childClass">
+          <option value="">Select class (optional)</option>
+          <option value="Beginner">Beginner</option>
+          <option value="Primary">Primary</option>
+          <option value="Junior">Junior</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Senior">Senior</option>
+          <option value="Young Adult">Young Adult</option>
+        </select>
+      </div>
       <div class="form-group">
         <label>Days Attending</label>
         <select id="days">
@@ -655,13 +681,12 @@
     <div style="margin:10px 0 6px;font-weight:700;font-size:0.8rem;color:#16A34A;letter-spacing:1px;">👩‍🏫 TEACHER LOGIN</div>
     <select id="teacherRoleSelect" class="modal-input" style="margin-bottom:4px;cursor:pointer;">
       <option value="">— Select Teacher —</option>
-      <option value="teacher1">Teacher 1</option>
-      <option value="teacher2">Teacher 2</option>
-      <option value="teacher3">Teacher 3</option>
-      <option value="teacher4">Teacher 4</option>
-      <option value="teacher5">Teacher 5</option>
-      <option value="teacher6">Teacher 6</option>
-      <option value="teacher7">Teacher 7</option>
+      <option value="teacher1">Teacher 1 (Beginner)</option>
+      <option value="teacher2">Teacher 2 (Primary)</option>
+      <option value="teacher3">Teacher 3 (Junior)</option>
+      <option value="teacher4">Teacher 4 (Intermediate)</option>
+      <option value="teacher5">Teacher 5 (Senior)</option>
+      <option value="teacher6">Teacher 6 (Young Adult)</option>
     </select>
     <input type="password" class="modal-input" id="loginPass" placeholder="Enter password" style="margin-top:4px;">
     <button class="modal-btn" id="loginBtn">🔓 Sign In</button>
@@ -686,6 +711,7 @@
     <!-- TABS -->
     <div class="dash-tabs">
       <button class="dash-tab active" data-tab="registrations">📋 Registrations</button>
+      <button class="dash-tab" data-tab="attendance" id="attendanceTab">📝 Attendance</button>
       <button class="dash-tab" data-tab="analytics">📊 Analytics</button>
       <button class="dash-tab" data-tab="teachers" id="teachersTab" style="display:none">👩‍🏫 Teachers</button>
     </div>
@@ -723,13 +749,12 @@
           <button class="filter-btn" data-filter="25">Day 1 (Apr 25)</button>
           <button class="filter-btn" data-filter="26">Day 2 (Apr 26)</button>
           <button class="filter-btn" data-filter="27">Day 3 (Apr 27)</button>
-          <button class="filter-btn" data-filter="cls-1">Class 1</button>
-          <button class="filter-btn" data-filter="cls-2">Class 2</button>
-          <button class="filter-btn" data-filter="cls-3">Class 3</button>
-          <button class="filter-btn" data-filter="cls-4">Class 4</button>
-          <button class="filter-btn" data-filter="cls-5">Class 5</button>
-          <button class="filter-btn" data-filter="cls-6">Class 6</button>
-          <button class="filter-btn" data-filter="cls-7">Class 7</button>
+          <button class="filter-btn" data-filter="cls-Beginner">Beginner</button>
+          <button class="filter-btn" data-filter="cls-Primary">Primary</button>
+          <button class="filter-btn" data-filter="cls-Junior">Junior</button>
+          <button class="filter-btn" data-filter="cls-Intermediate">Intermediate</button>
+          <button class="filter-btn" data-filter="cls-Senior">Senior</button>
+          <button class="filter-btn" data-filter="cls-Young Adult">Young Adult</button>
           <button class="filter-btn" data-filter="cls-unassigned">Unassigned</button>
         </div>
         <div class="table-wrap">
@@ -744,6 +769,68 @@
         </div>
       </div>
     </div><!-- /view-registrations -->
+
+    <!-- ATTENDANCE VIEW -->
+    <div class="dash-view" id="view-attendance">
+      <!-- Statistics Cards for Selected Day -->
+      <div class="stats-grid" id="attendanceStatsGrid" style="margin-bottom:20px;">
+        <div class="stat-card c-present"><div class="s-num" id="att-stat-present">—</div><div class="s-label">✅ Present</div></div>
+        <div class="stat-card c-absent"><div class="s-num" id="att-stat-absent">—</div><div class="s-label">❌ Absent</div></div>
+        <div class="stat-card c-total"><div class="s-num" id="att-stat-not-marked">—</div><div class="s-label">⏸️ Not Marked</div></div>
+        <div class="stat-card c-total"><div class="s-num" id="att-stat-total">—</div><div class="s-label">Total Students</div></div>
+      </div>
+
+      <div class="attendance-header">
+        <div class="day-selector">
+          <div>
+            <label>📅 Select Day:</label>
+            <select class="day-dropdown" id="dayDropdown">
+              <option value="25">Day 1 (Apr 25)</option>
+              <option value="26">Day 2 (Apr 26)</option>
+              <option value="27">Day 3 (Apr 27)</option>
+            </select>
+          </div>
+
+          <!-- Class Filter (Admin & Viewer) -->
+          <div id="classFilterContainer" style="display:none;">
+            <label>🏫 Class Filter:</label>
+            <select class="day-dropdown" id="classFilterDropdown">
+              <option value="all">All Classes</option>
+              <option value="Beginner">Beginner</option>
+              <option value="Primary">Primary</option>
+              <option value="Junior">Junior</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Senior">Senior</option>
+              <option value="Young Adult">Young Adult</option>
+              <option value="unassigned">Unassigned</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="attendance-table-card">
+        <div class="table-header">
+          <h3 id="attendanceTableTitle">📝 Attendance - Day 1 (Apr 25)</h3>
+        </div>
+        <div class="table-wrap">
+          <table class="att-table-simple">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Student Name</th>
+              <th>Age</th>
+              <th>Gender</th>
+              <th id="attClassHeader">Class</th>
+              <th>Attendance</th>
+            </tr>
+            </thead>
+            <tbody id="attendanceTableBody">
+            <tr><td colspan="6" class="loading-row">⏳ Loading attendance...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- /view-attendance -->
 
     <!-- TEACHERS VIEW -->
     <div class="dash-view" id="view-teachers">
@@ -1054,6 +1141,7 @@
       document.getElementById('view-' + tab.dataset.tab).classList.add('active');
       if(tab.dataset.tab === 'analytics') renderAnalytics();
       if(tab.dataset.tab === 'teachers') buildTeacherMgmt();
+      if(tab.dataset.tab === 'attendance') renderAttendanceView();
     });
   });
 
@@ -1065,6 +1153,7 @@
       tab.classList.add('active');
       document.getElementById('view-' + tab.dataset.tab).classList.add('active');
       if(tab.dataset.tab === 'analytics') renderAnalytics();
+      if(tab.dataset.tab === 'attendance') renderAttendanceView();
     });
   });
   document.getElementById('submitBtn').addEventListener('click', submitReg);
@@ -1077,6 +1166,20 @@
       btn.classList.add('active');
       applyFilters();
     });
+  });
+
+  // Day dropdown for attendance view
+  let selectedDay = '25';
+  let selectedAttClass = 'all'; // For admin class filter in attendance view
+
+  document.getElementById('dayDropdown').addEventListener('change', function(){
+    selectedDay = this.value;
+    renderAttendanceView();
+  });
+
+  document.getElementById('classFilterDropdown').addEventListener('change', function(){
+    selectedAttClass = this.value;
+    renderAttendanceView();
   });
 
   function openModal(){
@@ -1099,13 +1202,12 @@
   let selectedRole = 'admin';
   // Teacher email → class mapping (Firebase authenticated)
   const TEACHER_MAP = {
-    'teacher1@lefmagatapalli.com': {class:'1', label:'Teacher 1'},
-    'teacher2@lefmagatapalli.com': {class:'2', label:'Teacher 2'},
-    'teacher3@lefmagatapalli.com': {class:'3', label:'Teacher 3'},
-    'teacher4@lefmagatapalli.com': {class:'4', label:'Teacher 4'},
-    'teacher5@lefmagatapalli.com': {class:'5', label:'Teacher 5'},
-    'teacher6@lefmagatapalli.com': {class:'6', label:'Teacher 6'},
-    'teacher7@lefmagatapalli.com': {class:'7', label:'Teacher 7'},
+    'teacher1@lefmagatapalli.com': {class:'Beginner', label:'Teacher 1'},
+    'teacher2@lefmagatapalli.com': {class:'Primary', label:'Teacher 2'},
+    'teacher3@lefmagatapalli.com': {class:'Junior', label:'Teacher 3'},
+    'teacher4@lefmagatapalli.com': {class:'Intermediate', label:'Teacher 4'},
+    'teacher5@lefmagatapalli.com': {class:'Senior', label:'Teacher 5'},
+    'teacher6@lefmagatapalli.com': {class:'Young Adult', label:'Teacher 6'},
   };
   // role → email map for login
   const ROLE_EMAIL_MAP = {
@@ -1117,7 +1219,6 @@
     teacher4: 'teacher4@lefmagatapalli.com',
     teacher5: 'teacher5@lefmagatapalli.com',
     teacher6: 'teacher6@lefmagatapalli.com',
-    teacher7: 'teacher7@lefmagatapalli.com',
   };
 
   function pickRole(role){
@@ -1191,7 +1292,7 @@
 
     document.getElementById('loggedInEmail').textContent = tc.label;
     document.getElementById('viewerNotice').innerHTML =
-            `👩‍🏫 <strong>${tc.label}</strong> — Showing Class ${tc.class} students only.`;
+            `👩‍🏫 <strong>${tc.label}</strong> — Showing ${tc.class} students only.`;
     document.getElementById('viewerNotice').classList.add('show');
     document.getElementById('exportBtn').style.display   = 'none';
     document.getElementById('importBtn').style.display   = 'none';
@@ -1202,10 +1303,11 @@
       if(b.dataset.filter && b.dataset.filter.startsWith('cls-')) b.style.display='none';
     });
 
-    // Show only registrations tab
+    // Show registrations and attendance tabs for teachers
     document.querySelectorAll('.dash-tab').forEach(t=>{
       t.classList.remove('active');
-      t.style.display = t.dataset.tab==='registrations' ? '' : 'none';
+      const tabName = t.dataset.tab;
+      t.style.display = (tabName==='registrations' || tabName==='attendance') ? '' : 'none';
     });
     document.querySelectorAll('.dash-view').forEach(v=>v.classList.remove('active'));
     document.getElementById('view-registrations').classList.add('active');
@@ -1224,11 +1326,14 @@
     document.getElementById('importBtn').style.display   = isAdmin?'block':'none';
     document.getElementById('actionsHead').textContent = 'Actions';
 
-    // Admin + Viewer: show all tabs, default to registrations
+    // Admin + Viewer: show tabs, but Analytics only for admin
     document.querySelectorAll('.dash-tab').forEach(t=>{ t.style.display=''; t.classList.remove('active'); });
     document.querySelectorAll('.dash-view').forEach(v=>v.classList.remove('active'));
     // Teachers tab — admin only
     document.getElementById('teachersTab').style.display = isAdmin ? '' : 'none';
+    // Analytics tab — admin only
+    const analyticsTab = document.querySelector('[data-tab="analytics"]');
+    if(analyticsTab) analyticsTab.style.display = isAdmin ? '' : 'none';
     if(isAdmin) buildTeacherMgmt();
     document.querySelector('[data-tab="registrations"]').classList.add('active');
     document.getElementById('view-registrations').classList.add('active');
@@ -1285,8 +1390,25 @@
     document.getElementById('stat-today').textContent   = statsData.filter(r=>{
       try{ return new Date(r.createdAt.toDate()).toDateString()===today; }catch{ return false; }
     }).length;
-    document.getElementById('stat-present').textContent = statsData.filter(r=>r.attendance==='present').length;
-    document.getElementById('stat-absent').textContent  = statsData.filter(r=>r.attendance==='absent').length;
+
+    // Handle both old (string) and new (object) attendance formats
+    let presentCount = 0;
+    let absentCount = 0;
+    statsData.forEach(r => {
+      if(typeof r.attendance === 'object' && r.attendance){
+        // Day-wise attendance: count if present/absent on any day
+        const days = Object.values(r.attendance);
+        if(days.includes('present')) presentCount++;
+        if(days.includes('absent')) absentCount++;
+      } else if(r.attendance === 'present'){
+        presentCount++;
+      } else if(r.attendance === 'absent'){
+        absentCount++;
+      }
+    });
+
+    document.getElementById('stat-present').textContent = presentCount;
+    document.getElementById('stat-absent').textContent  = absentCount;
     // Label for total
     const lbl = document.getElementById('stat-total-label');
     if(lbl) lbl.textContent = (currentRole==='teacher' && teacherClass) ? 'Class '+teacherClass+' Students' : 'Total Registrations';
@@ -1304,7 +1426,7 @@
     renderRows(d);
   }
 
-  const CLASS_OPTIONS = ['—','1','2','3','4','5','6','7'];
+  const CLASS_OPTIONS = ['—','Beginner','Primary','Junior','Intermediate','Senior','Young Adult'];
 
   function renderRows(data){
     const tb=document.getElementById('tableBody');
@@ -1321,15 +1443,17 @@
     const titleEl=document.getElementById('tableTitle');
     if(titleEl){
       if(isTeacher && teacherClass){
-        const tName=TEACHER_MAP[`teacher${teacherClass.replace('cls-','')}@lefmagatapalli.com`]?.label||'';
-        titleEl.textContent=`📋 Class ${teacherClass} Students${tName?' — '+tName:''}`;
+        // Find teacher email based on current user
+        const teacherEmail = auth.currentUser?.email || '';
+        const tName = TEACHER_MAP[teacherEmail]?.label || '';
+        titleEl.textContent=`📋 ${teacherClass} Students${tName?' — '+tName:''}`;
       } else {
         titleEl.textContent='📋 All Registrations';
       }
     }
-    // Attendance col header
+    // Attendance col header - hide for teachers
     const attHead=document.getElementById('attHead');
-    if(attHead) attHead.style.display = (isTeacher||isAdmin||isViewer) ? '' : 'none';
+    if(attHead) attHead.style.display = isTeacher ? 'none' : '';
 
     if(!data.length){ tb.innerHTML=`<tr><td colspan="12" class="no-data"><span class="ni">📋</span>No registrations found.</td></tr>`; return; }
 
@@ -1339,7 +1463,7 @@
       const canManage = isAdmin || isViewer;
       const clsSelect = canManage
               ? `<select class="class-sel" data-id="${r.id}" style="border:2px solid #E2E8F0;border-radius:8px;padding:4px 8px;font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;outline:none;background:#F8FAFC;">
-            ${CLASS_OPTIONS.map(c=>`<option value="${c==='—'?'':c}" ${(cls===(c==='—'?'':c))?'selected':''}>${c==='—'?'Unassigned':'Class '+c}</option>`).join('')}
+            ${CLASS_OPTIONS.map(c=>`<option value="${c==='—'?'':c}" ${(cls===c || (c==='—' && !cls))?'selected':''}>${c==='—'?'Unassigned':c}</option>`).join('')}
            </select>`
               : `<span class="badge b-days">${cls?'Class '+cls:'—'}</span>`;
       const childName = r.childName||((r.childFirst||'')+(r.childLast?' '+r.childLast:''));
@@ -1348,12 +1472,30 @@
       const delBtn    = `<button class="del-btn" data-id="${r.id}" style="margin-left:2px">🗑</button>`;
       const actionBtns = isAdmin ? editBtn + shareBtn + delBtn : shareBtn;
       const chk = isAdmin ? `<input type="checkbox" class="row-check rec-check" data-id="${r.id}">` : '';
-      // Attendance
-      const att = r.attendance||'';
-      const attBtns = `<div class="att-wrap">
-        <button class="att-btn att-present${att==='present'?' active':''}" data-id="${r.id}" data-att="present">✅</button>
-        <button class="att-btn att-absent${att==='absent'?' active':''}" data-id="${r.id}" data-att="absent">❌</button>
-      </div>`;
+
+      // Attendance - display summary for day-wise attendance (hide for teachers)
+      let attDisplay = '';
+      if(!isTeacher){
+        if(typeof r.attendance === 'object' && r.attendance){
+          // Day-wise attendance - show summary
+          const day25 = r.attendance['25'] || '';
+          const day26 = r.attendance['26'] || '';
+          const day27 = r.attendance['27'] || '';
+          attDisplay = `<div style="font-size:0.7rem;font-weight:700;">
+            <div>D1: ${day25==='present'?'✅':day25==='absent'?'❌':'—'}</div>
+            <div>D2: ${day26==='present'?'✅':day26==='absent'?'❌':'—'}</div>
+            <div>D3: ${day27==='present'?'✅':day27==='absent'?'❌':'—'}</div>
+          </div>`;
+        } else {
+          // Old format - show buttons for backward compatibility
+          const att = r.attendance||'';
+          attDisplay = `<div class="att-wrap">
+            <button class="att-btn att-present${att==='present'?' active':''}" data-id="${r.id}" data-att="present">✅</button>
+            <button class="att-btn att-absent${att==='absent'?' active':''}" data-id="${r.id}" data-att="absent">❌</button>
+          </div>`;
+        }
+      }
+
       return `<tr>
         <td>${chk}</td>
         <td><strong style="color:#94A3B8">${i+1}</strong></td>
@@ -1365,7 +1507,7 @@
         <td><a href="tel:${r.phone}" style="color:var(--navy);font-weight:700;text-decoration:none">${r.phone||'—'}</a></td>
         <td>${r.address||'—'}</td>
         <td><span class="badge b-days">${days}</span></td>
-        <td>${attBtns}</td>
+        ${!isTeacher ? `<td>${attDisplay}</td>` : ''}
         <td style="white-space:nowrap">${actionBtns}</td>
       </tr>`;
     }).join('');
@@ -1433,6 +1575,124 @@
     });
   }
 
+  // Render Attendance View (day-wise with statistics and filters)
+  function renderAttendanceView(){
+    const tb = document.getElementById('attendanceTableBody');
+    const day = selectedDay;
+    const dayNames = {'25': 'Day 1 (Apr 25)', '26': 'Day 2 (Apr 26)', '27': 'Day 3 (Apr 27)'};
+    const isAdmin = currentRole === 'admin';
+    const isViewer = currentRole === 'viewer';
+    const isTeacher = currentRole === 'teacher';
+
+    // Show/hide class filter for admin and viewer
+    const classFilterContainer = document.getElementById('classFilterContainer');
+    if(classFilterContainer) classFilterContainer.style.display = (isAdmin || isViewer) ? 'flex' : 'none';
+
+    // Show/hide class column header
+    const classHeader = document.getElementById('attClassHeader');
+    if(classHeader) classHeader.style.display = (isAdmin || isViewer) ? '' : 'none';
+
+    // Update title
+    document.getElementById('attendanceTableTitle').textContent = '📝 Attendance - ' + dayNames[day];
+
+    // Filter data based on role and class filter
+    let data = [...allData];
+
+    // Teacher: filter by assigned class
+    if(isTeacher && teacherClass){
+      data = data.filter(r => r.class === teacherClass);
+    }
+
+    // Admin/Viewer: apply class filter if selected
+    if((isAdmin || isViewer) && selectedAttClass !== 'all'){
+      if(selectedAttClass === 'unassigned'){
+        data = data.filter(r => !r.class);
+      } else {
+        data = data.filter(r => r.class === selectedAttClass);
+      }
+    }
+
+    // Calculate statistics for the selected day
+    let presentCount = 0;
+    let absentCount = 0;
+    let notMarkedCount = 0;
+
+    data.forEach(r => {
+      const attendance = (typeof r.attendance === 'object' && r.attendance) ? r.attendance : {};
+      const dayAtt = attendance[day] || '';
+      if(dayAtt === 'present') presentCount++;
+      else if(dayAtt === 'absent') absentCount++;
+      else notMarkedCount++;
+    });
+
+    // Update statistics cards
+    document.getElementById('att-stat-present').textContent = presentCount;
+    document.getElementById('att-stat-absent').textContent = absentCount;
+    document.getElementById('att-stat-not-marked').textContent = notMarkedCount;
+    document.getElementById('att-stat-total').textContent = data.length;
+
+    if(!data.length){
+      tb.innerHTML = '<tr><td colspan="6" class="no-data"><span class="ni">📋</span>No students found.</td></tr>';
+      return;
+    }
+
+    tb.innerHTML = data.map((r, i) => {
+      const childName = r.childName || ((r.childFirst||'') + (r.childLast?' '+r.childLast:''));
+      const attendance = (typeof r.attendance === 'object' && r.attendance) ? r.attendance : {};
+      const dayAtt = attendance[day] || '';
+      const classDisplay = (isAdmin || isViewer) ? `<td><span class="badge b-days">${r.class || 'Unassigned'}</span></td>` : '';
+
+      return `<tr>
+        <td><strong style="color:#94A3B8">${i+1}</strong></td>
+        <td><strong>${childName}</strong></td>
+        <td>${r.age||'—'}</td>
+        <td><span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span></td>
+        ${classDisplay}
+        <td>
+          <div class="att-wrap">
+            <button class="att-btn att-present${dayAtt==='present'?' active':''}" data-id="${r.id}" data-day="${day}" data-att="present">✅ Present</button>
+            <button class="att-btn att-absent${dayAtt==='absent'?' active':''}" data-id="${r.id}" data-day="${day}" data-att="absent">❌ Absent</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+
+    // Wire attendance buttons
+    document.querySelectorAll('#attendanceTableBody .att-btn').forEach(btn => {
+      btn.addEventListener('click', async() => {
+        const id = btn.dataset.id;
+        const day = btn.dataset.day;
+        const att = btn.dataset.att;
+        const record = allData.find(r => r.id === id);
+        const currentAtt = (typeof record.attendance === 'object' && record.attendance) ? record.attendance : {};
+        const currentDayAtt = currentAtt[day] || '';
+
+        // Toggle: click same → clear; click different → set
+        const newDayAtt = currentDayAtt === att ? '' : att;
+        const newAttendance = {...currentAtt, [day]: newDayAtt};
+
+        try {
+          const {getFirestore, doc, updateDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+          await updateDoc(doc(getFirestore(), 'registrations', id), {attendance: newAttendance});
+          allData = allData.map(r => r.id === id ? {...r, attendance: newAttendance} : r);
+
+          // Update button states in-place
+          const row = btn.closest('tr');
+          row.querySelectorAll('.att-btn').forEach(b => {
+            b.classList.toggle('active', newDayAtt !== '' && b.dataset.att === newDayAtt);
+          });
+
+          // Re-render to update statistics
+          renderAttendanceView();
+
+          showToast('✅ Attendance updated', 2000);
+        } catch {
+          showToast('❌ Could not save attendance', 3000);
+        }
+      });
+    });
+  }
+
   function exportCSV(){
     if(!allData.length){ alert('No registrations to export yet.'); return; }
     const hdr=['#','Child Name','Age','Gender','Parent','Phone','Email','Address','Church','Days','Special','Registered On'];
@@ -1456,17 +1716,21 @@
   async function submitReg(){
     const cn  = document.getElementById('childName').value.trim();
     const age = document.getElementById('childAge').value;
+    const gender = document.getElementById('childGender').value;
+    const address = document.getElementById('address').value.trim();
     const pn  = document.getElementById('parentName').value.trim();
     const ph  = document.getElementById('parentPhone').value.trim();
 
-    // Validation
-    if(!cn || !age || !pn){
+    // Validation - Required: Name, Age, Gender, Address
+    if(!cn || !age || !gender || !address){
       showToast(currentLang==='te'
               ? '⚠️ దయచేసి అన్ని తప్పనిసరి ఫీల్డ్‌లు (*) పూరించండి'
               : '⚠️ Please fill all required fields (*)');
       return;
     }
-    if(ph.length !== 10){
+
+    // Phone validation only if provided
+    if(ph && ph.length !== 10){
       document.getElementById('phoneErr').style.display = 'block';
       document.getElementById('parentPhone').focus();
       showToast(currentLang==='te'
@@ -1484,8 +1748,10 @@
       // Always save English values regardless of current language
       const genderEl   = document.getElementById('childGender');
       const daysEl2    = document.getElementById('days');
+      const classEl    = document.getElementById('childClass');
       const genderVal  = genderEl.options[genderEl.selectedIndex]?.value || genderEl.value;
       const daysVal    = daysEl2.options[daysEl2.selectedIndex]?.value  || daysEl2.value;
+      const classVal   = classEl.options[classEl.selectedIndex]?.value  || classEl.value;
 
       await addDoc(collection(db,'registrations'),{
         childName:  cn,
@@ -1494,9 +1760,10 @@
         parentName: pn,
         phone:      ph,
         email:      document.getElementById('parentEmail').value.trim(),
-        address:    document.getElementById('address').value.trim(),
+        address:    address,
         church:     document.getElementById('church').value.trim(),
         days:       daysVal,      // always English: Day 1 Only – April 25 etc.
+        class:      classVal,     // optional class field
         createdAt:  serverTimestamp()
       });
 
@@ -2151,13 +2418,31 @@
       const {getFirestore,collection,addDoc,serverTimestamp} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
       const db2=getFirestore();
       let imported=0, skipped=0;
-      const existingPhones = new Set(allData.map(r=>r.phone||''));
+      const duplicates = [];
+
+      // Create a Set of "name+phone" combinations for duplicate detection
+      const existingKeys = new Set(
+              allData.map(r => {
+                const name = (r.childName || '').toLowerCase().trim();
+                const phone = (r.phone || '').replace(/\D/g,'');
+                return `${name}|${phone}`;
+              }).filter(k => k !== '|')
+      );
 
       for(const row of importParsedRows){
+        const childName = (row['child name']||row['childname']||'').trim();
         const phone = (row['phone']||'').replace(/\D/g,'');
-        if(skipDups && phone && existingPhones.has(phone)){ skipped++; continue; }
+        const key = `${childName.toLowerCase()}|${phone}`;
+
+        // Check for duplicate based on name AND phone match
+        if(skipDups && childName && phone && existingKeys.has(key)){
+          skipped++;
+          duplicates.push({name: childName, phone});
+          continue;
+        }
+
         const rec = {
-          childName:  row['child name']||row['childname']||'',
+          childName:  childName,
           age:        row['age']||'',
           gender:     row['gender']||'',
           parentName: row['parent']||row['parentname']||row['parent/guardian name']||'',
@@ -2166,20 +2451,28 @@
           address:    row['address']||row['village']||'',
           church:     row['church']||'',
           days:       row['days']||row['days attending']||'All 3 Days (Apr 25, 26 & 27)',
+          class:      row['class']||'',
           createdAt:  serverTimestamp(),
         };
         if(!rec.childName) continue;
         await addDoc(collection(db2,'registrations'), rec);
-        existingPhones.add(phone);
+        existingKeys.add(key);
         imported++;
       }
 
       const msg = document.getElementById('importResultMsg');
       msg.style.background='#DCFCE7'; msg.style.color='#166534';
-      msg.textContent=`✅ Imported ${imported} record(s).${skipped>0?' Skipped '+skipped+' duplicate(s).':''}`;
+      let resultText = `✅ Imported ${imported} record(s).`;
+      if(skipped > 0){
+        resultText += ` Skipped ${skipped} duplicate(s) (matching both name & phone).`;
+        if(duplicates.length > 0 && duplicates.length <= 5){
+          resultText += ' Duplicates: ' + duplicates.map(d => d.name).join(', ');
+        }
+      }
+      msg.textContent = resultText;
       msg.style.display='block';
       await loadData();
-      showToast(`✅ Imported ${imported} records!`, 3000);
+      showToast(`✅ Imported ${imported} records!${skipped>0?' ('+skipped+' duplicates skipped)':''}`, 4000);
       document.getElementById('importPreviewWrap').style.display='none';
     }catch(err){
       const msg=document.getElementById('importResultMsg');
@@ -2242,10 +2535,10 @@
   }
 
   function syncTeacherMapFromProfiles(profiles){
-    for(let i=1;i<=7;i++){
+    for(let i=1;i<=6;i++){
       const email=`teacher${i}@lefmagatapalli.com`;
       const p = profiles[`teacher${i}`];
-      if(p){
+      if(p && TEACHER_MAP[email]){
         TEACHER_MAP[email].label = p.name || `Teacher ${i}`;
         if(p.class) TEACHER_MAP[email].class = p.class;
       }
@@ -2256,12 +2549,14 @@
   function updateTeacherDropdown(profiles){
     const sel = document.getElementById('teacherRoleSelect');
     if(!sel) return;
-    for(let i=1;i<=7;i++){
+    for(let i=1;i<=6;i++){
       const opt = sel.querySelector(`option[value="teacher${i}"]`);
       if(opt){
-        const name = (profiles||cachedTeacherProfiles)[`teacher${i}`]?.name;
-        // Show only name, no "(Teacher N)" suffix
-        opt.textContent = name || `Teacher ${i}`;
+        const p = (profiles||cachedTeacherProfiles)[`teacher${i}`];
+        const name = p?.name;
+        const cls = p?.class;
+        // Show name with class
+        opt.textContent = name ? `${name} (${cls || 'No Class'})` : `Teacher ${i}`;
       }
     }
   }
@@ -2288,11 +2583,12 @@
       syncTeacherMapFromProfiles(profiles);
       const list = document.getElementById('teacherMgmtList');
       if(!list) return;
-      list.innerHTML = Array.from({length:7},(_,i)=>{
+      const classNames = ['', 'Beginner', 'Primary', 'Junior', 'Intermediate', 'Senior', 'Young Adult'];
+      list.innerHTML = Array.from({length:6},(_,i)=>{
         const key = `teacher${i+1}`;
         const p   = profiles[key]||{};
-        const clsOpts = ['','1','2','3','4','5','6','7'].map(c=>
-                `<option value="${c}" ${(p.class||'')=== c?'selected':''}>${c?'Class '+c:'No class assigned'}</option>`
+        const clsOpts = classNames.map(c=>
+                `<option value="${c}" ${(p.class||'')=== c?'selected':''}>${c?c:'No class assigned'}</option>`
         ).join('');
         return `<div class="teacher-row">
           <span class="teacher-num">T${i+1}</span>
@@ -2333,7 +2629,7 @@
         });
         // Show which teachers conflict
         const otherNames = [...new Set(names)].join(' & ');
-        showToast(`⚠️ Class ${cls} already assigned to: ${otherNames}`, 4000);
+        showToast(`⚠️ ${cls} already assigned to: ${otherNames}`, 4000);
       }
     });
     return !hasDup;
@@ -2487,33 +2783,73 @@
       document.getElementById('chart-timeline').innerHTML=`<div class="timeline-row">${bars}</div>`;
     }
 
-    // ── Attendance by Class ──
-    const attByClass={};
-    allData.forEach(r=>{
-      const cls=r.class||'Unassigned';
-      if(!attByClass[cls]) attByClass[cls]={present:0,absent:0,total:0};
+    // ── Attendance by Class (Day-wise) ──
+    const attByClass = {};
+    allData.forEach(r => {
+      const cls = r.class || 'Unassigned';
+      if(!attByClass[cls]) attByClass[cls] = {day25: {present:0,absent:0}, day26: {present:0,absent:0}, day27: {present:0,absent:0}, total:0};
       attByClass[cls].total++;
-      if(r.attendance==='present') attByClass[cls].present++;
-      if(r.attendance==='absent')  attByClass[cls].absent++;
+
+      // Handle both old and new attendance formats
+      if(typeof r.attendance === 'object' && r.attendance){
+        // Day-wise attendance
+        if(r.attendance['25'] === 'present') attByClass[cls].day25.present++;
+        if(r.attendance['25'] === 'absent') attByClass[cls].day25.absent++;
+        if(r.attendance['26'] === 'present') attByClass[cls].day26.present++;
+        if(r.attendance['26'] === 'absent') attByClass[cls].day26.absent++;
+        if(r.attendance['27'] === 'present') attByClass[cls].day27.present++;
+        if(r.attendance['27'] === 'absent') attByClass[cls].day27.absent++;
+      }
     });
-    const attEntries=Object.entries(attByClass).sort((a,b)=>a[0].localeCompare(b[0]));
+
+    const attEntries = Object.entries(attByClass).sort((a,b) => a[0].localeCompare(b[0]));
     document.getElementById('chart-attendance').innerHTML = attEntries.length
-            ? attEntries.map(([cls,v])=>`
-          <div style="margin-bottom:12px;">
-            <div style="font-weight:800;font-size:0.82rem;color:var(--navy);margin-bottom:4px;">${cls==='Unassigned'?cls:'Class '+cls} <span style="color:#94A3B8;font-weight:600;">(${v.total})</span></div>
+            ? attEntries.map(([cls,v]) => `
+          <div style="margin-bottom:16px;">
+            <div style="font-weight:800;font-size:0.82rem;color:var(--navy);margin-bottom:6px;">${cls==='Unassigned'?cls:'Class '+cls} <span style="color:#94A3B8;font-weight:600;">(${v.total})</span></div>
+            <div style="font-size:0.72rem;font-weight:700;color:#555;margin-bottom:3px;">Day 1 (Apr 25)</div>
+            <div style="display:flex;gap:4px;align-items:center;margin-bottom:6px;">
+              <div style="flex:${v.day25.present||0};background:#16A34A;height:16px;border-radius:4px 0 0 4px;min-width:${v.day25.present?2:0}px;"></div>
+              <div style="flex:${v.day25.absent||0};background:#DC2626;height:16px;border-radius:0 4px 4px 0;min-width:${v.day25.absent?2:0}px;"></div>
+              <span style="font-size:0.7rem;font-weight:700;color:#555;white-space:nowrap;">✅${v.day25.present} ❌${v.day25.absent}</span>
+            </div>
+            <div style="font-size:0.72rem;font-weight:700;color:#555;margin-bottom:3px;">Day 2 (Apr 26)</div>
+            <div style="display:flex;gap:4px;align-items:center;margin-bottom:6px;">
+              <div style="flex:${v.day26.present||0};background:#16A34A;height:16px;border-radius:4px 0 0 4px;min-width:${v.day26.present?2:0}px;"></div>
+              <div style="flex:${v.day26.absent||0};background:#DC2626;height:16px;border-radius:0 4px 4px 0;min-width:${v.day26.absent?2:0}px;"></div>
+              <span style="font-size:0.7rem;font-weight:700;color:#555;white-space:nowrap;">✅${v.day26.present} ❌${v.day26.absent}</span>
+            </div>
+            <div style="font-size:0.72rem;font-weight:700;color:#555;margin-bottom:3px;">Day 3 (Apr 27)</div>
             <div style="display:flex;gap:4px;align-items:center;">
-              <div style="flex:${v.present||0};background:#16A34A;height:18px;border-radius:4px 0 0 4px;min-width:${v.present?2:0}px;"></div>
-              <div style="flex:${v.absent||0};background:#DC2626;height:18px;border-radius:0 4px 4px 0;min-width:${v.absent?2:0}px;"></div>
-              <span style="font-size:0.72rem;font-weight:700;color:#555;white-space:nowrap;">✅${v.present} ❌${v.absent}</span>
+              <div style="flex:${v.day27.present||0};background:#16A34A;height:16px;border-radius:4px 0 0 4px;min-width:${v.day27.present?2:0}px;"></div>
+              <div style="flex:${v.day27.absent||0};background:#DC2626;height:16px;border-radius:0 4px 4px 0;min-width:${v.day27.absent?2:0}px;"></div>
+              <span style="font-size:0.7rem;font-weight:700;color:#555;white-space:nowrap;">✅${v.day27.present} ❌${v.day27.absent}</span>
             </div>
           </div>`).join('')
             : '<div class="empty-analytics">No attendance recorded yet</div>';
 
-    // ── Overall attendance donut ──
-    const totPresent=allData.filter(r=>r.attendance==='present').length;
-    const totAbsent =allData.filter(r=>r.attendance==='absent').length;
-    const totNone   =allData.length-totPresent-totAbsent;
-    const attTotal  =allData.length;
+    // ── Overall attendance donut (aggregated across all days) ──
+    let totPresent = 0;
+    let totAbsent = 0;
+    let totNone = 0;
+
+    allData.forEach(r => {
+      if(typeof r.attendance === 'object' && r.attendance){
+        // Day-wise: count student as present if present on any day, absent if absent on any day
+        const days = Object.values(r.attendance);
+        if(days.includes('present')) totPresent++;
+        else if(days.includes('absent')) totAbsent++;
+        else totNone++;
+      } else if(r.attendance === 'present'){
+        totPresent++;
+      } else if(r.attendance === 'absent'){
+        totAbsent++;
+      } else {
+        totNone++;
+      }
+    });
+
+    const attTotal = allData.length;
     if(attTotal){
       const attParts=[
         {label:'Present',count:totPresent,color:'#16A34A'},
