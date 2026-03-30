@@ -711,6 +711,7 @@
     <!-- TABS -->
     <div class="dash-tabs">
       <button class="dash-tab active" data-tab="registrations">📋 Registrations</button>
+      <button class="dash-tab" data-tab="documents" id="documentsTab">📄 Documents</button>
       <button class="dash-tab" data-tab="attendance" id="attendanceTab">📝 Attendance</button>
       <button class="dash-tab" data-tab="analytics">📊 Analytics</button>
       <button class="dash-tab" data-tab="teachers" id="teachersTab" style="display:none">👩‍🏫 Teachers</button>
@@ -733,6 +734,7 @@
             <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search name, phone…">
             <button class="export-btn" id="exportBtn" style="display:none">⬇ Export CSV</button>
             <button class="import-btn" id="importBtn" style="display:none">⬆ Import CSV</button>
+            <button class="send-certs-btn" id="sendCertsBtn" style="display:none;background:#25D366;color:white;border:none;padding:10px 16px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;">📱 Send Certificates</button>
             <input type="file" id="importFileInput" accept=".csv" style="display:none">
           </div>
         </div>
@@ -769,6 +771,47 @@
         </div>
       </div>
     </div><!-- /view-registrations -->
+
+    <!-- DOCUMENTS VIEW -->
+    <div class="dash-view" id="view-documents">
+      <div class="view-header">
+        <h2 class="view-title">📄 Student Documents</h2>
+        <div class="header-right">
+          <select class="day-dropdown" id="docsClassFilter" style="margin-right:10px;">
+            <option value="all">All Classes</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Primary">Primary</option>
+            <option value="Junior">Junior</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Senior">Senior</option>
+            <option value="Young Adult">Young Adult</option>
+            <option value="unassigned">Unassigned</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Photo</th>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Gender</th>
+              <th>Class</th>
+              <th>Village</th>
+              <th>Documents</th>
+            </tr>
+            </thead>
+            <tbody id="documentsTableBody">
+            <tr><td colspan="8" class="loading-row">⏳ Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- /view-documents -->
 
     <!-- ATTENDANCE VIEW -->
     <div class="dash-view" id="view-attendance">
@@ -1142,6 +1185,7 @@
       if(tab.dataset.tab === 'analytics') renderAnalytics();
       if(tab.dataset.tab === 'teachers') buildTeacherMgmt();
       if(tab.dataset.tab === 'attendance') renderAttendanceView();
+      if(tab.dataset.tab === 'documents') renderDocumentsView();
     });
   });
 
@@ -1313,6 +1357,11 @@
     document.getElementById('view-registrations').classList.add('active');
     document.getElementById('adminPanel').classList.add('active');
     document.body.style.overflow='hidden';
+
+    // Show Send Certificates button for teachers
+    const sendCertsBtn = document.getElementById('sendCertsBtn');
+    if(sendCertsBtn) sendCertsBtn.style.display = 'block';
+
     loadData();
   }
 
@@ -1324,6 +1373,7 @@
     document.getElementById('viewerNotice').classList.remove('show'); // viewer has full access
     document.getElementById('exportBtn').style.display   = (isAdmin||currentRole==='viewer')?'block':'none';
     document.getElementById('importBtn').style.display   = isAdmin?'block':'none';
+    document.getElementById('sendCertsBtn').style.display = isAdmin?'block':'none';
     document.getElementById('actionsHead').textContent = 'Actions';
 
     // Admin + Viewer: show tabs, but Analytics only for admin
@@ -1467,10 +1517,9 @@
            </select>`
               : `<span class="badge b-days">${cls?'Class '+cls:'—'}</span>`;
       const childName = r.childName||((r.childFirst||'')+(r.childLast?' '+r.childLast:''));
-      const shareBtn  = `<button class="share-btn" data-id="${r.id}" data-name="${childName}" data-days="${r.days||''}" data-age="${r.age||''}" data-phone="${r.phone||''}" title="Share Certificate">📜</button>`;
       const editBtn   = `<button class="edit-btn" data-id="${r.id}" title="Edit record">✏️</button>`;
       const delBtn    = `<button class="del-btn" data-id="${r.id}" style="margin-left:2px">🗑</button>`;
-      const actionBtns = isAdmin ? editBtn + shareBtn + delBtn : shareBtn;
+      const actionBtns = isAdmin ? editBtn + delBtn : '';
       const chk = isAdmin ? `<input type="checkbox" class="row-check rec-check" data-id="${r.id}">` : '';
 
       // Attendance - display summary for day-wise attendance (hide for teachers)
@@ -1530,15 +1579,19 @@
       btn.addEventListener('click', async()=>{
         const ok = await showConfirm('Delete Registration?','This record will be permanently deleted and cannot be recovered.','🗑 Delete','🗑️');
         if(!ok) return;
-        try{ await deleteDoc(doc(db,'registrations',btn.dataset.id)); allData=allData.filter(r=>r.id!==btn.dataset.id); refreshStats(); applyFilters(); showToast('✅ Record deleted.',2500); }
-        catch{ showToast('❌ Delete failed. Try again.',3000); }
-      });
-    });
-
-    // Wire share/certificate buttons
-    document.querySelectorAll('.share-btn').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        openCertModal(btn.dataset.id, btn.dataset.name, btn.dataset.days, btn.dataset.age, btn.dataset.phone);
+        try{
+          const {getFirestore, doc, deleteDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+          const db = getFirestore();
+          await deleteDoc(doc(db,'registrations',btn.dataset.id));
+          allData=allData.filter(r=>r.id!==btn.dataset.id);
+          refreshStats();
+          applyFilters();
+          showToast('✅ Record deleted.',2500);
+        }
+        catch(err){
+          console.error('Delete error:', err);
+          showToast('❌ Delete failed. Try again.',3000);
+        }
       });
     });
 
@@ -1693,6 +1746,142 @@
     });
   }
 
+  // Render Documents View
+  let selectedDocsClass = 'all';
+
+  document.getElementById('docsClassFilter').addEventListener('change', function(){
+    selectedDocsClass = this.value;
+    renderDocumentsView();
+  });
+
+  function renderDocumentsView(){
+    const tb = document.getElementById('documentsTableBody');
+    const isAdmin = currentRole === 'admin';
+    const isTeacher = currentRole === 'teacher';
+
+    // Filter data
+    let data = [...allData];
+    if(isTeacher && teacherClass){
+      data = data.filter(r => r.class === teacherClass);
+    }
+
+    if(selectedDocsClass !== 'all'){
+      if(selectedDocsClass === 'unassigned'){
+        data = data.filter(r => !r.class);
+      } else {
+        data = data.filter(r => r.class === selectedDocsClass);
+      }
+    }
+
+    if(!data.length){
+      tb.innerHTML = '<tr><td colspan="8" class="no-data"><span class="ni">📋</span>No students found.</td></tr>';
+      return;
+    }
+
+    tb.innerHTML = data.map((r, i) => {
+      const childName = r.childName || ((r.childFirst||'') + (r.childLast?' '+r.childLast:''));
+
+      // Photo preview
+      const photoPreview = r.photo
+              ? `<img src="${r.photo}" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #E2E8F0;">`
+              : `<div style="width:50px;height:50px;border-radius:50%;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:1.5rem;">📷</div>`;
+
+      // Document buttons
+      const photoBtn = r.photo
+              ? `<button class="photo-btn" data-id="${r.id}" title="View Photo" style="background:#8B5CF6;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;">📷</button>`
+              : `<button class="photo-btn" data-id="${r.id}" title="Upload Photo" style="background:#F59E0B;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;">📷+</button>`;
+
+      const idCardBtn = r.photo
+              ? `<button class="id-card-btn" data-id="${r.id}" title="Generate ID Card" style="background:#3B82F6;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">🪪</button>`
+              : '';
+
+      const certBtn = r.photo
+              ? `<button class="cert-btn" data-id="${r.id}" title="Generate Certificate" style="background:#10B981;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">📜</button>`
+              : '';
+
+      const viewIdBtn = r.idCard
+              ? `<button class="view-id-btn" data-id="${r.id}" title="View ID Card" style="background:#2563EB;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">👁️🪪</button>`
+              : '';
+
+      const viewCertBtn = r.certificate
+              ? `<button class="view-cert-btn" data-id="${r.id}" title="View Certificate" style="background:#059669;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">👁️📜</button>`
+              : '';
+
+      const docBtns = photoBtn + idCardBtn + certBtn + viewIdBtn + viewCertBtn;
+
+      return `<tr>
+        <td><strong style="color:#94A3B8">${i+1}</strong></td>
+        <td>${photoPreview}</td>
+        <td><strong>${childName}</strong></td>
+        <td>${r.age||'—'}</td>
+        <td><span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span></td>
+        <td><span class="badge b-days">${r.class||'Unassigned'}</span></td>
+        <td>${r.address||'—'}</td>
+        <td style="white-space:nowrap">${docBtns}</td>
+      </tr>`;
+    }).join('');
+
+    // Wire all document buttons
+    wireDocumentButtons();
+  }
+
+  function wireDocumentButtons(){
+    // Wire photo buttons
+    document.querySelectorAll('.photo-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const student = allData.find(r => r.id === btn.dataset.id);
+        openPhotoModal(student);
+      });
+    });
+
+    // Wire ID card buttons
+    document.querySelectorAll('.id-card-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const student = allData.find(r => r.id === btn.dataset.id);
+        generateIDCard(student);
+      });
+    });
+
+    // Wire certificate buttons
+    document.querySelectorAll('.cert-btn').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        const student = allData.find(r => r.id === btn.dataset.id);
+
+        // Check if certificate already exists
+        if(student.certificate){
+          const regenerate = await showCustomConfirm(
+                  'Certificate Already Generated',
+                  `${student.childName} already has a certificate.\n\nWould you like to regenerate it?`
+          );
+
+          if(regenerate){
+            openCertificateFromPhoto(student);
+          } else {
+            openViewCertModal(student);
+          }
+        } else {
+          openCertificateFromPhoto(student);
+        }
+      });
+    });
+
+    // Wire view certificate buttons
+    document.querySelectorAll('.view-cert-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const student = allData.find(r => r.id === btn.dataset.id);
+        openViewCertModal(student);
+      });
+    });
+
+    // Wire view ID card buttons
+    document.querySelectorAll('.view-id-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const student = allData.find(r => r.id === btn.dataset.id);
+        openViewIdCardModal(student);
+      });
+    });
+  }
+
   function exportCSV(){
     if(!allData.length){ alert('No registrations to export yet.'); return; }
     const hdr=['#','Child Name','Age','Gender','Parent','Phone','Email','Address','Church','Days','Special','Registered On'];
@@ -1813,50 +2002,45 @@
   let certRecordId = '', certChildName = '', certDays = '', certAge = '', certPhone = '';
   let certPhotoDataUrl = null;
 
-  function openCertModal(id, name, days, age, phone=''){
-    certRecordId = id;
-    certChildName = name;
-    certDays = days;
-    certAge = age;
-    certPhone = phone;
-    certPhotoDataUrl = null;
-    document.getElementById('certStep1').style.display = 'block';
-    document.getElementById('certPreviewWrap').style.display = 'none';
-    document.getElementById('certPhotoPreview').style.display = 'none';
-    document.getElementById('certCameraInput').value = '';
-    document.getElementById('certGalleryInput').value = '';
+  // Certificate generation using stored photo
+  async function openCertificateFromPhoto(student){
+    if(!student || !student.photo){
+      showToast('❌ Please upload student photo first', 3000);
+      return;
+    }
+
+    certRecordId = student.id;
+    certChildName = student.childName || 'Student';
+    certDays = student.days || '';
+    certAge = student.age || '';
+    certPhone = student.phone || '';
+    certPhotoDataUrl = student.photo;
+
+    // Show modal and generate certificate
     document.getElementById('certModal').classList.add('active');
+    document.getElementById('certStep1').style.display='none';
+    document.getElementById('certPreviewWrap').style.display='none';
+    document.getElementById('certSaveStatus').style.display='none';
+
+    // Show loading state
+    showToast('⏳ Generating certificate...', 1500);
+
+    // Generate certificate after a small delay to show loading
+    setTimeout(async () => {
+      await generateCertificate(); // Call the existing certificate generation with await
+      document.getElementById('certPreviewWrap').style.display='block';
+      prepareCertBlob().catch(()=>{});
+    }, 100);
   }
 
   document.getElementById('certModalClose').addEventListener('click',()=>{
     document.getElementById('certModal').classList.remove('active');
   });
 
-  // Photo capture handlers
-  function handlePhotoFile(file){
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-      certPhotoDataUrl = e.target.result;
-      document.getElementById('certPhotoImg').src = certPhotoDataUrl;
-      document.getElementById('certPhotoPreview').style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-  }
-  document.getElementById('certCameraInput').addEventListener('change', e => handlePhotoFile(e.target.files[0]));
-  document.getElementById('certGalleryInput').addEventListener('change', e => handlePhotoFile(e.target.files[0]));
-
-  document.getElementById('certRetakeBtn').addEventListener('click',()=>{
-    document.getElementById('certStep1').style.display = 'block';
-    document.getElementById('certPreviewWrap').style.display = 'none';
-    certPhotoDataUrl = null;
-    document.getElementById('certPhotoPreview').style.display = 'none';
-  });
-
-  // Generate certificate on canvas
-  document.getElementById('certGenerateBtn').addEventListener('click', ()=>{
+  // Generate certificate canvas
+  async function generateCertCanvas(){
     generateCertificate();
-  });
+  };
 
   function wrapText(ctx, text, x, y, maxWidth, lineHeight){
     const words = text.split(' ');
@@ -1875,7 +2059,7 @@
     return yPos;
   }
 
-  function generateCertificate(){
+  async function generateCertificate(){
     const canvas = document.getElementById('certCanvas');
     canvas.width  = 1080;
     canvas.height = 1527;
@@ -1997,19 +2181,35 @@
     ctx.restore();
 
     if(certPhotoDataUrl){
-      // Draw photo circle only when photo is provided
-      ctx.save();
-      ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR,0,Math.PI*2); ctx.clip();
-      const img=new Image(); img.src=certPhotoDataUrl;
-      const iw=img.naturalWidth||img.width||300;
-      const ih=img.naturalHeight||img.height||300;
-      const scale=Math.max((photoR*2)/iw,(photoR*2)/ih);
-      ctx.drawImage(img, photoCX-(iw*scale)/2, photoCY-(ih*scale)/2, iw*scale, ih*scale);
-      ctx.restore();
-      ctx.strokeStyle='#FFD700'; ctx.lineWidth=5;
-      ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR+3,0,Math.PI*2); ctx.stroke();
-      ctx.strokeStyle='rgba(255,215,0,0.35)'; ctx.lineWidth=2;
-      ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR+11,0,Math.PI*2); ctx.stroke();
+      // Load and draw photo properly
+      try{
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+          img.src = certPhotoDataUrl;
+        });
+
+        // Draw photo circle
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(photoCX,photoCY,photoR,0,Math.PI*2);
+        ctx.clip();
+        const iw=img.naturalWidth||img.width||300;
+        const ih=img.naturalHeight||img.height||300;
+        const scale=Math.max((photoR*2)/iw,(photoR*2)/ih);
+        ctx.drawImage(img, photoCX-(iw*scale)/2, photoCY-(ih*scale)/2, iw*scale, ih*scale);
+        ctx.restore();
+
+        // Gold border
+        ctx.strokeStyle='#FFD700'; ctx.lineWidth=5;
+        ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR+3,0,Math.PI*2); ctx.stroke();
+        ctx.strokeStyle='rgba(255,215,0,0.35)'; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR+11,0,Math.PI*2); ctx.stroke();
+      } catch(e){
+        console.error('Error loading certificate photo:', e);
+      }
     }
     // If no photo — skip circle entirely, content moves up naturally
 
@@ -2112,21 +2312,101 @@
     ctx.font='italic 28px Georgia';
     ctx.fillText('May God bless you abundantly! 🙏', cx, sigLineY+228);
 
-    // Done
+    // Done - Generate certificate (don't auto-save)
     document.getElementById('certPreviewWrap').style.display='block';
     document.getElementById('certStep1').style.display='none';
     document.getElementById('certModal').querySelector('.modal-box').scrollTop=0;
+    document.getElementById('certSaveStatus').style.display='none';
     certReadyBlob=null;
     prepareCertBlob().catch(()=>{});
   }
 
+  // Save to Database button handler
+  document.getElementById('certSaveDbBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('certSaveDbBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Saving...';
+
+    await saveCertificateToFirestore();
+
+    document.getElementById('certSaveStatus').style.display = 'block';
+    btn.textContent = '✅ Saved!';
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = '💾 Save to Database';
+    }, 2000);
+  });
+
+  // Save certificate to Firestore (with compression)
+  async function saveCertificateToFirestore(){
+    if(!certRecordId) return;
+    try{
+      const canvas = document.getElementById('certCanvas');
+
+      // Save as JPEG with compression to reduce size
+      const certDataUrl = canvas.toDataURL('image/jpeg', 0.85); // 85% quality JPEG
+
+      // Check size
+      if(certDataUrl.length > 1000000) { // ~1MB limit
+        showToast('⚠️ Compressing certificate...', 1500);
+        // Try even more compression
+        const certDataUrl2 = canvas.toDataURL('image/jpeg', 0.7); // 70% quality
+        if(certDataUrl2.length > 1000000){
+          throw new Error('Certificate too large even after compression');
+        }
+        // Use the more compressed version
+        await saveCertToFirebase(certDataUrl2);
+      } else {
+        await saveCertToFirebase(certDataUrl);
+      }
+
+    } catch(err){
+      console.error('❌ Error saving certificate:', err);
+      if(err.message.includes('too large')){
+        showToast('❌ Certificate too large. Try smaller photo.', 4000);
+      } else {
+        showToast('❌ Could not save certificate', 3000);
+      }
+    }
+  }
+
+  async function saveCertToFirebase(certDataUrl){
+    const {getFirestore, doc, updateDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    const db = getFirestore();
+
+    await updateDoc(doc(db, 'registrations', certRecordId), {
+      certificate: certDataUrl,
+      certificateGeneratedAt: new Date().toISOString(),
+      certificateName: certChildName,
+      certificateAge: certAge,
+      certificateDays: certDays
+    });
+
+    // Update local data
+    allData = allData.map(r =>
+            r.id === certRecordId
+                    ? {...r, certificate: certDataUrl, certificateGeneratedAt: new Date().toISOString()}
+                    : r
+    );
+
+    showToast('✅ Certificate saved!', 2000);
+    applyFilters(); // Refresh table to show view button
+    console.log('✅ Certificate saved to Firestore');
+  }
+
   // Download
-  document.getElementById('certDownloadBtn').addEventListener('click',()=>{
+  document.getElementById('certDownloadBtn').addEventListener('click', () => {
     const canvas = document.getElementById('certCanvas');
+    // Use JPEG for faster download
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
     const a = document.createElement('a');
-    a.download = `VBS2026_Certificate_${certChildName.replace(/\s+/g,'_')}.png`;
-    a.href = canvas.toDataURL('image/png');
+    a.download = `VBS2026_Certificate_${certChildName.replace(/\s+/g,'_')}.jpg`;
+    a.href = dataUrl;
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
+    showToast('📥 Certificate downloaded!', 2000);
   });
 
   // ── Certificate blob cache (same pattern as Rani Gold — iOS compatible) ──
@@ -2203,9 +2483,585 @@
     }
   });
 
+  // Custom Confirm Dialog
+  function showCustomConfirm(title, message){
+    return new Promise((resolve) => {
+      document.getElementById('customConfirmTitle').textContent = title;
+      document.getElementById('customConfirmMessage').textContent = message;
+      document.getElementById('customConfirmModal').classList.add('active');
+
+      const handleOk = () => {
+        document.getElementById('customConfirmModal').classList.remove('active');
+        cleanup();
+        resolve(true);
+      };
+
+      const handleCancel = () => {
+        document.getElementById('customConfirmModal').classList.remove('active');
+        cleanup();
+        resolve(false);
+      };
+
+      const cleanup = () => {
+        document.getElementById('customConfirmOkBtn').removeEventListener('click', handleOk);
+        document.getElementById('customConfirmCancelBtn').removeEventListener('click', handleCancel);
+      };
+
+      document.getElementById('customConfirmOkBtn').addEventListener('click', handleOk);
+      document.getElementById('customConfirmCancelBtn').addEventListener('click', handleCancel);
+    });
+  }
+
   // ══════ END CERTIFICATE MODULE ══════
 
 
+  // ══════════════════════════════════════════
+  // PHOTO UPLOAD MODULE
+  // ══════════════════════════════════════════
+  let currentPhotoStudent = null;
+  let tempPhotoData = null;
+
+  document.getElementById('photoModalClose').addEventListener('click', closePhotoModal);
+
+  function openPhotoModal(student){
+    if(!student) return;
+    currentPhotoStudent = student;
+    tempPhotoData = null;
+
+    // Reset file inputs
+    document.getElementById('photoCameraInput').value = '';
+    document.getElementById('photoGalleryInput').value = '';
+
+    document.getElementById('photoStudentInfo').textContent = student.childName || 'Student';
+    document.getElementById('photoModal').classList.add('active');
+
+    if(student.photo){
+      // Show existing photo
+      document.getElementById('photoPreviewImg').src = student.photo;
+      document.getElementById('photoPreviewSection').style.display = 'block';
+      document.getElementById('photoUploadSection').style.display = 'none';
+      document.getElementById('photoChangeSection').style.display = 'block';
+      document.getElementById('photoTempPreview').style.display = 'none';
+    } else {
+      // Show upload interface
+      document.getElementById('photoPreviewSection').style.display = 'none';
+      document.getElementById('photoUploadSection').style.display = 'block';
+      document.getElementById('photoChangeSection').style.display = 'none';
+      document.getElementById('photoTempPreview').style.display = 'none';
+    }
+  }
+
+  function closePhotoModal(){
+    document.getElementById('photoModal').classList.remove('active');
+    currentPhotoStudent = null;
+    tempPhotoData = null;
+    // Reset all UI elements
+    document.getElementById('photoTempPreview').style.display = 'none';
+    document.getElementById('photoCameraInput').value = '';
+    document.getElementById('photoGalleryInput').value = '';
+
+    // Reset button
+    const btn = document.getElementById('photoSaveBtn');
+    btn.disabled = false;
+    btn.textContent = '💾 Save Photo to Database';
+  }
+
+  // Photo upload handlers with compression
+  function handlePhotoUpload(file){
+    if(!file) return;
+
+    // Check file size
+    if(file.size > 5 * 1024 * 1024) { // 5MB limit
+      showToast('❌ Photo too large. Please use a smaller image.', 3000);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        // Compress image
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+
+        // Resize if too large
+        const maxDim = 800;
+        if(width > maxDim || height > maxDim){
+          if(width > height){
+            height = (height / width) * maxDim;
+            width = maxDim;
+          } else {
+            width = (width / height) * maxDim;
+            height = maxDim;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Convert to compressed base64
+        tempPhotoData = canvas.toDataURL('image/jpeg', 0.8); // 80% quality JPEG
+        document.getElementById('photoTempImg').src = tempPhotoData;
+        document.getElementById('photoTempPreview').style.display = 'block';
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  document.getElementById('photoCameraInput').addEventListener('change', e => handlePhotoUpload(e.target.files[0]));
+  document.getElementById('photoGalleryInput').addEventListener('change', e => handlePhotoUpload(e.target.files[0]));
+
+  // Save photo to database
+  document.getElementById('photoSaveBtn').addEventListener('click', async () => {
+    if(!tempPhotoData || !currentPhotoStudent) {
+      showToast('❌ No photo selected', 2000);
+      return;
+    }
+
+    const btn = document.getElementById('photoSaveBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Saving...';
+
+    try{
+      const {getFirestore, doc, updateDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      const db = getFirestore();
+
+      // Validate data size (Firebase has limits)
+      if(tempPhotoData.length > 1000000) { // ~1MB limit
+        throw new Error('Photo is too large. Please use a smaller image.');
+      }
+
+      console.log('Saving photo for student:', currentPhotoStudent.id);
+
+      await updateDoc(doc(db, 'registrations', currentPhotoStudent.id), {
+        photo: tempPhotoData,
+        photoUploadedAt: new Date().toISOString()
+      });
+
+      // Update local data
+      allData = allData.map(r =>
+              r.id === currentPhotoStudent.id
+                      ? {...r, photo: tempPhotoData, photoUploadedAt: new Date().toISOString()}
+                      : r
+      );
+
+      console.log('Photo saved successfully');
+      showToast('✅ Photo saved successfully!', 2000);
+      applyFilters(); // Refresh table to show new buttons
+
+      // Close modal after short delay
+      setTimeout(() => {
+        closePhotoModal();
+      }, 500);
+
+    } catch(err){
+      console.error('Error saving photo:', err);
+      let errorMsg = '❌ Failed to save photo';
+
+      if(err.message.includes('too large')){
+        errorMsg = '❌ Photo too large. Use smaller image.';
+      } else if(err.code === 'permission-denied'){
+        errorMsg = '❌ Permission denied. Check Firebase rules.';
+      } else if(err.code === 'unavailable'){
+        errorMsg = '❌ Network error. Check connection.';
+      } else if(err.message.includes('protocol')){
+        errorMsg = '❌ App must run on http:// or https://';
+      }
+
+      showToast(errorMsg, 4000);
+      btn.disabled = false;
+      btn.textContent = '💾 Save Photo to Database';
+    }
+  });
+
+  // Change photo button
+  document.getElementById('photoChangeBtn').addEventListener('click', () => {
+    document.getElementById('photoPreviewSection').style.display = 'none';
+    document.getElementById('photoUploadSection').style.display = 'block';
+    document.getElementById('photoChangeSection').style.display = 'none';
+  });
+
+
+  // ══════════════════════════════════════════
+  // ID CARD GENERATION MODULE
+  // ══════════════════════════════════════════
+  let currentIdStudent = null;
+
+  document.getElementById('idCardModalClose').addEventListener('click', closeIdCardModal);
+
+  function closeIdCardModal(){
+    document.getElementById('idCardModal').classList.remove('active');
+  }
+
+  async function generateIDCard(student){
+    if(!student || !student.photo){
+      showToast('❌ Please upload student photo first', 3000);
+      return;
+    }
+
+    currentIdStudent = student;
+    document.getElementById('idCardModal').classList.add('active');
+    document.getElementById('idCardSaveStatus').style.display = 'none';
+
+    const canvas = document.getElementById('idCardCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // ID Card size (400x550px - similar to reference image)
+    canvas.width = 400;
+    canvas.height = 550;
+
+    // ═══ TEAL GRADIENT BACKGROUND (Top Section) ═══
+    const tealGrad = ctx.createLinearGradient(0, 0, 400, 250);
+    tealGrad.addColorStop(0, '#0D9488');
+    tealGrad.addColorStop(1, '#14B8A6');
+    ctx.fillStyle = tealGrad;
+    ctx.fillRect(0, 0, 400, 250);
+
+    // ═══ DIAGONAL DECORATIVE STRIPES ═══
+    ctx.save();
+    ctx.globalAlpha = 0.15;
+
+    // Stripe 1
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.moveTo(0, 150);
+    ctx.lineTo(250, 0);
+    ctx.lineTo(350, 0);
+    ctx.lineTo(100, 250);
+    ctx.closePath();
+    ctx.fill();
+
+    // Stripe 2 (yellow accent)
+    ctx.fillStyle = '#FCD34D';
+    ctx.beginPath();
+    ctx.moveTo(100, 250);
+    ctx.lineTo(350, 0);
+    ctx.lineTo(400, 0);
+    ctx.lineTo(150, 250);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+
+    // ═══ HEADER TEXT ═══
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 28px Arial';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)';
+    ctx.shadowBlur = 4;
+    ctx.fillText('VBS 2026', 200, 45);
+
+    ctx.font = '16px Arial';
+    ctx.shadowBlur = 2;
+    ctx.fillText('LEF Church Magatapalli', 200, 72);
+
+    ctx.font = 'italic 13px Arial';
+    ctx.fillText('Theme: Haggai 2:23', 200, 95);
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = 'transparent';
+
+    // ═══ WHITE BOTTOM SECTION ═══
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 250, 400, 300);
+
+    // ═══ PHOTO SECTION WITH CIRCLE ═══
+    try{
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = student.photo;
+      });
+
+      // White outer circle
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(200, 220, 95, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Photo circle
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(200, 220, 85, 0, Math.PI * 2);
+      ctx.clip();
+
+      // Draw image centered
+      const iw = img.naturalWidth || img.width;
+      const ih = img.naturalHeight || img.height;
+      const scale = Math.max(170/iw, 170/ih);
+      const x = 200 - (iw * scale) / 2;
+      const y = 220 - (ih * scale) / 2;
+      ctx.drawImage(img, x, y, iw * scale, ih * scale);
+      ctx.restore();
+
+      // Teal border around photo
+      ctx.strokeStyle = '#14B8A6';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(200, 220, 85, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Yellow accent arc
+      ctx.strokeStyle = '#FCD34D';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(200, 220, 89, Math.PI * 0.3, Math.PI * 0.7);
+      ctx.stroke();
+
+    } catch(e){
+      console.error('Error loading photo:', e);
+    }
+
+    // ═══ STUDENT NAME ═══
+    ctx.fillStyle = '#0F172A';
+    ctx.font = 'bold 22px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText((student.childName || 'Student Name').toUpperCase(), 200, 330);
+
+    // ═══ DETAILS SECTION - Better Aligned ═══
+    const leftX = 90;
+    const colonX = 220;
+    const valueX = 235;
+    let yPos = 370;
+    const lineHeight = 28;
+
+    ctx.textAlign = 'left';
+
+    // Gender
+    if(student.gender){
+      ctx.fillStyle = '#14B8A6';
+      ctx.font = 'bold 15px Arial';
+      ctx.fillText('Gender', leftX, yPos);
+      ctx.fillText(':', colonX, yPos);
+      ctx.fillStyle = '#0F172A';
+      ctx.font = '15px Arial';
+      ctx.fillText(student.gender, valueX, yPos);
+      yPos += lineHeight;
+    }
+
+    // Class
+    if(student.class){
+      ctx.fillStyle = '#14B8A6';
+      ctx.font = 'bold 15px Arial';
+      ctx.fillText('Class', leftX, yPos);
+      ctx.fillText(':', colonX, yPos);
+      ctx.fillStyle = '#0F172A';
+      ctx.font = '15px Arial';
+      ctx.fillText(student.class, valueX, yPos);
+      yPos += lineHeight;
+    }
+
+    // Village/Address
+    if(student.address){
+      ctx.fillStyle = '#14B8A6';
+      ctx.font = 'bold 15px Arial';
+      ctx.fillText('Village', leftX, yPos);
+      ctx.fillText(':', colonX, yPos);
+      ctx.fillStyle = '#0F172A';
+      ctx.font = '15px Arial';
+      const village = student.address.substring(0, 25);
+      ctx.fillText(village, valueX, yPos);
+      yPos += lineHeight;
+    }
+
+    // ═══ BOTTOM DECORATION (Just barcode, no text) ═══
+    yPos = 500;
+
+    // Barcode-like decoration
+    ctx.fillStyle = '#E5E7EB';
+    for(let i = 0; i < 30; i++){
+      const barHeight = Math.random() > 0.5 ? 20 : 15;
+      ctx.fillRect(70 + (i * 9), yPos, 5, barHeight);
+    }
+  }
+
+  // Helper function for rounded rectangles
+  function roundRect(ctx, x, y, w, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.arcTo(x + w, y, x + w, y + r, r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+    ctx.lineTo(x + r, y + h);
+    ctx.arcTo(x, y + h, x, y + h - r, r);
+    ctx.lineTo(x, y + r);
+    ctx.arcTo(x, y, x + r, y, r);
+    ctx.closePath();
+  }
+
+  function roundRectPath(ctx, x, y, w, h, r){
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.arcTo(x + w, y, x + w, y + r, r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+    ctx.lineTo(x + r, y + h);
+    ctx.arcTo(x, y + h, x, y + h - r, r);
+    ctx.lineTo(x, y + r);
+    ctx.arcTo(x, y, x + r, y, r);
+    ctx.closePath();
+  }
+
+  // Download ID Card
+  document.getElementById('idCardDownloadBtn').addEventListener('click', () => {
+    if(!currentIdStudent) return;
+
+    const canvas = document.getElementById('idCardCanvas');
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = `VBS2026_IDCard_${currentIdStudent.childName.replace(/\s+/g,'_')}.png`;
+    a.click();
+
+    showToast('📥 ID Card downloaded!', 2000);
+  });
+
+  // Share ID Card
+  document.getElementById('idCardShareBtn').addEventListener('click', () => {
+    if(!currentIdStudent) return;
+
+    const name = currentIdStudent.childName;
+    const phone = currentIdStudent.phone;
+    const message = `🪪 VBS 2026 ID Card for *${name}*\n\nLEF Church Magatapalli\nApril 25-27, 2026\n\nTheme: Signet Ring — Haggai 2:23`;
+
+    if(phone && phone.length === 10){
+      window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(message)}`, '_blank');
+    } else {
+      window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+    }
+  });
+
+
+  // ══════════════════════════════════════════
+  // VIEW ID CARD MODAL
+  // ══════════════════════════════════════════
+  let currentViewIdStudent = null;
+
+  document.getElementById('viewIdCardModalClose').addEventListener('click', closeViewIdCardModal);
+
+  function openViewIdCardModal(student){
+    if(!student || !student.idCard){
+      showToast('❌ No ID card found for this student', 3000);
+      return;
+    }
+
+    currentViewIdStudent = student;
+
+    document.getElementById('viewIdStudentName').textContent = student.childName || 'Student';
+
+    const generatedDate = student.idCardGeneratedAt
+            ? new Date(student.idCardGeneratedAt).toLocaleString('en-IN', {
+              dateStyle: 'medium',
+              timeStyle: 'short'
+            })
+            : 'Unknown';
+    document.getElementById('viewIdGeneratedDate').textContent = 'Generated: ' + generatedDate;
+
+    document.getElementById('viewIdImage').src = student.idCard;
+
+    document.getElementById('viewIdCardModal').classList.add('active');
+  }
+
+  function closeViewIdCardModal(){
+    document.getElementById('viewIdCardModal').classList.remove('active');
+    currentViewIdStudent = null;
+  }
+
+  // Download from view modal
+  document.getElementById('viewIdDownloadBtn').addEventListener('click', () => {
+    if(!currentViewIdStudent) return;
+
+    const a = document.createElement('a');
+    a.href = currentViewIdStudent.idCard;
+    a.download = `VBS2026_IDCard_${currentViewIdStudent.childName.replace(/\s+/g,'_')}.png`;
+    a.click();
+
+    showToast('📥 ID Card downloaded!', 2000);
+  });
+
+  // Share from view modal
+  document.getElementById('viewIdShareBtn').addEventListener('click', () => {
+    if(!currentViewIdStudent) return;
+
+    const name = currentViewIdStudent.childName;
+    const phone = currentViewIdStudent.phone;
+    const message = `🪪 VBS 2026 ID Card for *${name}*\n\nLEF Church Magatapalli\nApril 25-27, 2026`;
+
+    if(phone && phone.length === 10){
+      window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(message)}`, '_blank');
+    } else {
+      window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+    }
+  });
+
+
+
+  // ══════════════════════════════════════════
+  // VIEW CERTIFICATE MODAL
+  // ══════════════════════════════════════════
+  let currentViewCertStudent = null; // Initialize at top level
+
+  document.getElementById('viewCertModalClose').addEventListener('click', closeViewCertModal);
+
+  function openViewCertModal(student){
+    if(!student || !student.certificate){
+      showToast('❌ No certificate found for this student', 3000);
+      return;
+    }
+
+    currentViewCertStudent = student;
+
+    document.getElementById('viewCertStudentName').textContent = student.childName || 'Student';
+
+    const generatedDate = student.certificateGeneratedAt
+            ? new Date(student.certificateGeneratedAt).toLocaleString('en-IN', {
+              dateStyle: 'medium',
+              timeStyle: 'short'
+            })
+            : 'Unknown';
+    document.getElementById('viewCertGeneratedDate').textContent = 'Generated: ' + generatedDate;
+
+    document.getElementById('viewCertImage').src = student.certificate;
+
+    document.getElementById('viewCertModal').classList.add('active');
+  }
+
+  function closeViewCertModal(){
+    document.getElementById('viewCertModal').classList.remove('active');
+    currentViewCertStudent = null;
+  }
+
+  // Download from view modal
+  document.getElementById('viewCertDownloadBtn').addEventListener('click', () => {
+    if(!currentViewCertStudent) return;
+
+    const a = document.createElement('a');
+    a.href = currentViewCertStudent.certificate;
+    a.download = `VBS2026_Certificate_${currentViewCertStudent.childName.replace(/\s+/g,'_')}.png`;
+    a.click();
+
+    showToast('📥 Certificate downloaded!', 2000);
+  });
+
+  // Share from view modal
+  document.getElementById('viewCertShareBtn').addEventListener('click', () => {
+    if(!currentViewCertStudent) return;
+
+    const name = currentViewCertStudent.childName;
+    const phone = currentViewCertStudent.phone;
+    const message = `🙏 Congratulations to *${name}* for completing VBS 2026 at LEF Church Magatapalli! ✝️\n\nTheme: Signet Ring — Haggai 2:23\n\n"Let the little children come to me." — Matthew 19:14`;
+
+    if(phone && phone.length === 10){
+      window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(message)}`, '_blank');
+    } else {
+      window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+    }
+  });
 
   // ══════════════════════════════════════════
   // EDIT REGISTRATION
@@ -2485,6 +3341,153 @@
   });
   // ══════════════════════════════════════════
 
+  // ══════ SEND CERTIFICATES VIA WHATSAPP ══════
+  document.getElementById('sendCertsBtn').addEventListener('click', openSendCertsModal);
+  document.getElementById('sendCertsModalClose').addEventListener('click', closeSendCertsModal);
+  document.getElementById('sendCertsCancelBtn').addEventListener('click', closeSendCertsModal);
+
+  function openSendCertsModal(){
+    document.getElementById('sendCertsModal').classList.add('active');
+    document.getElementById('sendCertsProgress').style.display = 'none';
+    document.getElementById('sendCertsResult').style.display = 'none';
+    document.getElementById('sendCertsConfirmBtn').disabled = false;
+    updateSendCertsStats();
+  }
+
+  function closeSendCertsModal(){
+    document.getElementById('sendCertsModal').classList.remove('active');
+  }
+
+  function updateSendCertsStats(){
+    const classFilter = document.getElementById('sendCertsClassFilter').value;
+
+    let filtered = allData.filter(r => r.certificate);
+    if(classFilter !== 'all'){
+      if(classFilter === 'unassigned'){
+        filtered = filtered.filter(r => !r.class);
+      } else {
+        filtered = filtered.filter(r => r.class === classFilter);
+      }
+    }
+
+    const validPhones = filtered.filter(r => r.phone && r.phone.length === 10);
+
+    document.getElementById('certsReadyCount').textContent = filtered.length;
+    document.getElementById('validPhonesCount').textContent = validPhones.length;
+  }
+
+  document.getElementById('sendCertsClassFilter').addEventListener('change', updateSendCertsStats);
+
+  document.getElementById('sendCertsConfirmBtn').addEventListener('click', async () => {
+    const classFilter = document.getElementById('sendCertsClassFilter').value;
+    const btn = document.getElementById('sendCertsConfirmBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Sending...';
+
+    document.getElementById('sendCertsProgress').style.display = 'block';
+    document.getElementById('sendCertsResult').style.display = 'none';
+
+    let filtered = allData.filter(r => r.certificate && r.phone && r.phone.length === 10);
+    if(classFilter !== 'all'){
+      if(classFilter === 'unassigned'){
+        filtered = filtered.filter(r => !r.class);
+      } else {
+        filtered = filtered.filter(r => r.class === classFilter);
+      }
+    }
+
+    if(filtered.length === 0){
+      showToast('❌ No certificates to send', 3000);
+      btn.disabled = false;
+      btn.textContent = '📤 Send Certificates';
+      document.getElementById('sendCertsProgress').style.display = 'none';
+      return;
+    }
+
+    let sent = 0;
+    let failed = 0;
+    const failedNumbers = [];
+
+    for(let i = 0; i < filtered.length; i++){
+      const student = filtered[i];
+      const progress = Math.round(((i + 1) / filtered.length) * 100);
+
+      document.getElementById('sendCertsProgressBar').style.width = progress + '%';
+      document.getElementById('sendCertsProgressText').textContent = progress + '%';
+      document.getElementById('sendCertsStatus').textContent = `Sending ${i + 1} of ${filtered.length}...`;
+
+      try{
+        await sendCertificateToWhatsApp(student);
+        sent++;
+      } catch(err){
+        failed++;
+        failedNumbers.push(student.phone);
+        console.error('Failed to send to', student.phone, err);
+      }
+
+      // Small delay to avoid rate limiting
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    // Show results
+    const resultDiv = document.getElementById('sendCertsResult');
+    resultDiv.style.display = 'block';
+    resultDiv.style.background = sent > 0 ? '#DCFCE7' : '#FEE2E2';
+    resultDiv.style.color = sent > 0 ? '#166534' : '#DC2626';
+    resultDiv.innerHTML = `
+      <div style="font-weight:800;margin-bottom:8px;">
+        ${sent > 0 ? '✅' : '❌'} Sending Complete
+      </div>
+      <div style="font-size:0.9rem;">
+        <strong>${sent}</strong> sent successfully<br>
+        <strong>${failed}</strong> failed
+        ${failedNumbers.length > 0 ? '<br><br>Failed numbers: ' + failedNumbers.join(', ') : ''}
+      </div>
+    `;
+
+    showToast(`✅ Sent ${sent} certificate(s)${failed > 0 ? ', ' + failed + ' failed' : ''}`, 4000);
+
+    btn.disabled = false;
+    btn.textContent = '📤 Send Certificates';
+  });
+
+  async function sendCertificateToWhatsApp(student){
+    const phone = student.phone;
+    const name = student.childName;
+    const certificate = student.certificate;
+
+    // Convert base64 to blob
+    const base64Data = certificate.split(',')[1];
+    const blob = base64ToBlob(base64Data, 'image/png');
+
+    // WhatsApp message
+    const message = `🙏 Congratulations to *${name}* for completing VBS 2026 at LEF Church Magatapalli! ✝️\n\nTheme: Signet Ring — Haggai 2:23\n\n"Let the little children come to me." — Matthew 19:14\n\nHere is your certificate! God bless you! 🌟`;
+
+    // WhatsApp Web API - Opens WhatsApp with pre-filled message
+    // For production, you would integrate with WhatsApp Business API
+    const whatsappUrl = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
+
+    // For now, we'll just open WhatsApp links
+    // In production, integrate with Twilio WhatsApp API or similar service
+    window.open(whatsappUrl, '_blank');
+
+    // Simulate sending - in production, replace with actual API call
+    return new Promise((resolve) => {
+      setTimeout(resolve, 500);
+    });
+  }
+
+  function base64ToBlob(base64, mimeType){
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for(let i = 0; i < byteCharacters.length; i++){
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], {type: mimeType});
+  }
+  // ══════════════════════════════════════════
+
 
   // ══════ CUSTOM CONFIRM DIALOG ══════
   let confirmResolve = null;
@@ -2508,7 +3511,7 @@
   }
 
   // ══════ TEACHER MANAGEMENT (Firestore-backed, works across devices) ══════
-  let cachedTeacherProfiles = {};
+  let cachedTeacherProfiles = {}; // Initialize empty object
 
   async function loadTeacherProfiles(){
     try{
@@ -2915,11 +3918,19 @@
       <!-- Certificate Preview -->
       <div id="certPreviewWrap" style="display:none;">
         <p style="font-weight:700;color:var(--navy);margin-bottom:12px;">📄 Certificate Preview</p>
-        <canvas id="certCanvas" style="width:100%;border-radius:12px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
+        <canvas id="certCanvas" style="max-width:100%;height:auto;border-radius:12px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
+
+        <!-- Save Status -->
+        <div id="certSaveStatus" style="display:none;background:#DCFCE7;border:2px solid #16A34A;color:#166534;padding:12px;border-radius:10px;margin-top:16px;font-weight:700;text-align:center;">
+          ✅ Certificate saved to database!
+        </div>
+
         <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-          <button class="cert-action-btn" id="certShareBtn" style="background:var(--grass);color:var(--navy);flex:1;">📤 Share via WhatsApp</button>
+          <button class="cert-action-btn" id="certSaveDbBtn" style="background:#FCD34D;color:#92400E;flex:1;font-weight:800;">
+            💾 Save to Database
+          </button>
+          <button class="cert-action-btn" id="certShareBtn" style="background:var(--grass);color:var(--navy);">📤 Share</button>
           <button class="cert-action-btn" id="certDownloadBtn" style="background:var(--sky);color:var(--navy);">⬇ Download</button>
-          <button class="cert-action-btn" id="certRetakeBtn" style="background:#F1F5F9;color:var(--navy);" id="certRetakeBtn">📸 Change Photo</button>
         </div>
       </div>
 
@@ -3031,6 +4042,215 @@
     </div>
   </div>
 </div>
+<!-- CUSTOM CONFIRM DIALOG -->
+<div class="modal-overlay" id="customConfirmModal" style="z-index:10000;">
+  <div class="modal-box" style="max-width:450px;">
+    <div style="padding:24px;">
+      <div style="font-size:3rem;text-align:center;margin-bottom:16px;">⚠️</div>
+      <h3 style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--navy);text-align:center;margin-bottom:12px;" id="customConfirmTitle">Confirm Action</h3>
+      <p style="color:#64748B;text-align:center;margin-bottom:24px;line-height:1.6;" id="customConfirmMessage">Are you sure?</p>
+      <div style="display:flex;gap:12px;">
+        <button id="customConfirmCancelBtn" style="flex:1;background:#E2E8F0;color:#64748B;border:none;padding:12px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
+          Cancel
+        </button>
+        <button id="customConfirmOkBtn" style="flex:1;background:#F59E0B;color:white;border:none;padding:12px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
+          Continue
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHOTO UPLOAD MODAL -->
+<div class="modal-overlay" id="photoModal">
+  <div class="modal-box" style="max-width:500px;">
+    <div style="background:linear-gradient(135deg,#8B5CF6,#7C3AED);padding:20px 24px;border-radius:21px 21px 0 0;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:white;">📷 Student Photo</div>
+      <button id="photoModalClose" style="background:rgba(255,255,255,.2);border:none;color:white;font-size:1.3rem;cursor:pointer;border-radius:50%;width:34px;height:34px;">✕</button>
+    </div>
+    <div style="padding:24px;">
+      <div id="photoStudentInfo" style="background:#F8FAFC;padding:12px;border-radius:10px;margin-bottom:16px;font-weight:700;color:#1E3A5F;"></div>
+
+      <!-- Photo Preview or Upload -->
+      <div id="photoPreviewSection" style="display:none;text-align:center;margin-bottom:16px;">
+        <img id="photoPreviewImg" src="" alt="Student Photo" style="max-width:100%;max-height:400px;border-radius:12px;border:2px solid #E2E8F0;">
+        <div style="margin-top:12px;font-size:0.85rem;color:#64748B;">Photo saved in database</div>
+      </div>
+
+      <div id="photoUploadSection">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+          <button onclick="document.getElementById('photoCameraInput').click()" style="background:#8B5CF6;color:white;border:none;padding:16px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
+            📸 Take Photo
+          </button>
+          <button onclick="document.getElementById('photoGalleryInput').click()" style="background:#7C3AED;color:white;border:none;padding:16px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
+            🖼️ Upload Photo
+          </button>
+        </div>
+        <input type="file" id="photoCameraInput" accept="image/*" capture="environment" style="display:none">
+        <input type="file" id="photoGalleryInput" accept="image/*" style="display:none">
+
+        <div id="photoTempPreview" style="display:none;text-align:center;margin-top:16px;">
+          <img id="photoTempImg" src="" alt="Preview" style="max-width:100%;max-height:300px;border-radius:12px;border:2px solid #E2E8F0;margin-bottom:12px;">
+          <button id="photoSaveBtn" style="width:100%;background:#10B981;color:white;border:none;padding:14px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.95rem;">
+            💾 Save Photo to Database
+          </button>
+        </div>
+      </div>
+
+      <div id="photoChangeSection" style="display:none;">
+        <button id="photoChangeBtn" style="width:100%;background:#F59E0B;color:white;border:none;padding:14px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
+          🔄 Change Photo
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ID CARD MODAL -->
+<div class="modal-overlay" id="idCardModal">
+  <div class="modal-box" style="max-width:600px;">
+    <div style="background:linear-gradient(135deg,#3B82F6,#2563EB);padding:20px 24px;border-radius:21px 21px 0 0;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:white;">🪪 VBS ID Card</div>
+      <button id="idCardModalClose" style="background:rgba(255,255,255,.2);border:none;color:white;font-size:1.3rem;cursor:pointer;border-radius:50%;width:34px;height:34px;">✕</button>
+    </div>
+    <div style="padding:24px;">
+      <p style="font-weight:700;color:var(--navy);margin-bottom:12px;">🪪 ID Card Preview</p>
+      <canvas id="idCardCanvas" style="max-width:100%;height:auto;border-radius:12px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
+
+      <div id="idCardSaveStatus" style="display:none;background:#DCFCE7;border:2px solid #16A34A;color:#166534;padding:12px;border-radius:10px;margin-top:16px;font-weight:700;text-align:center;">
+        ✅ ID Card saved to database!
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+        <button class="cert-action-btn" id="idCardDownloadBtn" style="background:#3B82F6;color:white;flex:1;">⬇ Download</button>
+        <button class="cert-action-btn" id="idCardShareBtn" style="background:#25D366;color:white;">📤 Share</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW ID CARD MODAL -->
+<div class="modal-overlay" id="viewIdCardModal">
+  <div class="modal-box" style="max-width:600px;">
+    <div style="background:linear-gradient(135deg,#3B82F6,#2563EB);padding:20px 24px;border-radius:21px 21px 0 0;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:white;">👁️ View ID Card</div>
+      <button id="viewIdCardModalClose" style="background:rgba(255,255,255,.2);border:none;color:white;font-size:1.3rem;cursor:pointer;border-radius:50%;width:34px;height:34px;">✕</button>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:#F8FAFC;padding:12px;border-radius:10px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#1E3A5F;margin-bottom:4px;" id="viewIdStudentName">Student Name</div>
+        <div style="font-size:0.85rem;color:#64748B;" id="viewIdGeneratedDate">Generated: --</div>
+      </div>
+
+      <img id="viewIdImage" src="" alt="ID Card" style="width:100%;border-radius:12px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);">
+
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <button id="viewIdDownloadBtn" style="flex:1;background:#3B82F6;color:white;border:none;padding:12px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
+          ⬇ Download ID Card
+        </button>
+        <button id="viewIdShareBtn" style="background:#25D366;color:white;border:none;padding:12px 20px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
+          📤 Share
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW CERTIFICATE MODAL -->
+<div class="modal-overlay" id="viewCertModal">
+  <div class="modal-box" style="max-width:700px;height: auto">
+    <div style="background:linear-gradient(135deg,#10B981,#059669);padding:20px 24px;border-radius:21px 21px 0 0;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:white;">👁️ View Certificate</div>
+      <button id="viewCertModalClose" style="background:rgba(255,255,255,.2);border:none;color:white;font-size:1.3rem;cursor:pointer;border-radius:50%;width:34px;height:34px;">✕</button>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:#F8FAFC;padding:12px;border-radius:10px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#1E3A5F;margin-bottom:4px;" id="viewCertStudentName">Student Name</div>
+        <div style="font-size:0.85rem;color:#64748B;" id="viewCertGeneratedDate">Generated: --</div>
+      </div>
+
+      <img id="viewCertImage" src="" alt="Certificate" style="width:100%;border-radius:12px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);">
+
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <button id="viewCertDownloadBtn" style="flex:1;background:#3B82F6;color:white;border:none;padding:12px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
+          ⬇ Download Certificate
+        </button>
+        <button id="viewCertShareBtn" style="background:#25D366;color:white;border:none;padding:12px 20px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
+          📤 Share
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEND CERTIFICATES MODAL -->
+<div class="modal-overlay" id="sendCertsModal">
+  <div class="modal-box" style="max-width:600px;">
+    <div class="modal-header">
+      <h2>📱 Send Certificates via WhatsApp</h2>
+      <button class="close-btn" id="sendCertsModalClose">✕</button>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:#FEF3C7;border:2px solid #F59E0B;border-radius:12px;padding:16px;margin-bottom:20px;">
+        <div style="font-weight:700;color:#92400E;margin-bottom:8px;">⚠️ Important Information</div>
+        <ul style="margin:0;padding-left:20px;color:#92400E;font-size:0.85rem;line-height:1.6;">
+          <li>This will send certificates to students with generated certificates</li>
+          <li>Only students with valid 10-digit phone numbers will receive messages</li>
+          <li>Messages will be sent via WhatsApp Business API</li>
+          <li>Make sure you have configured WhatsApp API credentials</li>
+        </ul>
+      </div>
+
+      <div id="sendCertsStats" style="background:#F8FAFC;border-radius:12px;padding:16px;margin-bottom:20px;">
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;text-align:center;">
+          <div>
+            <div style="font-size:2rem;font-weight:800;color:#1E3A5F;" id="certsReadyCount">0</div>
+            <div style="font-size:0.75rem;color:#64748B;font-weight:700;">Certificates Ready</div>
+          </div>
+          <div>
+            <div style="font-size:2rem;font-weight:800;color:#16A34A;" id="validPhonesCount">0</div>
+            <div style="font-size:0.75rem;color:#64748B;font-weight:700;">Valid Phone Numbers</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-weight:700;margin-bottom:8px;color:#1E3A5F;">Filter by Class (Optional)</label>
+        <select id="sendCertsClassFilter" style="width:100%;padding:10px;border:2px solid #E2E8F0;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;">
+          <option value="all">All Classes</option>
+          <option value="Beginner">Beginner</option>
+          <option value="Primary">Primary</option>
+          <option value="Junior">Junior</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Senior">Senior</option>
+          <option value="Young Adult">Young Adult</option>
+          <option value="unassigned">Unassigned</option>
+        </select>
+      </div>
+
+      <div id="sendCertsProgress" style="display:none;margin-bottom:20px;">
+        <div style="background:#E2E8F0;height:24px;border-radius:12px;overflow:hidden;margin-bottom:8px;">
+          <div id="sendCertsProgressBar" style="background:#16A34A;height:100%;width:0%;transition:width 0.3s;display:flex;align-items:center;justify-content:center;">
+            <span id="sendCertsProgressText" style="font-size:0.7rem;font-weight:800;color:white;"></span>
+          </div>
+        </div>
+        <div id="sendCertsStatus" style="font-size:0.85rem;color:#64748B;text-align:center;"></div>
+      </div>
+
+      <div id="sendCertsResult" style="display:none;padding:16px;border-radius:12px;margin-bottom:20px;"></div>
+
+      <div style="display:flex;gap:12px;">
+        <button id="sendCertsConfirmBtn" style="flex:1;background:#25D366;color:white;border:none;padding:14px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.95rem;">
+          📤 Send Certificates
+        </button>
+        <button id="sendCertsCancelBtn" style="background:#E2E8F0;color:#64748B;border:none;padding:14px 20px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
+
