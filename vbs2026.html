@@ -1999,7 +1999,7 @@
 
 
   // ══════ CERTIFICATE MODULE ══════
-  let certRecordId = '', certChildName = '', certDays = '', certAge = '', certPhone = '';
+  let certRecordId = '', certChildName = '', certDays = '', certAge = '', certPhone = '',  certClass = '';
   let certPhotoDataUrl = null;
 
   // Certificate generation using stored photo
@@ -2014,6 +2014,7 @@
     certDays = student.days || '';
     certAge = student.age || '';
     certPhone = student.phone || '';
+    certClass = student.class || '';
     certPhotoDataUrl = student.photo;
 
     // Show modal and generate certificate
@@ -2098,22 +2099,25 @@
 
     // ── 1. COLORFUL BACKGROUND ───────────────
     const bg = ctx.createLinearGradient(0,0,W,H);
-    bg.addColorStop(0,  '#1a0533');
-    bg.addColorStop(0.3,'#2E0854');
-    bg.addColorStop(0.6,'#1B3A7A');
-    bg.addColorStop(1,  '#0D1F4A');
+    const color = '#4D7A73'
+    bg.addColorStop(0,  color);
+    bg.addColorStop(0.3,color);
+    bg.addColorStop(0.6,color);
+    bg.addColorStop(1,  color);
     ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
 
     const glow = ctx.createRadialGradient(cx,H*0.45,50,cx,H*0.45,600);
     glow.addColorStop(0,'rgba(255,200,50,0.12)'); glow.addColorStop(1,'transparent');
     ctx.fillStyle=glow; ctx.fillRect(0,0,W,H);
 
-    ctx.save(); ctx.globalAlpha=0.04;
-    ctx.strokeStyle='#FFD700'; ctx.lineWidth=1;
-    for(let i=-H;i<W+H;i+=60){
-      ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i+H,H); ctx.stroke();
-    }
-    ctx.restore();
+    // ctx.save();
+    // ctx.globalAlpha=0.04;
+    // ctx.strokeStyle='#FFD700';
+    // ctx.lineWidth=1;
+    // for(let i=-H;i<W+H;i+=60){
+    //   ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i+H,H); ctx.stroke();
+    // }
+    // ctx.restore();
 
     // ── 2. BORDERS ───────────────────────────
     ctx.shadowColor='rgba(255,200,50,0.6)'; ctx.shadowBlur=20;
@@ -2131,16 +2135,16 @@
     ctx.fillText('"Let the little children come to me."', cx, 96);
     ctx.fillStyle='#FFD700';
     ctx.font='22px Georgia';
-    ctx.fillText('— Matthew 19:14', cx, 130);
+    ctx.fillText('Matthew 19:14', cx, 130);
     hLine(158,'rgba(255,215,0,0.2)','rgba(255,215,0,0.8)');
 
     // ── 4. CHURCH + VBS ──────────────────────
     ctx.fillStyle='#FFD700';
-    ctx.font='bold 38px Georgia';
-    ctx.fillText('LEF Church, Magatapalli', cx, 208);
+    ctx.font='bold 50px Jenson';
+    ctx.fillText('Vacation Bible School 2026', cx, 208);
     ctx.fillStyle='rgba(255,255,255,0.9)';
-    ctx.font='italic 30px Georgia';
-    ctx.fillText('VBS 2026', cx, 250);
+    ctx.font='35px Garamond';
+    ctx.fillText('LEF Church, Magatapalli', cx, 250);
     hLine(275,'rgba(255,215,0,0.2)','rgba(255,215,0,0.8)');
 
     // ── 5. CERTIFICATE OF PARTICIPATION ──────
@@ -2150,7 +2154,7 @@
     titleGrad.addColorStop(0,'#FF9A3C'); titleGrad.addColorStop(0.35,'#FFD700');
     titleGrad.addColorStop(0.65,'#FFF0A0'); titleGrad.addColorStop(1,'#FF9A3C');
     ctx.fillStyle=titleGrad;
-    ctx.font='bold 52px Georgia';
+    ctx.font='bold 40px Georgia';
     ctx.fillText('Certificate of Participation', cx, 342);
     ctx.restore();
     hLine(368,'rgba(255,165,0,0.2)','rgba(255,165,0,0.7)');
@@ -2163,7 +2167,7 @@
     ctx.save();
     ctx.shadowColor='rgba(255,220,0,0.8)'; ctx.shadowBlur=14;
     ctx.fillStyle='#FFD700';
-    ctx.font='bold 60px Georgia';
+    ctx.font='bold 55px Georgia';
     ctx.fillText('Signet Ring', cx, 478);
     ctx.restore();
 
@@ -2218,7 +2222,7 @@
     const certifyY = certPhotoDataUrl ? 848 : 600;
     const nameY    = certifyY + 60;   // name band starts here
     const bodyY    = nameY + 140;     // body text starts here
-    const sigLineY = bodyY + 200;     // signature line
+    const sigLineY = bodyY + (certClass ? 260 : 200);  // signature line — extra space if class shown
     hLine(certifyY,'rgba(255,255,255,0.1)','rgba(255,255,255,0.4)');
     ctx.fillStyle='rgba(220,220,255,0.85)';
     ctx.font='italic 30px Georgia';
@@ -2249,10 +2253,10 @@
 
     // Underline with diamond dots
     const nw=ctx.measureText(certChildName).width;
-    const nx=cx-nw/2;
+    const nx=cx-nw/1.2;
     ctx.strokeStyle='rgba(255,215,0,0.8)'; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(nx,nameY+88); ctx.lineTo(cx+nw/2,nameY+88); ctx.stroke();
-    [nx-6, cx+nw/2+6].forEach(px=>{
+    ctx.beginPath(); ctx.moveTo(nx,nameY+88); ctx.lineTo(cx+nw/1.2,nameY+88); ctx.stroke();
+    [nx-6, cx+nw/1.2+6].forEach(px=>{
       ctx.fillStyle='#FFD700';
       ctx.beginPath(); ctx.arc(px,nameY+88,4,0,Math.PI*2); ctx.fill();
     });
@@ -2269,7 +2273,7 @@
     ctx.font='27px Georgia';
     const part1='conducted by ';
     const part2='LEF Church, Magatapalli';
-    const part3=' on';
+    const part3=' held on';
     const w1=ctx.measureText(part1).width;
     const w3=ctx.measureText(part3).width;
     ctx.font='bold 27px Georgia';
@@ -2292,6 +2296,35 @@
     ctx.fillStyle='#FFD580';
     ctx.font='italic 28px Georgia';
     ctx.fillText('April 25, 26 & 27, 2026', cx, bodyY+96);
+
+    // Line 4 — Class (if assigned)
+    if(certClass){
+      const gap = 35; // spacing
+      ctx.font='27px Georgia';
+      ctx.fillStyle='rgba(220,230,255,0.92)';
+      const clsPart1 = 'as a participant in the ';
+      const clsPart2 = certClass;
+      const clsPart3 = ' Class';
+      ctx.font='27px Georgia';
+      const cw1 = ctx.measureText(clsPart1).width;
+      ctx.font='bold 27px Georgia';
+      const cw2 = ctx.measureText(clsPart2).width;
+      ctx.font='27px Georgia';
+      const cw3 = ctx.measureText(clsPart3).width;
+      const clsLineX = cx - (cw1+cw2+cw3)/2;
+      ctx.font='27px Georgia';
+      ctx.fillStyle='rgba(220,230,255,0.92)';
+      ctx.textAlign='left';
+      ctx.fillText(clsPart1, clsLineX, bodyY+144);
+      ctx.font='bold 27px Georgia';
+      ctx.fillStyle='rgba(180,255,200,0.95)';
+      ctx.fillText(clsPart2, clsLineX+cw1, bodyY+144);
+      ctx.textAlign='center';
+      ctx.font='27px Georgia';
+      ctx.fillStyle='rgba(220,230,255,0.92)';
+      ctx.fillText(clsPart3, clsLineX+cw1+cw2+gap, bodyY+144);
+      ctx.textAlign='center';
+    }
 
     // ── 11. SIGNATURES ────────────────────────
     // Teacher LEFT, Director RIGHT
