@@ -273,7 +273,7 @@
     tr:hover td{background:#FAFAFE;}
     tr:last-child td{border-bottom:none;}
     .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-weight:700;font-size:0.73rem;}
-    .b-boy{background:#DBEAFE;color:#1E40AF;}.b-girl{background:#FCE7F3;color:#9D174D;}.b-days{background:#FEF3C7;color:#92400E;font-size:0.7rem;}
+    .b-boy{background:#DBEAFE;color:#1E40AF;}.b-girl{background:#FCE7F3;color:#9D174D;}.b-days{background:#FEF3C7;color:#92400E;font-size:0.7rem;}.b-online{background:#DCFCE7;color:#166534;}.b-imported{background:#E0F2FE;color:#0C4A6E;}
     .no-data{text-align:center;padding:50px;color:#94A3B8;font-weight:700;}
     .no-data .ni{font-size:3rem;display:block;margin-bottom:10px;}
     .loading-row{text-align:center;padding:40px;color:#94A3B8;font-weight:700;}
@@ -342,8 +342,10 @@
     /* ── LEFT SIDEBAR NAV ── */
     .dash-layout{display:flex;gap:0;min-height:calc(100vh - 60px);}
     .dash-sidebar{width:180px;flex-shrink:0;background:var(--navy);padding:16px 0;display:flex;flex-direction:column;gap:4px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
-    .dash-tabs{display:flex;flex-direction:column;gap:4px;padding:0 10px;}
-    .dash-tab{background:none;border:none;padding:12px 16px;font-family:'Fredoka One',cursive;font-size:0.95rem;color:rgba(255,255,255,0.55);cursor:pointer;border-radius:12px;text-align:left;transition:all .2s;display:flex;align-items:center;gap:10px;white-space:nowrap;}
+    .dash-tabs{display:flex;flex-direction:column;gap:4px;padding:0 10px;align-items:stretch;}
+    .dash-tab{background:none;border:none;padding:12px 16px;font-family:'Fredoka One',cursive;font-size:0.95rem;color:rgba(255,255,255,0.55);cursor:pointer;border-radius:12px;text-align:left;transition:all .2s;display:flex;align-items:center;justify-content:flex-start;gap:10px;white-space:nowrap;width:100%;box-sizing:border-box;line-height:1.2;}
+    .dash-tab .tab-icon{width:24px;min-width:24px;display:inline-flex;align-items:center;justify-content:center;text-align:center;}
+    .dash-tab .tab-label{display:inline-block;}
     .dash-tab:hover{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.9);}
     .dash-tab.active{background:var(--coral);color:white;box-shadow:0 2px 8px rgba(255,107,107,0.4);}
     .dash-main{flex:1;padding:24px;overflow-x:auto;min-width:0;}
@@ -352,6 +354,7 @@
     @media(max-width:700px){
       .dash-sidebar{width:52px;}
       .dash-tab{padding:12px;justify-content:center;}
+      .dash-tab .tab-icon{width:auto;min-width:0;}
       .dash-tab span.tab-label{display:none;}
     }
 
@@ -722,11 +725,12 @@
       <!-- LEFT SIDEBAR -->
       <div class="dash-sidebar">
     <div class="dash-tabs">
-      <button class="dash-tab active" data-tab="registrations">📋 Registrations</button>
-      <button class="dash-tab" data-tab="documents" id="documentsTab">📄 Documents</button>
-      <button class="dash-tab" data-tab="attendance" id="attendanceTab">📝 Attendance</button>
-      <button class="dash-tab" data-tab="analytics">📊 Analytics</button>
-      <button class="dash-tab" data-tab="teachers" id="teachersTab" style="display:none">👩‍🏫 Teachers</button>
+      <button class="dash-tab active" data-tab="registrations"><span class="tab-icon">📋</span><span class="tab-label">Registrations</span></button>
+      <button class="dash-tab" data-tab="documents" id="documentsTab"><span class="tab-icon">📄</span><span class="tab-label">Documents</span></button>
+      <button class="dash-tab" data-tab="attendance" id="attendanceTab"><span class="tab-icon">📝</span><span class="tab-label">Attendance</span></button>
+      <button class="dash-tab" data-tab="analytics"><span class="tab-icon">📊</span><span class="tab-label">Analytics</span></button>
+      <button class="dash-tab" data-tab="teachers" id="teachersTab"><span class="tab-icon">👩‍🏫</span><span class="tab-label">Teachers</span></button>
+      <button class="dash-tab" data-tab="archive" id="archiveTab"><span class="tab-icon">🗂</span><span class="tab-label">Archive</span></button>
     </div>
       </div>
       <div class="dash-main">
@@ -754,7 +758,7 @@
         <!-- Bulk action bar -->
         <div class="bulk-bar" id="bulkBar">
           <span class="bulk-count" id="bulkCount">0 selected</span>
-          <button class="bulk-del-btn" id="bulkDelBtn">🗑 Delete Selected</button>
+          <button class="bulk-del-btn" id="bulkDelBtn">🗂 Archive Selected</button>
           <button style="background:#6B7280;color:white;border:none;padding:8px 14px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.82rem;cursor:pointer;" id="bulkCancelBtn">✕ Cancel</button>
         </div>
         <div class="filter-row">
@@ -775,7 +779,7 @@
         <div class="table-wrap">
           <table>
             <thead>
-            <tr><th><input type="checkbox" id="selectAllCheck" class="row-check" title="Select all"></th><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th>Class</th><th>Parent</th><th>Phone</th><th>Village</th><th>Days</th><th id="attHead">Attendance</th><th id="actionsHead"></th></tr>
+            <tr><th><input type="checkbox" id="selectAllCheck" class="row-check" title="Select all"></th><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th>Class</th><th>Parent</th><th>Phone</th><th>Village</th><th>Days</th><th>Registration Type</th><th id="attHead">Attendance</th><th id="actionsHead"></th></tr>
             </thead>
             <tbody id="tableBody">
             <tr><td colspan="10" class="loading-row">⏳ Loading…</td></tr>
@@ -787,10 +791,10 @@
 
     <!-- DOCUMENTS VIEW -->
     <div class="dash-view" id="view-documents">
-      <div class="view-header">
+      <div class="view-header" style="margin-bottom:14px;">
         <h2 class="view-title">📄 Student Documents</h2>
         <div class="header-right">
-          <select class="day-dropdown" id="docsClassFilter" style="margin-right:10px;">
+          <select class="day-dropdown" id="docsClassFilter" style="margin-right:10px;margin-bottom:6px;">
             <option value="all">All Classes</option>
             <option value="Beginner">Beginner</option>
             <option value="Primary">Primary</option>
@@ -919,6 +923,10 @@
           <div id="chart-timeline"><div class="empty-analytics">No data yet</div></div>
         </div>
         <div class="chart-card">
+          <h4>🔀 Registration Source</h4>
+          <div id="chart-source" class="donut-wrap"><div class="empty-analytics">No data yet</div></div>
+        </div>
+        <div class="chart-card">
           <h4>✅ Attendance by Class</h4>
           <div id="chart-attendance"><div class="empty-analytics">No data yet</div></div>
         </div>
@@ -929,6 +937,27 @@
       </div>
 
     </div><!-- /view-analytics -->
+
+  <!-- ARCHIVE VIEW -->
+  <div class="dash-view" id="view-archive">
+    <div class="table-card">
+      <div class="table-header">
+        <h3>🗂 Archived Records</h3>
+        <span id="archiveCount" style="font-size:0.85rem;color:#64748B;font-weight:700;"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+          <tr><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th>Parent</th><th>Phone</th><th>Village</th><th>Days</th><th>Source</th><th>Archived On</th><th>Action</th></tr>
+          </thead>
+          <tbody id="archiveBody">
+          <tr><td colspan="11" class="loading-row">⏳ Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div><!-- /view-archive -->
+
     </div><!-- /dash-main -->
     </div><!-- /dash-layout -->
   </div><!-- /admin-content -->
@@ -1188,7 +1217,7 @@
   document.getElementById('loginBtn').addEventListener('click', doLogin);
   document.getElementById('loginPass').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
   document.getElementById('logoutBtn').addEventListener('click', doLogout);
-  document.getElementById('refreshBtn').addEventListener('click', loadData);
+  document.getElementById('refreshBtn').addEventListener('click', refreshActiveTab);
 
   // Tab switching
   document.querySelectorAll('.dash-tab').forEach(tab => {
@@ -1201,20 +1230,25 @@
       if(tab.dataset.tab === 'teachers') buildTeacherMgmt();
       if(tab.dataset.tab === 'attendance') renderAttendanceView();
       if(tab.dataset.tab === 'documents') renderDocumentsView();
+      if(tab.dataset.tab === 'archive') loadArchive();
     });
   });
 
-  // Tab switching
-  document.querySelectorAll('.dash-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.dash-view').forEach(v => v.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById('view-' + tab.dataset.tab).classList.add('active');
-      if(tab.dataset.tab === 'analytics') renderAnalytics();
-      if(tab.dataset.tab === 'attendance') renderAttendanceView();
-    });
-  });
+  function getActiveDashboardTab(){
+    return document.querySelector('.dash-tab.active')?.dataset.tab || 'registrations';
+  }
+
+  async function refreshActiveTab(){
+    const activeTab = getActiveDashboardTab();
+    if(activeTab === 'archive'){
+      await loadArchive();
+      return;
+    }
+    await loadData();
+    if(activeTab === 'attendance') renderAttendanceView();
+    if(activeTab === 'teachers' && currentRole === 'admin') buildTeacherMgmt();
+    if(activeTab === 'analytics') renderAnalytics();
+  }
   document.getElementById('submitBtn').addEventListener('click', submitReg);
   document.getElementById('exportBtn').addEventListener('click', exportCSV);
   document.getElementById('searchBox').addEventListener('input', applyFilters);
@@ -1396,6 +1430,8 @@
     document.querySelectorAll('.dash-view').forEach(v=>v.classList.remove('active'));
     // Teachers tab — admin only
     document.getElementById('teachersTab').style.display = isAdmin ? '' : 'none';
+    // Archive tab — admin only
+    document.getElementById('archiveTab').style.display = isAdmin ? '' : 'none';
     // Analytics tab — admin only
     const analyticsTab = document.querySelector('[data-tab="analytics"]');
     if(analyticsTab) analyticsTab.style.display = isAdmin ? '' : 'none';
@@ -1532,6 +1568,9 @@
            </select>`
               : `<span class="badge b-days">${cls?'Class '+cls:'—'}</span>`;
       const childName = r.childName||((r.childFirst||'')+(r.childLast?' '+r.childLast:''));
+      const sourceType = r.source === 'imported'
+              ? `<span class="badge b-imported">Imported</span>`
+              : `<span class="badge b-online">Online</span>`;
       const editBtn   = `<button class="edit-btn" data-id="${r.id}" title="Edit record">✏️</button>`;
       const delBtn    = `<button class="del-btn" data-id="${r.id}" style="margin-left:2px">🗑</button>`;
       const actionBtns = isAdmin ? editBtn + delBtn : '';
@@ -1571,6 +1610,7 @@
         <td><a href="tel:${r.phone}" style="color:var(--navy);font-weight:700;text-decoration:none">${r.phone||'—'}</a></td>
         <td>${r.address||'—'}</td>
         <td><span class="badge b-days">${days}</span></td>
+        <td>${sourceType}</td>
         ${!isTeacher ? `<td>${attDisplay}</td>` : ''}
         <td style="white-space:nowrap">${actionBtns}</td>
       </tr>`;
@@ -1589,24 +1629,26 @@
       });
     });
 
-    // Wire delete buttons
-    document.querySelectorAll('.del-btn').forEach(btn=>{
+    // Wire delete (archive) buttons
+    document.querySelectorAll('#tableBody .del-btn').forEach(btn=>{
       btn.addEventListener('click', async()=>{
-        const ok = await showConfirm('Delete Registration?','This record will be permanently deleted and cannot be recovered.','🗑 Delete','🗑️');
+        const ok = await showConfirm('Archive Registration?','This record will be moved to the Archive tab. You can permanently delete it from there.','🗂 Archive','🗂️');
         if(!ok) return;
         try{
-          const {getFirestore, doc, deleteDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-          const db = getFirestore();
-          await deleteDoc(doc(db,'registrations',btn.dataset.id));
+          const {getFirestore,doc,getDoc,setDoc,deleteDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+          const db2=getFirestore();
+          const snap = await getDoc(doc(db2,'registrations',btn.dataset.id));
+          let archivedRecord = null;
+          if(snap.exists()){
+            archivedRecord = {...snap.data(), archivedAt: new Date().toISOString()};
+            await setDoc(doc(db2,'archived',btn.dataset.id), archivedRecord);
+          }
+          await deleteDoc(doc(db2,'registrations',btn.dataset.id));
           allData=allData.filter(r=>r.id!==btn.dataset.id);
-          refreshStats();
-          applyFilters();
-          showToast('✅ Record deleted.',2500);
-        }
-        catch(err){
-          console.error('Delete error:', err);
-          showToast('❌ Delete failed. Try again.',3000);
-        }
+          if(archivedRecord) upsertArchivedRecord(btn.dataset.id, archivedRecord);
+          refreshStats(); applyFilters();
+          showToast('🗂 Record archived.',2500);
+        }catch(e){ showToast('❌ Archive failed. Try again.',3000); }
       });
     });
 
@@ -1968,6 +2010,7 @@
         church:     document.getElementById('church').value.trim(),
         days:       daysVal,      // always English: Day 1 Only – April 25 etc.
         class:      classVal,     // optional class field
+        source:     'online',
         createdAt:  serverTimestamp()
       });
 
@@ -3223,30 +3266,41 @@
     document.getElementById('bulkBar').classList.remove('show');
   });
 
-  // Bulk delete
+  // Bulk delete → archive
   document.getElementById('bulkDelBtn').addEventListener('click', async()=>{
     const checked = [...document.querySelectorAll('.rec-check:checked')];
     if(!checked.length) return;
-    const ok2 = await showConfirm(`Delete ${checked.length} Record(s)?`,`${checked.length} registration(s) will be permanently deleted.`,`🗑 Delete ${checked.length}`,'🗑️');
+    const ok2 = await showConfirm(`Archive ${checked.length} Record(s)?`,`${checked.length} registration(s) will be moved to the Archive tab.`,`🗂 Archive ${checked.length}`,'🗂️');
     if(!ok2) return;
     const btn = document.getElementById('bulkDelBtn');
-    btn.disabled=true; btn.textContent='⏳ Deleting…';
+    btn.disabled=true; btn.textContent='⏳ Archiving…';
     try{
-      const {getFirestore,doc,deleteDoc,writeBatch} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      const {getFirestore,doc,getDoc,setDoc,deleteDoc,writeBatch} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
       const db2=getFirestore();
-      const batch=writeBatch(db2);
       const ids = checked.map(cb=>cb.dataset.id);
+      const archivedRecords = [];
+      // Copy each to archived, then batch-delete from registrations
+      for(const id of ids){
+        const snap = await getDoc(doc(db2,'registrations',id));
+        if(snap.exists()){
+          const archivedRecord = {...snap.data(), archivedAt: new Date().toISOString()};
+          archivedRecords.push({id, data: archivedRecord});
+          await setDoc(doc(db2,'archived',id), archivedRecord);
+        }
+      }
+      const batch=writeBatch(db2);
       ids.forEach(id=>batch.delete(doc(db2,'registrations',id)));
       await batch.commit();
       allData=allData.filter(r=>!ids.includes(r.id));
+      archivedRecords.forEach(({id, data})=>upsertArchivedRecord(id, data));
       refreshStats(); applyFilters();
       document.getElementById('selectAllCheck').checked=false;
       document.getElementById('bulkBar').classList.remove('show');
-      showToast(`✅ ${ids.length} record(s) deleted.`, 3000);
+      showToast(`🗂 ${ids.length} record(s) archived.`, 3000);
     }catch(err){
-      showToast('❌ Delete failed: '+err.message, 4000);
+      showToast('❌ Archive failed: '+err.message, 4000);
     }finally{
-      btn.disabled=false; btn.textContent='🗑 Delete Selected';
+      btn.disabled=false; btn.textContent='🗂 Archive Selected';
     }
   });
 
@@ -3356,6 +3410,7 @@
           church:     row['church']||'',
           days:       row['days']||row['days attending']||'All 3 Days (Apr 25, 26 & 27)',
           class:      row['class']||'',
+          source:     'imported',
           createdAt:  serverTimestamp(),
         };
         if(!rec.childName) continue;
@@ -3932,6 +3987,117 @@
     } else {
       document.getElementById('chart-att-overall').innerHTML='<div class="empty-analytics">No attendance yet</div>';
     }
+  }
+
+  // ══════════════════════════════════════════
+  // ARCHIVE TAB
+  // ══════════════════════════════════════════
+  let archiveData = [];
+
+  function updateArchiveCount(){
+    document.getElementById('archiveCount').textContent = archiveData.length
+            ? `${archiveData.length} archived record${archiveData.length>1?'s':''}`
+            : 'No archived records';
+  }
+
+  function upsertArchivedRecord(id, data){
+    archiveData = [{id, ...data}, ...archiveData.filter(r=>r.id!==id)].sort((a,b)=>{
+      const aTime = new Date(a.archivedAt || 0).getTime();
+      const bTime = new Date(b.archivedAt || 0).getTime();
+      return bTime - aTime;
+    });
+    updateArchiveCount();
+  }
+
+  function removeArchivedRecord(id){
+    archiveData = archiveData.filter(r=>r.id!==id);
+    updateArchiveCount();
+  }
+
+  async function loadArchive(){
+    const tb = document.getElementById('archiveBody');
+    tb.innerHTML = '<tr><td colspan="11" class="loading-row">⏳ Loading archived records…</td></tr>';
+    try{
+      const {getFirestore,collection,getDocs,orderBy,query} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      const db2 = getFirestore();
+      const snap = await getDocs(query(collection(db2,'archived'), orderBy('archivedAt','desc')));
+      archiveData = snap.docs.map(d=>({id:d.id,...d.data()}));
+      updateArchiveCount();
+      renderArchiveRows();
+    }catch(err){
+      tb.innerHTML=`<tr><td colspan="11" class="no-data">❌ Failed to load: ${err.message}</td></tr>`;
+    }
+  }
+
+  function renderArchiveRows(){
+    const tb = document.getElementById('archiveBody');
+    if(!archiveData.length){
+      tb.innerHTML='<tr><td colspan="11" class="no-data"><span class="ni">🗂</span>No archived records.</td></tr>';
+      return;
+    }
+    tb.innerHTML = archiveData.map((r,i)=>{
+      const archivedOn = r.archivedAt ? new Date(r.archivedAt).toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+      const childName = r.childName||((r.childFirst||'')+(r.childLast?' '+r.childLast:''));
+      const days = (r.days||'—').replace('All 3 Days (Apr 25, 26 & 27)','All 3 Days');
+      const src = r.source==='imported'
+              ? `<span class="badge b-imported">⬆ Imported</span>`
+              : `<span class="badge b-online">✅ Registered</span>`;
+      return `<tr>
+        <td><strong style="color:#94A3B8">${i+1}</strong></td>
+        <td><strong>${childName}</strong></td>
+        <td>${r.age||'—'}</td>
+        <td><span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span></td>
+        <td>${r.parentName||'—'}</td>
+        <td>${r.phone||'—'}</td>
+        <td>${r.address||'—'}</td>
+        <td><span class="badge b-days">${days}</span></td>
+        <td>${src}</td>
+        <td style="font-size:0.76rem;color:#94A3B8">${archivedOn}</td>
+        <td style="white-space:nowrap;display:flex;gap:4px;">
+          <button class="arch-restore-btn" style="background:#DCFCE7;color:#166534;border:none;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:700;" data-id="${r.id}" title="Restore to registrations">↩ Restore</button>
+          <button class="arch-perm-del-btn del-btn" data-id="${r.id}" title="Permanently delete">🗑</button>
+        </td>
+      </tr>`;
+    }).join('');
+
+    // Wire restore buttons
+    document.querySelectorAll('.arch-restore-btn').forEach(btn=>{
+      btn.addEventListener('click', async()=>{
+        const ok = await showConfirm('Restore Record?','This record will be moved back to the Registrations tab.','↩ Restore','↩️');
+        if(!ok) return;
+        try{
+          const {getFirestore,doc,getDoc,setDoc,deleteDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+          const db2=getFirestore();
+          const snap = await getDoc(doc(db2,'archived',btn.dataset.id));
+          if(snap.exists()){
+            const data = snap.data();
+            delete data.archivedAt;
+            await setDoc(doc(db2,'registrations',btn.dataset.id), data);
+          }
+          await deleteDoc(doc(db2,'archived',btn.dataset.id));
+          removeArchivedRecord(btn.dataset.id);
+          renderArchiveRows();
+          await loadData();
+          showToast('↩ Record restored to Registrations.',2500);
+        }catch(e){ showToast('❌ Restore failed: '+e.message,3000); }
+      });
+    });
+
+    // Wire permanent delete buttons
+    document.querySelectorAll('.arch-perm-del-btn').forEach(btn=>{
+      btn.addEventListener('click', async()=>{
+        const ok = await showConfirm('Permanently Delete?','This record will be deleted forever and cannot be recovered.','🗑 Delete Forever','🗑️');
+        if(!ok) return;
+        try{
+          const {getFirestore,doc,deleteDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+          const db2=getFirestore();
+          await deleteDoc(doc(db2,'archived',btn.dataset.id));
+          removeArchivedRecord(btn.dataset.id);
+          renderArchiveRows();
+          showToast('🗑 Record permanently deleted.',2500);
+        }catch(e){ showToast('❌ Delete failed: '+e.message,3000); }
+      });
+    });
   }
 
 </script>
