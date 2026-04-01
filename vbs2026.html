@@ -248,6 +248,7 @@
     .role-admin{background:#FEF3C7;color:#92400E;}
     .role-viewer{background:#DBEAFE;color:#1E40AF;}
     .topbar-right{display:flex;gap:10px;align-items:center;}
+    .sidebar-toggle{display:none;background:rgba(255,255,255,.14);color:white;border:2px solid rgba(255,255,255,.28);padding:8px 12px;border-radius:14px;font-family:'Fredoka One',cursive;font-size:1.15rem;cursor:pointer;line-height:1;}
     .logout-btn{background:rgba(255,255,255,.15);color:white;border:2px solid rgba(255,255,255,.3);padding:8px 18px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;font-size:0.85rem;}
     .logout-btn:hover{background:rgba(255,255,255,.25);}
     .refresh-btn{background:var(--sun);color:var(--navy);border:none;padding:8px 18px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;}
@@ -263,9 +264,9 @@
     .search-box{padding:10px 14px;border:2px solid #E2E8F0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.88rem;outline:none;width:200px;}
     .search-box:focus{border-color:var(--coral);}
     .export-btn{background:#4ADE80;color:var(--navy);border:none;padding:10px 18px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;}
-    .filter-row{display:flex;gap:8px;padding:12px 22px;border-bottom:2px solid #F1F5F9;flex-wrap:wrap;}
-    .filter-btn{background:#F1F5F9;color:#64748B;border:none;padding:6px 14px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;font-size:0.8rem;transition:all .2s;}
-    .filter-btn.active,.filter-btn:hover{background:var(--navy);color:white;}
+    .filter-row{display:flex;gap:10px;padding:12px 22px;border-bottom:2px solid #F1F5F9;flex-wrap:wrap;}
+    .filter-select{min-width:140px;padding:8px 12px;border:2px solid #E2E8F0;border-radius:10px;background:#F8FAFC;color:#334155;font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;outline:none;cursor:pointer;}
+    .filter-select:focus{border-color:var(--coral);background:white;}
     .table-wrap{overflow-x:auto;}
     table{width:100%;border-collapse:collapse;}
     th{background:#F8FAFC;padding:11px 14px;text-align:left;font-weight:800;font-size:0.76rem;color:#64748B;letter-spacing:.5px;border-bottom:2px solid #E2E8F0;white-space:nowrap;}
@@ -334,6 +335,20 @@
     .save-teacher-btn{background:var(--coral);color:white;border:none;padding:7px 14px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.8rem;cursor:pointer;}
     .save-teacher-btn:hover{background:var(--orange);}
     .teacher-saved-badge{font-size:0.75rem;color:#16A34A;font-weight:700;display:none;}
+    .roles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;}
+    .role-card{background:#F8FAFC;border:2px solid #E2E8F0;border-radius:16px;padding:18px;}
+    .role-card h4{font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--navy);margin-bottom:6px;}
+    .role-card p{font-size:0.82rem;color:#64748B;line-height:1.5;margin-bottom:14px;}
+    .role-toggle-list{display:flex;flex-direction:column;gap:10px;}
+    .role-toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:white;border:1px solid #E2E8F0;border-radius:12px;padding:10px 12px;}
+    .role-toggle-label{font-weight:800;font-size:0.84rem;color:var(--navy);}
+    .role-toggle{appearance:none;-webkit-appearance:none;width:48px;height:28px;border-radius:999px;background:#CBD5E1;position:relative;cursor:pointer;transition:background .2s;border:none;flex-shrink:0;}
+    .role-toggle::after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:white;box-shadow:0 1px 3px rgba(0,0,0,.18);transition:transform .2s;}
+    .role-toggle:checked{background:#22C55E;}
+    .role-toggle:checked::after{transform:translateX(20px);}
+    .role-save-btn{margin-top:18px;background:var(--coral);color:white;border:2px solid var(--navy);border-radius:12px;padding:12px 22px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;box-shadow:3px 3px 0 var(--navy);}
+    .role-save-btn:hover{background:var(--orange);}
+    .role-save-msg{display:none;margin-top:12px;padding:10px 12px;border-radius:10px;font-weight:700;font-size:0.84rem;}
     .del-btn:hover{background:#FECACA;}
     .viewer-notice{background:#EFF6FF;border:2px solid #93C5FD;border-radius:12px;padding:14px 20px;margin-bottom:20px;color:#1E40AF;font-weight:700;font-size:0.9rem;display:none;align-items:center;gap:10px;}
     .viewer-notice.show{display:flex;}
@@ -342,6 +357,7 @@
     /* ── LEFT SIDEBAR NAV ── */
     .dash-layout{display:flex;gap:0;min-height:calc(100vh - 60px);}
     .dash-sidebar{width:180px;flex-shrink:0;background:var(--navy);padding:16px 0;display:flex;flex-direction:column;gap:4px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+    .sidebar-backdrop{display:none;}
     .dash-tabs{display:flex;flex-direction:column;gap:4px;padding:0 10px;align-items:stretch;}
     .dash-tab{background:none;border:none;padding:12px 16px;font-family:'Fredoka One',cursive;font-size:0.95rem;color:rgba(255,255,255,0.55);cursor:pointer;border-radius:12px;text-align:left;transition:all .2s;display:flex;align-items:center;justify-content:flex-start;gap:10px;white-space:nowrap;width:100%;box-sizing:border-box;line-height:1.2;}
     .dash-tab .tab-icon{width:24px;min-width:24px;display:inline-flex;align-items:center;justify-content:center;text-align:center;}
@@ -352,10 +368,66 @@
     .dash-view{display:none;}
     .dash-view.active{display:block;}
     @media(max-width:700px){
-      .dash-sidebar{width:52px;}
-      .dash-tab{padding:12px;justify-content:center;}
-      .dash-tab .tab-icon{width:auto;min-width:0;}
-      .dash-tab span.tab-label{display:none;}
+      .admin-topbar{padding:14px 16px;}
+      .sidebar-toggle{display:inline-flex;align-items:center;justify-content:center;}
+      .dash-layout{position:relative;min-height:auto;}
+      .dash-sidebar{width:240px;position:fixed;top:0;left:0;height:100vh;z-index:1200;padding:84px 0 20px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:12px 0 30px rgba(15,23,42,.28);}
+      .dash-sidebar.open{transform:translateX(0);}
+      .sidebar-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:1190;}
+      .sidebar-backdrop.show{display:block;}
+      .dash-tab{padding:12px 16px;justify-content:flex-start;}
+      .dash-tab .tab-icon{width:24px;min-width:24px;}
+      .dash-tab span.tab-label{display:inline;}
+      .dash-main{padding:16px;}
+      #statsGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px;}
+      #statsGrid .stat-card{padding:14px 10px;border-radius:14px;}
+      #statsGrid .s-num{font-size:1.6rem;}
+      #statsGrid .s-label{font-size:0.72rem;}
+      #attendanceStatsGrid{display:none !important;}
+      .attendance-header{padding:14px;margin-bottom:14px;}
+      .day-selector{align-items:stretch;}
+      .day-selector > div{width:100%;flex-wrap:wrap;}
+      .day-selector label{font-size:0.95rem;}
+      .day-dropdown{width:100%;padding:10px 12px;font-size:0.9rem;}
+      .attendance-table-card .table-header{padding:14px 16px;}
+      .attendance-table-card h3{font-size:1.05rem;}
+      .att-table-simple thead{display:none;}
+      .att-table-simple td{padding:0;border-bottom:none;}
+      .att-mobile-cell{padding:12px 0 !important;}
+      .att-mobile-card{background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+      .att-mobile-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;}
+      .att-mobile-name{font-weight:800;color:var(--navy);font-size:0.95rem;line-height:1.35;}
+      .att-mobile-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+      .att-mobile-meta .badge{font-size:0.7rem;}
+      .att-mobile-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+      .att-mobile-actions .att-btn{width:100%;padding:10px 8px;font-size:0.82rem;justify-content:center;}
+      #view-registrations table thead,
+      #view-documents table thead,
+      #view-archive table thead{display:none;}
+      #view-registrations td,
+      #view-documents td,
+      #view-archive td{padding:0;border-bottom:none;}
+      .mobile-record-cell{padding:12px 0 !important;}
+      .mobile-record-card{background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+      .mobile-record-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;}
+      .mobile-record-title{font-weight:800;color:var(--navy);font-size:0.96rem;line-height:1.35;}
+      .mobile-record-sub{font-size:0.76rem;color:#64748B;font-weight:700;margin-top:3px;}
+      .mobile-record-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+      .mobile-record-meta .badge{font-size:0.7rem;}
+      .mobile-record-lines{display:grid;gap:8px;margin-bottom:12px;}
+      .mobile-record-line{display:flex;justify-content:space-between;gap:12px;font-size:0.82rem;color:#334155;}
+      .mobile-record-line strong{color:#64748B;font-size:0.74rem;min-width:88px;}
+      .mobile-record-actions{display:flex;flex-wrap:wrap;gap:8px;}
+      .mobile-record-actions .edit-btn,
+      .mobile-record-actions .del-btn,
+      .mobile-record-actions .photo-btn,
+      .mobile-record-actions .id-card-btn,
+      .mobile-record-actions .cert-btn,
+      .mobile-record-actions .view-id-btn,
+      .mobile-record-actions .view-cert-btn,
+      .mobile-record-actions .arch-restore-btn,
+      .mobile-record-actions .arch-perm-del-btn{margin-left:0 !important;}
+      .mobile-record-actions .class-sel{width:100%;}
     }
 
     /* ATTENDANCE VIEW */
@@ -597,7 +669,7 @@
       </div>
       <div class="form-row">
         <div class="form-group"><label>Parent/Guardian Name</label><input type="text" id="parentName" placeholder="Full name"></div>
-        <div class="form-group"><label>Phone Number</label><input type="tel" id="parentPhone" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" pattern="[0-9]*"><div class="field-err" id="phoneErr">⚠️ Please enter a valid 10-digit mobile number</div></div>
+        <div class="form-group"><label>Phone Number *</label><input type="tel" id="parentPhone" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" pattern="[0-9]*"><div class="field-err" id="phoneErr">⚠️ Please enter a valid 10-digit mobile number</div></div>
       </div>
       <div class="form-group"><label>Email Address</label><input type="email" id="parentEmail" placeholder="your@email.com"></div>
       <div class="form-group"><label>Address / Village *</label><input type="text" id="address" placeholder="Village / Town name"></div>
@@ -712,6 +784,7 @@
   <div class="admin-topbar">
     <div class="logo">✝ VBS Dashboard<span id="loggedInEmail"></span></div>
     <div class="topbar-right">
+      <button class="sidebar-toggle" id="sidebarToggle" type="button">☰</button>
       <span class="role-badge" id="roleBadge"></span>
       <button class="refresh-btn" id="refreshBtn">🔄 Refresh</button>
       <button class="logout-btn" id="logoutBtn">⬅ Logout</button>
@@ -722,6 +795,7 @@
 
     <!-- TABS -->
     <div class="dash-layout">
+      <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
       <!-- LEFT SIDEBAR -->
       <div class="dash-sidebar">
     <div class="dash-tabs">
@@ -730,6 +804,7 @@
       <button class="dash-tab" data-tab="attendance" id="attendanceTab"><span class="tab-icon">📝</span><span class="tab-label">Attendance</span></button>
       <button class="dash-tab" data-tab="analytics"><span class="tab-icon">📊</span><span class="tab-label">Analytics</span></button>
       <button class="dash-tab" data-tab="teachers" id="teachersTab"><span class="tab-icon">👩‍🏫</span><span class="tab-label">Teachers</span></button>
+      <button class="dash-tab" data-tab="manage-roles" id="manageRolesTab"><span class="tab-icon">🛠</span><span class="tab-label">Manage Roles</span></button>
       <button class="dash-tab" data-tab="archive" id="archiveTab"><span class="tab-icon">🗂</span><span class="tab-label">Archive</span></button>
     </div>
       </div>
@@ -762,27 +837,34 @@
           <button style="background:#6B7280;color:white;border:none;padding:8px 14px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.82rem;cursor:pointer;" id="bulkCancelBtn">✕ Cancel</button>
         </div>
         <div class="filter-row">
-          <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="Male">Male</button>
-          <button class="filter-btn" data-filter="Female">Female</button>
-          <button class="filter-btn" data-filter="25">Day 1 (Apr 25)</button>
-          <button class="filter-btn" data-filter="26">Day 2 (Apr 26)</button>
-          <button class="filter-btn" data-filter="27">Day 3 (Apr 27)</button>
-          <button class="filter-btn" data-filter="cls-Beginner">Beginner</button>
-          <button class="filter-btn" data-filter="cls-Primary">Primary</button>
-          <button class="filter-btn" data-filter="cls-Junior">Junior</button>
-          <button class="filter-btn" data-filter="cls-Intermediate">Intermediate</button>
-          <button class="filter-btn" data-filter="cls-Senior">Senior</button>
-          <button class="filter-btn" data-filter="cls-Young Adult">Young Adult</button>
-          <button class="filter-btn" data-filter="cls-unassigned">Unassigned</button>
+          <select id="genderFilter" class="filter-select">
+            <option value="all">Gender: All</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+          <select id="daysFilter" class="filter-select">
+            <option value="all">Days: All</option>
+            <option value="25">Day 1 (Apr 25)</option>
+            <option value="26">Day 2 (Apr 26)</option>
+            <option value="27">Day 3 (Apr 27)</option>
+          </select>
+          <select id="classFilter" class="filter-select">
+            <option value="all">Class: All</option>
+          </select>
+          <select id="villageFilter" class="filter-select">
+            <option value="all">Village: All</option>
+          </select>
+          <select id="churchFilter" class="filter-select">
+            <option value="all">Church: All</option>
+          </select>
         </div>
         <div class="table-wrap">
           <table>
             <thead>
-            <tr><th><input type="checkbox" id="selectAllCheck" class="row-check" title="Select all"></th><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th>Class</th><th>Parent</th><th>Phone</th><th>Village</th><th>Days</th><th>Registration Type</th><th id="attHead">Attendance</th><th id="actionsHead"></th></tr>
+            <tr><th><input type="checkbox" id="selectAllCheck" class="row-check" title="Select all"></th><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th>Class</th><th>Parent</th><th>Phone</th><th>Village</th><th>Church</th><th>Days</th><th>Registration Type</th><th id="actionsHead"></th></tr>
             </thead>
             <tbody id="tableBody">
-            <tr><td colspan="10" class="loading-row">⏳ Loading…</td></tr>
+            <tr><td colspan="13" class="loading-row">⏳ Loading…</td></tr>
             </tbody>
           </table>
         </div>
@@ -832,8 +914,7 @@
 
     <!-- ATTENDANCE VIEW -->
     <div class="dash-view" id="view-attendance">
-      <!-- Statistics Cards for Selected Day -->
-      <div class="stats-grid" id="attendanceStatsGrid" style="margin-bottom:20px;">
+      <div class="stats-grid" id="attendanceStatsGrid" style="display:none;margin-bottom:20px;">
         <div class="stat-card c-present"><div class="s-num" id="att-stat-present">—</div><div class="s-label">✅ Present</div></div>
         <div class="stat-card c-absent"><div class="s-num" id="att-stat-absent">—</div><div class="s-label">❌ Absent</div></div>
         <div class="stat-card c-total"><div class="s-num" id="att-stat-not-marked">—</div><div class="s-label">⏸️ Not Marked</div></div>
@@ -902,6 +983,17 @@
         <div id="teacherSaveMsg" style="display:none;margin-top:10px;padding:10px;border-radius:10px;font-weight:700;font-size:0.85rem;"></div>
       </div>
     </div><!-- /view-teachers -->
+
+    <!-- MANAGE ROLES VIEW -->
+    <div class="dash-view" id="view-manage-roles">
+      <div class="teacher-mgmt-card">
+        <h3 style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--navy);margin-bottom:6px;">🛠 Manage Roles</h3>
+        <p style="font-size:0.85rem;color:#64748B;margin-bottom:18px;">Choose which tabs teachers can access after login. Disabled tabs will be hidden from every teacher account.</p>
+        <div id="roleMgmtList" class="roles-grid"></div>
+        <button id="saveRoleConfigBtn" class="role-save-btn">💾 Save Role Settings</button>
+        <div id="roleSaveMsg" class="role-save-msg"></div>
+      </div>
+    </div><!-- /view-manage-roles -->
 
     <!-- ANALYTICS VIEW -->
     <div class="dash-view" id="view-analytics">
@@ -1209,7 +1301,14 @@
   const auth = getAuth(app);
   const db   = getFirestore(app);
 
-  let allData = [], activeFilter = 'all', currentRole = null, teacherClass = null;
+  let allData = [], currentRole = null, teacherClass = null;
+  const TEACHER_TAB_OPTIONS = [
+    {key:'registrations', label:'Registrations', desc:'Allow teachers to view the registrations table for their class.'},
+    {key:'documents', label:'Documents', desc:'Allow teachers to view student documents for their class.'},
+    {key:'attendance', label:'Attendance', desc:'Allow teachers to mark and review attendance for their class.'},
+    {key:'analytics', label:'Analytics', desc:'Allow teachers to see analytics based on their class data.'},
+  ];
+  const DEFAULT_TEACHER_TABS = {registrations:true, documents:false, attendance:true, analytics:false};
 
   // ── Wire up buttons via addEventListener (no onclick= needed) ──
   document.getElementById('adminBtn').addEventListener('click', openModal);
@@ -1218,6 +1317,34 @@
   document.getElementById('loginPass').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
   document.getElementById('logoutBtn').addEventListener('click', doLogout);
   document.getElementById('refreshBtn').addEventListener('click', refreshActiveTab);
+  document.getElementById('sidebarToggle').addEventListener('click', toggleSidebarMenu);
+  document.getElementById('sidebarBackdrop').addEventListener('click', closeSidebarMenu);
+
+  function isMobileViewport(){
+    return window.innerWidth <= 700;
+  }
+
+  function openSidebarMenu(){
+    if(!isMobileViewport()) return;
+    document.querySelector('.dash-sidebar')?.classList.add('open');
+    document.getElementById('sidebarBackdrop')?.classList.add('show');
+  }
+
+  function closeSidebarMenu(){
+    document.querySelector('.dash-sidebar')?.classList.remove('open');
+    document.getElementById('sidebarBackdrop')?.classList.remove('show');
+  }
+
+  function toggleSidebarMenu(){
+    const sidebar = document.querySelector('.dash-sidebar');
+    if(!sidebar || !isMobileViewport()) return;
+    sidebar.classList.toggle('open');
+    document.getElementById('sidebarBackdrop')?.classList.toggle('show', sidebar.classList.contains('open'));
+  }
+
+  window.addEventListener('resize', ()=>{
+    if(!isMobileViewport()) closeSidebarMenu();
+  });
 
   // Tab switching
   document.querySelectorAll('.dash-tab').forEach(tab => {
@@ -1228,9 +1355,11 @@
       document.getElementById('view-' + tab.dataset.tab).classList.add('active');
       if(tab.dataset.tab === 'analytics') renderAnalytics();
       if(tab.dataset.tab === 'teachers') buildTeacherMgmt();
+      if(tab.dataset.tab === 'manage-roles') buildRoleMgmt();
       if(tab.dataset.tab === 'attendance') renderAttendanceView();
       if(tab.dataset.tab === 'documents') renderDocumentsView();
       if(tab.dataset.tab === 'archive') loadArchive();
+      closeSidebarMenu();
     });
   });
 
@@ -1245,20 +1374,17 @@
       return;
     }
     await loadData();
+    if(activeTab === 'documents') renderDocumentsView();
     if(activeTab === 'attendance') renderAttendanceView();
     if(activeTab === 'teachers' && currentRole === 'admin') buildTeacherMgmt();
+    if(activeTab === 'manage-roles' && currentRole === 'admin') buildRoleMgmt();
     if(activeTab === 'analytics') renderAnalytics();
   }
   document.getElementById('submitBtn').addEventListener('click', submitReg);
   document.getElementById('exportBtn').addEventListener('click', exportCSV);
   document.getElementById('searchBox').addEventListener('input', applyFilters);
-  document.querySelectorAll('.filter-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      activeFilter = btn.dataset.filter;
-      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      applyFilters();
-    });
+  ['genderFilter','daysFilter','classFilter','villageFilter','churchFilter'].forEach(id=>{
+    document.getElementById(id).addEventListener('change', applyFilters);
   });
 
   // Day dropdown for attendance view
@@ -1373,10 +1499,23 @@
     }
   }
 
+  function activateDashboardTab(tabName){
+    document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.dash-view').forEach(v=>v.classList.remove('active'));
+    document.querySelector(`.dash-tab[data-tab="${tabName}"]`)?.classList.add('active');
+    document.getElementById('view-' + tabName)?.classList.add('active');
+    if(tabName === 'attendance') renderAttendanceView();
+    if(tabName === 'documents') renderDocumentsView();
+    if(tabName === 'analytics') renderAnalytics();
+    if(tabName === 'teachers') buildTeacherMgmt();
+    if(tabName === 'manage-roles') buildRoleMgmt();
+    if(tabName === 'archive') loadArchive();
+    closeSidebarMenu();
+  }
+
   function openTeacherDashboard(tc){
     currentRole  = 'teacher';
     teacherClass = tc.class;
-    activeFilter = 'cls-'+tc.class;  // e.g. cls-1 through cls-7
 
     const badge = document.getElementById('roleBadge');
     badge.textContent = '🟢 '+tc.label;
@@ -1391,19 +1530,21 @@
     document.getElementById('importBtn').style.display   = 'none';
     document.getElementById('actionsHead').textContent   = 'Certificate';
 
-    // Hide class filter buttons for teachers
-    document.querySelectorAll('.filter-btn').forEach(b=>{
-      if(b.dataset.filter && b.dataset.filter.startsWith('cls-')) b.style.display='none';
-    });
+    document.getElementById('classFilter').value = tc.class || 'all';
+    document.getElementById('classFilter').style.display = 'none';
 
-    // Show registrations and attendance tabs for teachers
+    const visibleTabs = getTeacherVisibleTabs();
+    const safeVisibleTabs = visibleTabs.length ? visibleTabs : ['registrations'];
+    const firstTab = safeVisibleTabs[0];
+
+    // Show only the tabs enabled for teachers
     document.querySelectorAll('.dash-tab').forEach(t=>{
       t.classList.remove('active');
       const tabName = t.dataset.tab;
-      t.style.display = (tabName==='registrations' || tabName==='attendance') ? '' : 'none';
+      t.style.display = safeVisibleTabs.includes(tabName) ? '' : 'none';
     });
     document.querySelectorAll('.dash-view').forEach(v=>v.classList.remove('active'));
-    document.getElementById('view-registrations').classList.add('active');
+    activateDashboardTab(firstTab);
     document.getElementById('adminPanel').classList.add('active');
     document.body.style.overflow='hidden';
 
@@ -1430,6 +1571,8 @@
     document.querySelectorAll('.dash-view').forEach(v=>v.classList.remove('active'));
     // Teachers tab — admin only
     document.getElementById('teachersTab').style.display = isAdmin ? '' : 'none';
+    // Manage Roles tab — admin only
+    document.getElementById('manageRolesTab').style.display = isAdmin ? '' : 'none';
     // Archive tab — admin only
     document.getElementById('archiveTab').style.display = isAdmin ? '' : 'none';
     // Analytics tab — admin only
@@ -1451,19 +1594,24 @@
     currentRole=null;
     teacherClass=null;
     selectedRole='admin';
-    activeFilter='all';
     allData=[];
     // Reset tabs & class filter buttons
     document.querySelectorAll('.dash-tab').forEach(t=>{ t.style.display=''; t.classList.remove('active'); });
     document.querySelector('[data-tab="registrations"]').classList.add('active');
-    document.querySelectorAll('.filter-btn').forEach(b=>{ b.style.display=''; });
+    ['genderFilter','daysFilter','classFilter','villageFilter','churchFilter'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el){
+        el.value = 'all';
+        el.style.display = '';
+      }
+    });
     document.querySelector('.c-total .s-label').textContent='Total Registrations';
     document.getElementById('adminPanel').classList.remove('active');
     document.body.style.overflow='';
   }
 
   async function loadData(){
-    document.getElementById('tableBody').innerHTML='<tr><td colspan="12" class="loading-row">⏳ Loading registrations…</td></tr>';
+    document.getElementById('tableBody').innerHTML='<tr><td colspan="13" class="loading-row">⏳ Loading registrations…</td></tr>';
     try{
       const snap=await getDocs(query(collection(db,'registrations'),orderBy('createdAt','desc')));
       allData=snap.docs.map(d=>({id:d.id,...d.data()}));
@@ -1471,14 +1619,27 @@
       if(currentRole==='teacher' && teacherClass){
         allData = allData.filter(r=>r.class===teacherClass);
       }
+      populateRegistrationFilters();
+      if(currentRole==='teacher'){
+        const clsFilter = document.getElementById('classFilter');
+        if(clsFilter){
+          clsFilter.value = teacherClass || 'all';
+          clsFilter.style.display = 'none';
+        }
+      }else{
+        const clsFilter = document.getElementById('classFilter');
+        if(clsFilter) clsFilter.style.display = '';
+      }
       refreshStats(); applyFilters();
+      if(document.getElementById('view-documents').classList.contains('active')) renderDocumentsView();
+      if(document.getElementById('view-attendance').classList.contains('active')) renderAttendanceView();
       if(document.getElementById('view-analytics').classList.contains('active')) renderAnalytics();
     }catch(err){
       const isTeacher = currentRole==='teacher';
       const msg = isTeacher
               ? `<span class="ni">⚠️</span>Could not load data.<br><small>Please update Firestore rules:<br><code>allow read: if true;</code></small>`
               : `<span class="ni">⚠️</span>Could not load data. Check Firestore rules.`;
-      document.getElementById('tableBody').innerHTML=`<tr><td colspan="11" class="no-data">${msg}</td></tr>`;
+      document.getElementById('tableBody').innerHTML=`<tr><td colspan="13" class="no-data">${msg}</td></tr>`;
     }
   }
 
@@ -1515,15 +1676,51 @@
     if(lbl) lbl.textContent = (currentRole==='teacher' && teacherClass) ? 'Class '+teacherClass+' Students' : 'Total Registrations';
   }
 
+  function populateRegistrationFilters(){
+    const classFilter = document.getElementById('classFilter');
+    const villageFilter = document.getElementById('villageFilter');
+    const churchFilter = document.getElementById('churchFilter');
+    if(!classFilter || !villageFilter || !churchFilter) return;
+
+    const currentValues = {
+      class: classFilter.value,
+      village: villageFilter.value,
+      church: churchFilter.value
+    };
+
+    const classes = [...new Set(allData.map(r=>r.class || 'unassigned'))].filter(Boolean).sort((a,b)=>a.localeCompare(b));
+    const villages = [...new Set(allData.map(r=>(r.address||'').trim() || 'Not specified'))].sort((a,b)=>a.localeCompare(b));
+    const churches = [...new Set(allData.map(r=>(r.church||'').trim() || 'Not specified'))].sort((a,b)=>a.localeCompare(b));
+
+    classFilter.innerHTML = '<option value="all">Class: All</option>' + classes.map(v=>`<option value="${v}">${v==='unassigned'?'Unassigned':v}</option>`).join('');
+    villageFilter.innerHTML = '<option value="all">Village: All</option>' + villages.map(v=>`<option value="${v}">${v}</option>`).join('');
+    churchFilter.innerHTML = '<option value="all">Church: All</option>' + churches.map(v=>`<option value="${v}">${v}</option>`).join('');
+
+    classFilter.value = [...classFilter.options].some(o=>o.value===currentValues.class) ? currentValues.class : 'all';
+    villageFilter.value = [...villageFilter.options].some(o=>o.value===currentValues.village) ? currentValues.village : 'all';
+    churchFilter.value = [...churchFilter.options].some(o=>o.value===currentValues.church) ? currentValues.church : 'all';
+  }
+
   function applyFilters(){
     const q=(document.getElementById('searchBox')?.value||'').toLowerCase();
+    const genderFilter = document.getElementById('genderFilter')?.value || 'all';
+    const daysFilter = document.getElementById('daysFilter')?.value || 'all';
+    const classFilter = document.getElementById('classFilter')?.value || 'all';
+    const villageFilter = document.getElementById('villageFilter')?.value || 'all';
+    const churchFilter = document.getElementById('churchFilter')?.value || 'all';
     let d=[...allData];
-    if(activeFilter==='Male') d=d.filter(r=>r.gender==='Male');
-    else if(activeFilter==='Female') d=d.filter(r=>r.gender==='Female');
-    else if(['25','26','27'].includes(activeFilter)) d=d.filter(r=>(r.days||'').includes(activeFilter));
-    else if(activeFilter==='cls-unassigned') d=d.filter(r=>!r.class);
-    else if(activeFilter.startsWith('cls-')) d=d.filter(r=>r.class===activeFilter.replace('cls-',''));
-    if(q) d=d.filter(r=>[r.childName,r.childFirst,r.childLast,r.phone,r.parentName,r.address].join(' ').toLowerCase().includes(q));
+    if(genderFilter !== 'all') d=d.filter(r=>r.gender===genderFilter);
+    if(daysFilter !== 'all') d=d.filter(r=>(r.days||'').includes(daysFilter));
+    if(classFilter !== 'all'){
+      d=d.filter(r=>classFilter==='unassigned' ? !r.class : r.class===classFilter);
+    }
+    if(villageFilter !== 'all'){
+      d=d.filter(r=>((r.address||'').trim() || 'Not specified')===villageFilter);
+    }
+    if(churchFilter !== 'all'){
+      d=d.filter(r=>((r.church||'').trim() || 'Not specified')===churchFilter);
+    }
+    if(q) d=d.filter(r=>[r.childName,r.childFirst,r.childLast,r.phone,r.parentName,r.address,r.church].join(' ').toLowerCase().includes(q));
     renderRows(d);
   }
 
@@ -1531,6 +1728,7 @@
 
   function renderRows(data){
     const tb=document.getElementById('tableBody');
+    const isMobile = isMobileViewport();
     const isAdmin  = currentRole==='admin';
     const isTeacher= currentRole==='teacher';
     const isViewer = currentRole==='viewer';
@@ -1552,11 +1750,7 @@
         titleEl.textContent='📋 All Registrations';
       }
     }
-    // Attendance col header - hide for teachers
-    const attHead=document.getElementById('attHead');
-    if(attHead) attHead.style.display = isTeacher ? 'none' : '';
-
-    if(!data.length){ tb.innerHTML=`<tr><td colspan="12" class="no-data"><span class="ni">📋</span>No registrations found.</td></tr>`; return; }
+    if(!data.length){ tb.innerHTML=`<tr><td colspan="13" class="no-data"><span class="ni">📋</span>No registrations found.</td></tr>`; return; }
 
     tb.innerHTML=data.map((r,i)=>{
       const days=(r.days||'—').replace('All 3 Days (Apr 25, 26 & 27)','All 3 Days');
@@ -1576,27 +1770,33 @@
       const actionBtns = isAdmin ? editBtn + delBtn : '';
       const chk = isAdmin ? `<input type="checkbox" class="row-check rec-check" data-id="${r.id}">` : '';
 
-      // Attendance - display summary for day-wise attendance (hide for teachers)
-      let attDisplay = '';
-      if(!isTeacher){
-        if(typeof r.attendance === 'object' && r.attendance){
-          // Day-wise attendance - show summary
-          const day25 = r.attendance['25'] || '';
-          const day26 = r.attendance['26'] || '';
-          const day27 = r.attendance['27'] || '';
-          attDisplay = `<div style="font-size:0.7rem;font-weight:700;">
-            <div>D1: ${day25==='present'?'✅':day25==='absent'?'❌':'—'}</div>
-            <div>D2: ${day26==='present'?'✅':day26==='absent'?'❌':'—'}</div>
-            <div>D3: ${day27==='present'?'✅':day27==='absent'?'❌':'—'}</div>
-          </div>`;
-        } else {
-          // Old format - show buttons for backward compatibility
-          const att = r.attendance||'';
-          attDisplay = `<div class="att-wrap">
-            <button class="att-btn att-present${att==='present'?' active':''}" data-id="${r.id}" data-att="present">✅</button>
-            <button class="att-btn att-absent${att==='absent'?' active':''}" data-id="${r.id}" data-att="absent">❌</button>
-          </div>`;
-        }
+      if(isMobile){
+        return `<tr>
+          <td colspan="13" class="mobile-record-cell">
+            <div class="mobile-record-card">
+              <div class="mobile-record-head">
+                <div>
+                  <div class="mobile-record-title">${i+1}. ${childName}</div>
+                  <div class="mobile-record-sub">${r.parentName||'—'}</div>
+                </div>
+                ${isAdmin ? chk : ''}
+              </div>
+              <div class="mobile-record-meta">
+                <span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span>
+                <span class="badge b-days">${days}</span>
+                ${sourceType}
+                ${canManage ? clsSelect : `<span class="badge b-days">${cls?'Class '+cls:'—'}</span>`}
+              </div>
+              <div class="mobile-record-lines">
+                <div class="mobile-record-line"><strong>Age</strong><span>${r.age||'—'}</span></div>
+                <div class="mobile-record-line"><strong>Phone</strong><span>${r.phone||'—'}</span></div>
+                <div class="mobile-record-line"><strong>Village</strong><span>${r.address||'—'}</span></div>
+                <div class="mobile-record-line"><strong>Church</strong><span>${r.church||'—'}</span></div>
+              </div>
+              <div class="mobile-record-actions">${actionBtns}</div>
+            </div>
+          </td>
+        </tr>`;
       }
 
       return `<tr>
@@ -1609,9 +1809,9 @@
         <td>${r.parentName||'—'}</td>
         <td><a href="tel:${r.phone}" style="color:var(--navy);font-weight:700;text-decoration:none">${r.phone||'—'}</a></td>
         <td>${r.address||'—'}</td>
+        <td>${r.church||'—'}</td>
         <td><span class="badge b-days">${days}</span></td>
         <td>${sourceType}</td>
-        ${!isTeacher ? `<td>${attDisplay}</td>` : ''}
         <td style="white-space:nowrap">${actionBtns}</td>
       </tr>`;
     }).join('');
@@ -1662,58 +1862,30 @@
       cb.addEventListener('change', updateBulkBar);
     });
 
-    // Wire attendance buttons
-    document.querySelectorAll('.att-btn').forEach(btn=>{
-      btn.addEventListener('click', async()=>{
-        const id  = btn.dataset.id;
-        const att = btn.dataset.att;
-        const cur = allData.find(r=>r.id===id)?.attendance||'';
-        // Toggle: click same → clear; click different → set
-        const newAtt = cur===att ? '' : att;
-        try{
-          const {getFirestore,doc,updateDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-          await updateDoc(doc(getFirestore(),'registrations',id),{attendance:newAtt});
-          allData=allData.map(r=>r.id===id?{...r,attendance:newAtt}:r);
-          refreshStats();
-          // Update button states in-place without re-rendering
-          const row=btn.closest('tr');
-          row.querySelectorAll('.att-btn').forEach(b=>{
-            b.classList.toggle('active', newAtt!=='' && b.dataset.att===newAtt);
-          });
-        }catch{ showToast('❌ Could not save attendance',3000); }
-      });
-    });
   }
 
   // Render Attendance View (day-wise with statistics and filters)
   function renderAttendanceView(){
     const tb = document.getElementById('attendanceTableBody');
     const day = selectedDay;
+    const isMobile = isMobileViewport();
     const dayNames = {'25': 'Day 1 (Apr 25)', '26': 'Day 2 (Apr 26)', '27': 'Day 3 (Apr 27)'};
     const isAdmin = currentRole === 'admin';
     const isViewer = currentRole === 'viewer';
     const isTeacher = currentRole === 'teacher';
 
-    // Show/hide class filter for admin and viewer
     const classFilterContainer = document.getElementById('classFilterContainer');
     if(classFilterContainer) classFilterContainer.style.display = (isAdmin || isViewer) ? 'flex' : 'none';
 
-    // Show/hide class column header
     const classHeader = document.getElementById('attClassHeader');
     if(classHeader) classHeader.style.display = (isAdmin || isViewer) ? '' : 'none';
 
-    // Update title
     document.getElementById('attendanceTableTitle').textContent = '📝 Attendance - ' + dayNames[day];
 
-    // Filter data based on role and class filter
     let data = [...allData];
-
-    // Teacher: filter by assigned class
     if(isTeacher && teacherClass){
       data = data.filter(r => r.class === teacherClass);
     }
-
-    // Admin/Viewer: apply class filter if selected
     if((isAdmin || isViewer) && selectedAttClass !== 'all'){
       if(selectedAttClass === 'unassigned'){
         data = data.filter(r => !r.class);
@@ -1722,11 +1894,9 @@
       }
     }
 
-    // Calculate statistics for the selected day
     let presentCount = 0;
     let absentCount = 0;
     let notMarkedCount = 0;
-
     data.forEach(r => {
       const attendance = (typeof r.attendance === 'object' && r.attendance) ? r.attendance : {};
       const dayAtt = attendance[day] || '';
@@ -1735,14 +1905,13 @@
       else notMarkedCount++;
     });
 
-    // Update statistics cards
     document.getElementById('att-stat-present').textContent = presentCount;
     document.getElementById('att-stat-absent').textContent = absentCount;
     document.getElementById('att-stat-not-marked').textContent = notMarkedCount;
     document.getElementById('att-stat-total').textContent = data.length;
 
     if(!data.length){
-      tb.innerHTML = '<tr><td colspan="6" class="no-data"><span class="ni">📋</span>No students found.</td></tr>';
+      tb.innerHTML = `<tr><td colspan="${isMobile ? 1 : 6}" class="no-data"><span class="ni">📋</span>No students found.</td></tr>`;
       return;
     }
 
@@ -1752,6 +1921,28 @@
       const dayAtt = attendance[day] || '';
       const classDisplay = (isAdmin || isViewer) ? `<td><span class="badge b-days">${r.class || 'Unassigned'}</span></td>` : '';
 
+      if(isMobile){
+        const classMeta = (isAdmin || isViewer) ? `<span class="badge b-days">${r.class || 'Unassigned'}</span>` : '';
+        return `<tr>
+          <td class="att-mobile-cell">
+            <div class="att-mobile-card">
+              <div class="att-mobile-top">
+                <div class="att-mobile-name">${i+1}. ${childName}</div>
+              </div>
+              <div class="att-mobile-meta">
+                <span class="badge b-online">Age ${r.age||'—'}</span>
+                <span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span>
+                ${classMeta}
+              </div>
+              <div class="att-mobile-actions">
+                <button class="att-btn att-present${dayAtt==='present'?' active':''}" data-id="${r.id}" data-day="${day}" data-att="present" title="Present">✅</button>
+                <button class="att-btn att-absent${dayAtt==='absent'?' active':''}" data-id="${r.id}" data-day="${day}" data-att="absent" title="Absent">❌</button>
+              </div>
+            </div>
+          </td>
+        </tr>`;
+      }
+
       return `<tr>
         <td><strong style="color:#94A3B8">${i+1}</strong></td>
         <td><strong>${childName}</strong></td>
@@ -1760,14 +1951,13 @@
         ${classDisplay}
         <td>
           <div class="att-wrap">
-            <button class="att-btn att-present${dayAtt==='present'?' active':''}" data-id="${r.id}" data-day="${day}" data-att="present">✅ Present</button>
-            <button class="att-btn att-absent${dayAtt==='absent'?' active':''}" data-id="${r.id}" data-day="${day}" data-att="absent">❌ Absent</button>
+            <button class="att-btn att-present${dayAtt==='present'?' active':''}" data-id="${r.id}" data-day="${day}" data-att="present" title="Present">✅</button>
+            <button class="att-btn att-absent${dayAtt==='absent'?' active':''}" data-id="${r.id}" data-day="${day}" data-att="absent" title="Absent">❌</button>
           </div>
         </td>
       </tr>`;
     }).join('');
 
-    // Wire attendance buttons
     document.querySelectorAll('#attendanceTableBody .att-btn').forEach(btn => {
       btn.addEventListener('click', async() => {
         const id = btn.dataset.id;
@@ -1776,8 +1966,6 @@
         const record = allData.find(r => r.id === id);
         const currentAtt = (typeof record.attendance === 'object' && record.attendance) ? record.attendance : {};
         const currentDayAtt = currentAtt[day] || '';
-
-        // Toggle: click same → clear; click different → set
         const newDayAtt = currentDayAtt === att ? '' : att;
         const newAttendance = {...currentAtt, [day]: newDayAtt};
 
@@ -1785,16 +1973,7 @@
           const {getFirestore, doc, updateDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
           await updateDoc(doc(getFirestore(), 'registrations', id), {attendance: newAttendance});
           allData = allData.map(r => r.id === id ? {...r, attendance: newAttendance} : r);
-
-          // Update button states in-place
-          const row = btn.closest('tr');
-          row.querySelectorAll('.att-btn').forEach(b => {
-            b.classList.toggle('active', newDayAtt !== '' && b.dataset.att === newDayAtt);
-          });
-
-          // Re-render to update statistics
           renderAttendanceView();
-
           showToast('✅ Attendance updated', 2000);
         } catch {
           showToast('❌ Could not save attendance', 3000);
@@ -1813,6 +1992,7 @@
 
   function renderDocumentsView(){
     const tb = document.getElementById('documentsTableBody');
+    const isMobile = isMobileViewport();
     const isAdmin = currentRole === 'admin';
     const isTeacher = currentRole === 'teacher';
 
@@ -1865,6 +2045,28 @@
               : '';
 
       const docBtns = photoBtn + idCardBtn + certBtn + viewIdBtn + viewCertBtn;
+
+      if(isMobile){
+        return `<tr>
+          <td colspan="8" class="mobile-record-cell">
+            <div class="mobile-record-card">
+              <div class="mobile-record-head">
+                <div>
+                  <div class="mobile-record-title">${i+1}. ${childName}</div>
+                  <div class="mobile-record-sub">${r.address||'—'}</div>
+                </div>
+                ${photoPreview}
+              </div>
+              <div class="mobile-record-meta">
+                <span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span>
+                <span class="badge b-online">Age ${r.age||'—'}</span>
+                <span class="badge b-days">${r.class||'Unassigned'}</span>
+              </div>
+              <div class="mobile-record-actions">${docBtns}</div>
+            </div>
+          </td>
+        </tr>`;
+      }
 
       return `<tr>
         <td><strong style="color:#94A3B8">${i+1}</strong></td>
@@ -1968,7 +2170,7 @@
     const ph  = document.getElementById('parentPhone').value.trim();
 
     // Validation - Required: Name, Age, Gender, Address
-    if(!cn || !age || !gender || !address){
+    if(!cn || !age || !gender || !address || !ph){
       showToast(currentLang==='te'
               ? '⚠️ దయచేసి అన్ని తప్పనిసరి ఫీల్డ్‌లు (*) పూరించండి'
               : '⚠️ Please fill all required fields (*)');
@@ -3620,10 +3822,10 @@
     try{
       const {getFirestore,doc,getDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
       const snap = await getDoc(doc(getFirestore(),'teachers','profiles'));
-      cachedTeacherProfiles = snap.exists() ? (snap.data()||{}) : {};
+      cachedTeacherProfiles = normalizeTeacherProfiles(snap.exists() ? (snap.data()||{}) : {});
     }catch{
       // Fallback to localStorage if Firestore fails
-      try{ cachedTeacherProfiles = JSON.parse(localStorage.getItem('vbs2026_teachers')||'{}'); }catch{}
+      try{ cachedTeacherProfiles = normalizeTeacherProfiles(JSON.parse(localStorage.getItem('vbs2026_teachers')||'{}')); }catch{}
     }
     return cachedTeacherProfiles;
   }
@@ -3631,6 +3833,7 @@
   async function saveTeacherProfiles(profiles){
     try{
       const {getFirestore,doc,setDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      profiles = normalizeTeacherProfiles(profiles);
       await setDoc(doc(getFirestore(),'teachers','profiles'), profiles);
       cachedTeacherProfiles = profiles;
       // Also cache locally as backup
@@ -3640,7 +3843,28 @@
     }
   }
 
+  function normalizeTeacherProfiles(profiles){
+    const normalized = {...(profiles||{})};
+    if(!normalized.__roles) normalized.__roles = {};
+    normalized.__roles.teacherTabs = {
+      ...DEFAULT_TEACHER_TABS,
+      ...(normalized.__roles.teacherTabs||{})
+    };
+    return normalized;
+  }
+
+  function getTeacherTabConfig(profiles=cachedTeacherProfiles){
+    return normalizeTeacherProfiles(profiles).__roles.teacherTabs;
+  }
+
+  function getTeacherVisibleTabs(profiles=cachedTeacherProfiles){
+    const cfg = getTeacherTabConfig(profiles);
+    return TEACHER_TAB_OPTIONS.filter(tab=>cfg[tab.key]).map(tab=>tab.key);
+  }
+
   function syncTeacherMapFromProfiles(profiles){
+    profiles = normalizeTeacherProfiles(profiles);
+    cachedTeacherProfiles = profiles;
     for(let i=1;i<=6;i++){
       const email=`teacher${i}@lefmagatapalli.com`;
       const p = profiles[`teacher${i}`];
@@ -3682,6 +3906,29 @@
 
 
   // ══════ TEACHER MANAGEMENT UI ══════
+  function buildRoleMgmt(){
+    loadTeacherProfiles().then(profiles=>{
+      cachedTeacherProfiles = profiles;
+      const list = document.getElementById('roleMgmtList');
+      if(!list) return;
+      const teacherTabs = getTeacherTabConfig(profiles);
+      list.innerHTML = `
+        <div class="role-card">
+          <h4>Teacher Dashboard Tabs</h4>
+          <p>Enable only the tabs that teacher accounts should see after login.</p>
+          <div class="role-toggle-list">
+            ${TEACHER_TAB_OPTIONS.map(tab=>`
+              <label class="role-toggle-row">
+                <span class="role-toggle-label">${tab.label}</span>
+                <input type="checkbox" class="role-toggle teacher-tab-toggle" data-tab="${tab.key}" ${teacherTabs[tab.key] ? 'checked' : ''}>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    });
+  }
+
   function buildTeacherMgmt(){
     // Reload from Firestore every time admin opens tab
     loadTeacherProfiles().then(profiles=>{
@@ -3777,6 +4024,38 @@
       setTimeout(()=>msg.style.display='none', 4000);
     }finally{
       btn.disabled=false; btn.textContent='💾 Save All Teachers';
+    }
+  });
+
+  document.getElementById('saveRoleConfigBtn').addEventListener('click', async()=>{
+    const msg = document.getElementById('roleSaveMsg');
+    const btn = document.getElementById('saveRoleConfigBtn');
+    const enabledTabs = [...document.querySelectorAll('.teacher-tab-toggle:checked')].map(el=>el.dataset.tab);
+    if(!enabledTabs.length){
+      msg.style.cssText='background:#FEE2E2;color:#DC2626;display:block;';
+      msg.textContent='❌ Enable at least one tab for teachers.';
+      setTimeout(()=>msg.style.display='none', 3500);
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = '⏳ Saving role settings…';
+    const profiles = normalizeTeacherProfiles({...cachedTeacherProfiles});
+    profiles.__roles.teacherTabs = {
+      ...DEFAULT_TEACHER_TABS,
+      ...Object.fromEntries(TEACHER_TAB_OPTIONS.map(tab=>[tab.key, enabledTabs.includes(tab.key)]))
+    };
+    try{
+      await saveTeacherProfiles(profiles);
+      syncTeacherMapFromProfiles(profiles);
+      msg.style.cssText='background:#DCFCE7;color:#166534;display:block;';
+      msg.textContent='✅ Role settings saved. Teacher tab access is updated.';
+      setTimeout(()=>msg.style.display='none', 3500);
+    }catch(e){
+      msg.style.cssText='background:#FEE2E2;color:#DC2626;display:block;';
+      msg.textContent='❌ '+e.message;
+    }finally{
+      btn.disabled = false;
+      btn.textContent = '💾 Save Role Settings';
     }
   });
 
@@ -4031,6 +4310,7 @@
 
   function renderArchiveRows(){
     const tb = document.getElementById('archiveBody');
+    const isMobile = isMobileViewport();
     if(!archiveData.length){
       tb.innerHTML='<tr><td colspan="11" class="no-data"><span class="ni">🗂</span>No archived records.</td></tr>';
       return;
@@ -4042,6 +4322,35 @@
       const src = r.source==='imported'
               ? `<span class="badge b-imported">⬆ Imported</span>`
               : `<span class="badge b-online">✅ Registered</span>`;
+      if(isMobile){
+        return `<tr>
+          <td colspan="11" class="mobile-record-cell">
+            <div class="mobile-record-card">
+              <div class="mobile-record-head">
+                <div>
+                  <div class="mobile-record-title">${i+1}. ${childName}</div>
+                  <div class="mobile-record-sub">${archivedOn}</div>
+                </div>
+                ${src}
+              </div>
+              <div class="mobile-record-meta">
+                <span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span>
+                <span class="badge b-online">Age ${r.age||'—'}</span>
+                <span class="badge b-days">${days}</span>
+              </div>
+              <div class="mobile-record-lines">
+                <div class="mobile-record-line"><strong>Parent</strong><span>${r.parentName||'—'}</span></div>
+                <div class="mobile-record-line"><strong>Phone</strong><span>${r.phone||'—'}</span></div>
+                <div class="mobile-record-line"><strong>Village</strong><span>${r.address||'—'}</span></div>
+              </div>
+              <div class="mobile-record-actions">
+                <button class="arch-restore-btn" style="background:#DCFCE7;color:#166534;border:none;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:700;" data-id="${r.id}" title="Restore to registrations">↩ Restore</button>
+                <button class="arch-perm-del-btn del-btn" data-id="${r.id}" title="Permanently delete">🗑</button>
+              </div>
+            </div>
+          </td>
+        </tr>`;
+      }
       return `<tr>
         <td><strong style="color:#94A3B8">${i+1}</strong></td>
         <td><strong>${childName}</strong></td>
