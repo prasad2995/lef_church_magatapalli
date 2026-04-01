@@ -251,7 +251,7 @@
     .logout-btn{background:rgba(255,255,255,.15);color:white;border:2px solid rgba(255,255,255,.3);padding:8px 18px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;font-size:0.85rem;}
     .logout-btn:hover{background:rgba(255,255,255,.25);}
     .refresh-btn{background:var(--sun);color:var(--navy);border:none;padding:8px 18px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;}
-    .admin-content{max-width:1300px;margin:0 auto;padding:28px 20px;}
+    .admin-content{padding:0;}
     .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:26px;}
     .stat-card{background:white;border-radius:18px;padding:22px;border:2px solid #E2E8F0;box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:center;}
     .stat-card .s-num{font-family:'Fredoka One',cursive;font-size:2.5rem;line-height:1;}
@@ -339,12 +339,21 @@
     .viewer-notice.show{display:flex;}
 
     /* TAB NAVIGATION */
-    .dash-tabs{display:flex;gap:8px;margin-bottom:24px;border-bottom:2px solid #E2E8F0;padding-bottom:0;}
-    .dash-tab{background:none;border:none;padding:12px 22px;font-family:'Fredoka One',cursive;font-size:1rem;color:#94A3B8;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;}
-    .dash-tab.active{color:var(--navy);border-bottom-color:var(--coral);}
-    .dash-tab:hover{color:var(--navy);}
+    /* ── LEFT SIDEBAR NAV ── */
+    .dash-layout{display:flex;gap:0;min-height:calc(100vh - 60px);}
+    .dash-sidebar{width:180px;flex-shrink:0;background:var(--navy);padding:16px 0;display:flex;flex-direction:column;gap:4px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+    .dash-tabs{display:flex;flex-direction:column;gap:4px;padding:0 10px;}
+    .dash-tab{background:none;border:none;padding:12px 16px;font-family:'Fredoka One',cursive;font-size:0.95rem;color:rgba(255,255,255,0.55);cursor:pointer;border-radius:12px;text-align:left;transition:all .2s;display:flex;align-items:center;gap:10px;white-space:nowrap;}
+    .dash-tab:hover{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.9);}
+    .dash-tab.active{background:var(--coral);color:white;box-shadow:0 2px 8px rgba(255,107,107,0.4);}
+    .dash-main{flex:1;padding:24px;overflow-x:auto;min-width:0;}
     .dash-view{display:none;}
     .dash-view.active{display:block;}
+    @media(max-width:700px){
+      .dash-sidebar{width:52px;}
+      .dash-tab{padding:12px;justify-content:center;}
+      .dash-tab span.tab-label{display:none;}
+    }
 
     /* ATTENDANCE VIEW */
     .attendance-header{background:white;border-radius:18px;border:2px solid #E2E8F0;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
@@ -709,6 +718,9 @@
     <div class="viewer-notice" id="viewerNotice">👁️ You are logged in as a <strong>Viewer</strong>. You can view registrations but cannot delete or export data.</div>
 
     <!-- TABS -->
+    <div class="dash-layout">
+      <!-- LEFT SIDEBAR -->
+      <div class="dash-sidebar">
     <div class="dash-tabs">
       <button class="dash-tab active" data-tab="registrations">📋 Registrations</button>
       <button class="dash-tab" data-tab="documents" id="documentsTab">📄 Documents</button>
@@ -716,7 +728,8 @@
       <button class="dash-tab" data-tab="analytics">📊 Analytics</button>
       <button class="dash-tab" data-tab="teachers" id="teachersTab" style="display:none">👩‍🏫 Teachers</button>
     </div>
-
+      </div>
+      <div class="dash-main">
     <!-- REGISTRATIONS VIEW -->
     <div class="dash-view active" id="view-registrations">
       <div class="stats-grid" id="statsGrid">
@@ -914,8 +927,10 @@
           <div id="chart-att-overall" class="donut-wrap"><div class="empty-analytics">No data yet</div></div>
         </div>
       </div>
-    </div><!-- /view-analytics -->
 
+    </div><!-- /view-analytics -->
+    </div><!-- /dash-main -->
+    </div><!-- /dash-layout -->
   </div><!-- /admin-content -->
 </div><!-- /admin-panel -->
 
