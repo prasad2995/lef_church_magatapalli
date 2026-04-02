@@ -2237,7 +2237,7 @@
               ? `<button class="view-id-btn" data-id="${r.id}" title="View ID Card" style="background:#2563EB;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">🪪</button>`
               : (r.photo ? `<button class="id-card-btn" data-id="${r.id}" title="Generate ID Card" style="background:#3B82F6;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">🪪</button>` : '');
 
-      const viewCertBtn = r.certificate
+      const viewCertBtn = r.photo
               ? `<button class="view-cert-btn" data-id="${r.id}" title="View Certificate" style="background:#059669;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">📜</button>`
               : '';
 
@@ -2302,24 +2302,9 @@
 
     // Wire certificate buttons
     document.querySelectorAll('.cert-btn').forEach(btn=>{
-      btn.addEventListener('click', async ()=>{
+      btn.addEventListener('click', ()=>{
         const student = allData.find(r => r.id === btn.dataset.id);
-
-        // Check if certificate already exists
-        if(student.certificate){
-          const regenerate = await showCustomConfirm(
-                  'Certificate Already Generated',
-                  `${student.childName} already has a certificate.\n\nWould you like to regenerate it?`
-          );
-
-          if(regenerate){
-            openCertificateFromPhoto(student);
-          } else {
-            openViewCertModal(student);
-          }
-        } else {
-          openCertificateFromPhoto(student);
-        }
+        openCertificateFromPhoto(student);
       });
     });
 
@@ -2356,16 +2341,6 @@
     if(!student?.photo) return;
     await generateIDCard(student, {showModal:false});
     await saveGeneratedIdCardToFirestore(student);
-
-    certRecordId = student.id;
-    certChildName = student.childName || 'Student';
-    certDays = student.days || '';
-    certAge = student.age || '';
-    certPhone = student.phone || '';
-    certClass = student.class || '';
-    certPhotoDataUrl = student.photo;
-    await generateCertificate();
-    await saveCertificateToFirestore();
   }
 
   function exportCSV(){
@@ -2485,554 +2460,509 @@
 
 
 
-  // ══════ CERTIFICATE MODULE ══════
-  let certRecordId = '', certChildName = '', certDays = '', certAge = '', certPhone = '',  certClass = '';
-  let certPhotoDataUrl = null;
+  // CERTIFICATE MODULE
+  const CERT_PREVIEW_SIZE = {width:1080, height:1527};
+  const CERT_EXPORT_SIZE = {width:2480, height:3508};
+  const PHOTO_DATA_URL_LIMIT = 900000;
+  const CERT_EXPORT_QUALITY = 0.96;
+  let currentCertStudent = null;
+  let certReadyBlob = null;
+  let certReadyBlobKey = '';
 
-  // Certificate generation using stored photo
+  function getCertificateStudent(student){
+    return student ? allData.find(r => r.id === student.id) || student : null;
+  }
+
+  function getCertificateBlobKey(student){
+    return student
+            ? [student.id || '', student.photoUploadedAt || '', student.childName || '', student.class || '', student.days || ''].join('|')
+            : '';
+  }
+
+  function sanitizeFilePart(value){
+    return String(value || 'Student').trim().replace(/[\/:*?"<>|]+/g, '').replace(/\s+/g, '_');
+  }
+
+  function getCertificateFileName(student, extension = 'jpg'){
+    return `VBS2026_Certificate_${sanitizeFilePart(student?.childName)}.${extension}`;
+  }
+
+  function canvasToBlob(canvas, type, quality){
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('toBlob failed')), type, quality);
+    });
+  }
+
+  function loadImage(src){
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    });
+  }
+
+  async function renderCertificateToCanvas(student, canvas, size = CERT_PREVIEW_SIZE){
+    if(!student?.photo) throw new Error('Photo is required to generate a certificate');
+
+    canvas.width = size.width;
+    canvas.height = size.height;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+    const cx = W / 2;
+    const sx = W / 1080;
+    const sy = H / 1527;
+    const s = Math.min(sx, sy);
+    const childName = student.childName || 'Student';
+    const certClass = student.class || '';
+    const photoImg = await loadImage(student.photo);
+
+    const x = value => value * sx;
+    const y = value => value * sy;
+    const fs = value => `${Math.round(value * s)}px`;
+
+    function roundRect(px, py, pw, ph, pr, fill, stroke, lw = 2){
+      ctx.beginPath();
+      ctx.moveTo(px + pr, py);
+      ctx.lineTo(px + pw - pr, py);
+      ctx.arcTo(px + pw, py, px + pw, py + pr, pr);
+      ctx.lineTo(px + pw, py + ph - pr);
+      ctx.arcTo(px + pw, py + ph, px + pw - pr, py + ph, pr);
+      ctx.lineTo(px + pr, py + ph);
+      ctx.arcTo(px, py + ph, px, py + ph - pr, pr);
+      ctx.lineTo(px, py + pr);
+      ctx.arcTo(px, py, px + pr, py, pr);
+      ctx.closePath();
+      if(fill){ ctx.fillStyle = fill; ctx.fill(); }
+      if(stroke){ ctx.strokeStyle = stroke; ctx.lineWidth = lw * s; ctx.stroke(); }
+    }
+
+    function hLine(py, c1 = 'rgba(255,255,255,0.15)', c2 = 'rgba(255,255,255,0.7)'){
+      const g = ctx.createLinearGradient(x(60), 0, W - x(60), 0);
+      g.addColorStop(0, 'transparent');
+      g.addColorStop(0.2, c1);
+      g.addColorStop(0.5, c2);
+      g.addColorStop(0.8, c1);
+      g.addColorStop(1, 'transparent');
+      ctx.strokeStyle = g;
+      ctx.lineWidth = 1.5 * s;
+      ctx.beginPath();
+      ctx.moveTo(x(60), py);
+      ctx.lineTo(W - x(60), py);
+      ctx.stroke();
+    }
+
+    function cornerDeco(px, py, scaleX, scaleY){
+      ctx.save();
+      ctx.translate(px, py);
+      ctx.scale(scaleX * s, scaleY * s);
+      ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0,50);
+      ctx.lineTo(0,10);
+      ctx.arcTo(0,0,10,0,10);
+      ctx.lineTo(50,0);
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.beginPath();
+      ctx.moveTo(8,0);
+      ctx.lineTo(14,-7);
+      ctx.lineTo(20,0);
+      ctx.lineTo(14,7);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    const bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, '#4D7A73');
+    bg.addColorStop(0.3, '#4D7A73');
+    bg.addColorStop(0.6, '#4D7A73');
+    bg.addColorStop(1, '#4D7A73');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    const glow = ctx.createRadialGradient(cx, H * 0.45, x(50), cx, H * 0.45, x(600));
+    glow.addColorStop(0, 'rgba(255,200,50,0.12)');
+    glow.addColorStop(1, 'transparent');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.shadowColor = 'rgba(255,200,50,0.6)';
+    ctx.shadowBlur = x(20);
+    roundRect(x(12), y(12), W - x(24), H - y(24), x(16), null, '#FFD700', 8);
+    ctx.shadowBlur = 0;
+    roundRect(x(26), y(26), W - x(52), H - y(52), x(12), null, 'rgba(255,215,0,0.4)', 2);
+    roundRect(x(38), y(38), W - x(76), H - y(76), x(8), null, 'rgba(255,215,0,0.15)', 1);
+    cornerDeco(x(46), y(46), 1, 1);
+    cornerDeco(W - x(46), y(46), -1, 1);
+    cornerDeco(x(46), H - y(46), 1, -1);
+    cornerDeco(W - x(46), H - y(46), -1, -1);
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255,240,180,0.95)';
+    ctx.font = `italic ${fs(24)} Georgia`;
+    ctx.fillText('"Let the little children come to me."', cx, y(96));
+    ctx.fillStyle = '#FFD700';
+    ctx.font = `${fs(22)} Georgia`;
+    ctx.fillText('Matthew 19:14', cx, y(130));
+    hLine(y(158), 'rgba(255,215,0,0.2)', 'rgba(255,215,0,0.8)');
+
+    ctx.fillStyle = '#FFD700';
+    ctx.font = `bold ${fs(50)} Jenson`;
+    ctx.fillText('Vacation Bible School 2026', cx, y(208));
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.font = `${fs(35)} Garamond`;
+    ctx.fillText('LEF Church, Magatapalli', cx, y(250));
+    hLine(y(275), 'rgba(255,215,0,0.2)', 'rgba(255,215,0,0.8)');
+
+    ctx.save();
+    ctx.shadowColor = 'rgba(255,180,0,0.6)';
+    ctx.shadowBlur = x(18);
+    const titleGrad = ctx.createLinearGradient(cx - x(380), 0, cx + x(380), 0);
+    titleGrad.addColorStop(0, '#FF9A3C');
+    titleGrad.addColorStop(0.35, '#FFD700');
+    titleGrad.addColorStop(0.65, '#FFF0A0');
+    titleGrad.addColorStop(1, '#FF9A3C');
+    ctx.fillStyle = titleGrad;
+    ctx.font = `bold ${fs(40)} Georgia`;
+    ctx.fillText('Certificate of Participation', cx, y(342));
+    ctx.restore();
+    hLine(y(368), 'rgba(255,165,0,0.2)', 'rgba(255,165,0,0.7)');
+
+    ctx.fillStyle = 'rgba(255,230,120,0.9)';
+    ctx.font = `italic ${fs(28)} Georgia`;
+    ctx.fillText('Theme:', cx, y(410));
+
+    ctx.save();
+    ctx.shadowColor = 'rgba(255,220,0,0.8)';
+    ctx.shadowBlur = x(14);
+    ctx.fillStyle = '#FFD700';
+    ctx.font = `bold ${fs(55)} Georgia`;
+    ctx.fillText('Signet Ring', cx, y(478));
+    ctx.restore();
+
+    ctx.fillStyle = 'rgba(180,255,200,0.9)';
+    ctx.font = `italic ${fs(28)} Georgia`;
+    ctx.fillText('Haggai 2:23', cx, y(518));
+    hLine(y(544), 'rgba(255,215,0,0.2)', 'rgba(255,215,0,0.6)');
+
+    const photoR = x(118);
+    const photoCX = cx;
+    const photoCY = y(690);
+    ctx.save();
+    ctx.shadowColor = 'rgba(255,215,0,0.5)';
+    ctx.shadowBlur = x(30);
+    ctx.beginPath();
+    ctx.arc(photoCX, photoCY, photoR + x(10), 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,215,0,0.08)';
+    ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(photoCX, photoCY, photoR, 0, Math.PI * 2);
+    ctx.clip();
+    const iw = photoImg.naturalWidth || photoImg.width || 300;
+    const ih = photoImg.naturalHeight || photoImg.height || 300;
+    const scale = Math.max((photoR * 2) / iw, (photoR * 2) / ih);
+    ctx.drawImage(photoImg, photoCX - (iw * scale) / 2, photoCY - (ih * scale) / 2, iw * scale, ih * scale);
+    ctx.restore();
+
+    ctx.strokeStyle = '#FFD700';
+    ctx.lineWidth = x(5);
+    ctx.beginPath();
+    ctx.arc(photoCX, photoCY, photoR + x(3), 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,215,0,0.35)';
+    ctx.lineWidth = x(2);
+    ctx.beginPath();
+    ctx.arc(photoCX, photoCY, photoR + x(11), 0, Math.PI * 2);
+    ctx.stroke();
+
+    const certifyY = y(848);
+    const nameY = certifyY + y(60);
+    const bodyY = nameY + y(140);
+    const sigLineY = bodyY + (certClass ? y(260) : y(200));
+    hLine(certifyY, 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.4)');
+    ctx.fillStyle = 'rgba(220,220,255,0.85)';
+    ctx.font = `italic ${fs(30)} Georgia`;
+    ctx.fillText('This is to certify that', cx, certifyY + y(46));
+
+    const nameFontStack = "'French Script MT', 'Edwardian Script ITC', 'Monotype Corsiva', cursive";
+    const nameBand = ctx.createLinearGradient(x(60), nameY, W - x(60), nameY);
+    nameBand.addColorStop(0, 'transparent');
+    nameBand.addColorStop(0.15, 'rgba(255,100,150,0.1)');
+    nameBand.addColorStop(0.5, 'rgba(255,150,80,0.15)');
+    nameBand.addColorStop(0.85, 'rgba(255,100,150,0.1)');
+    nameBand.addColorStop(1, 'transparent');
+    ctx.fillStyle = nameBand;
+    ctx.fillRect(x(60), nameY, W - x(120), y(88));
+
+    ctx.save();
+    ctx.shadowColor = 'rgba(255,200,50,0.7)';
+    ctx.shadowBlur = x(12);
+    const nameGrad = ctx.createLinearGradient(cx - x(300), 0, cx + x(300), 0);
+    nameGrad.addColorStop(0, '#FFD580');
+    nameGrad.addColorStop(0.5, '#FFFFFF');
+    nameGrad.addColorStop(1, '#FFD580');
+    ctx.fillStyle = nameGrad;
+    ctx.font = `italic ${fs(80)} ${nameFontStack}`;
+    ctx.fillText(childName, cx, nameY + y(74));
+    ctx.restore();
+
+    const nw = ctx.measureText(childName).width;
+    const nx = cx - nw / 1.2;
+    ctx.strokeStyle = 'rgba(255,215,0,0.8)';
+    ctx.lineWidth = x(2);
+    ctx.beginPath();
+    ctx.moveTo(nx, nameY + y(88));
+    ctx.lineTo(cx + nw / 1.2, nameY + y(88));
+    ctx.stroke();
+    [nx - x(6), cx + nw / 1.2 + x(6)].forEach(px => {
+      ctx.fillStyle = '#FFD700';
+      ctx.beginPath();
+      ctx.arc(px, nameY + y(88), x(4), 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    ctx.font = `${fs(27)} Georgia`;
+    ctx.fillStyle = 'rgba(220,230,255,0.92)';
+    ctx.fillText('has successfully attended the Vacation Bible School 2026', cx, bodyY);
+
+    const part1 = 'conducted by ';
+    const part2 = 'LEF Church, Magatapalli';
+    const part3 = ' held on';
+    ctx.font = `${fs(27)} Georgia`;
+    const w1 = ctx.measureText(part1).width;
+    ctx.font = `bold ${fs(27)} Georgia`;
+    const w2 = ctx.measureText(part2).width;
+    const w3 = ctx.measureText(part3).width;
+    const totalW = w1 + w2 + w3;
+    const lineX = cx - totalW / 2;
+    ctx.font = `${fs(27)} Georgia`;
+    ctx.fillStyle = 'rgba(220,230,255,0.92)';
+    ctx.textAlign = 'left';
+    ctx.fillText(part1, lineX, bodyY + y(48));
+    ctx.font = `bold ${fs(27)} Georgia`;
+    ctx.fillStyle = '#FFD700';
+    ctx.fillText(part2, lineX + w1, bodyY + y(48));
+    ctx.font = `${fs(27)} Georgia`;
+    ctx.fillStyle = 'rgba(220,230,255,0.92)';
+    ctx.fillText(part3, lineX + w1 + w2, bodyY + y(48));
+    ctx.textAlign = 'center';
+
+    ctx.fillStyle = '#FFD580';
+    ctx.font = `italic ${fs(28)} Georgia`;
+    ctx.fillText('April 25, 26 & 27, 2026', cx, bodyY + y(96));
+
+    if(certClass){
+      const gap = x(35);
+      const clsPart1 = 'as a participant in the ';
+      const clsPart2 = certClass;
+      const clsPart3 = ' Class';
+      ctx.font = `${fs(27)} Georgia`;
+      const cw1 = ctx.measureText(clsPart1).width;
+      ctx.font = `bold ${fs(27)} Georgia`;
+      const cw2 = ctx.measureText(clsPart2).width;
+      ctx.font = `${fs(27)} Georgia`;
+      const cw3 = ctx.measureText(clsPart3).width;
+      const clsLineX = cx - (cw1 + cw2 + cw3) / 2;
+      ctx.font = `${fs(27)} Georgia`;
+      ctx.fillStyle = 'rgba(220,230,255,0.92)';
+      ctx.textAlign = 'left';
+      ctx.fillText(clsPart1, clsLineX, bodyY + y(144));
+      ctx.font = `bold ${fs(27)} Georgia`;
+      ctx.fillStyle = 'rgba(180,255,200,0.95)';
+      ctx.fillText(clsPart2, clsLineX + cw1, bodyY + y(144));
+      ctx.textAlign = 'center';
+      ctx.font = `${fs(27)} Georgia`;
+      ctx.fillStyle = 'rgba(220,230,255,0.92)';
+      ctx.fillText(clsPart3, clsLineX + cw1 + cw2 + gap, bodyY + y(144));
+    }
+
+    hLine(sigLineY, 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.4)');
+    const teachX = cx - x(210);
+    const dirX = cx + x(210);
+    const sigY = sigLineY + y(90);
+    ctx.strokeStyle = 'rgba(255,215,0,0.7)';
+    ctx.lineWidth = x(1.5);
+    ctx.beginPath();
+    ctx.moveTo(teachX - x(120), sigY);
+    ctx.lineTo(teachX + x(120), sigY);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(dirX - x(120), sigY);
+    ctx.lineTo(dirX + x(120), sigY);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255,230,150,0.9)';
+    ctx.font = `italic ${fs(28)} Georgia`;
+    ctx.fillText('Teacher', teachX, sigY + y(40));
+    ctx.fillText('Director', dirX, sigY + y(40));
+
+    hLine(sigLineY + y(180), 'rgba(255,255,255,0.1)', 'rgba(255,215,0,0.5)');
+    ctx.fillStyle = 'rgba(255,220,120,0.9)';
+    ctx.font = `italic ${fs(28)} Georgia`;
+    ctx.fillText('May God bless you abundantly!', cx, sigLineY + y(228));
+  }
+
+  async function prepareCertBlob(student = currentCertStudent){
+    const liveStudent = getCertificateStudent(student);
+    if(!liveStudent?.photo) throw new Error('Photo is required to prepare certificate');
+    const cacheKey = getCertificateBlobKey(liveStudent);
+    if(certReadyBlob && certReadyBlobKey === cacheKey){
+      return certReadyBlob;
+    }
+    const exportCanvas = document.createElement('canvas');
+    await renderCertificateToCanvas(liveStudent, exportCanvas, CERT_EXPORT_SIZE);
+    certReadyBlob = await canvasToBlob(exportCanvas, 'image/jpeg', CERT_EXPORT_QUALITY);
+    certReadyBlobKey = cacheKey;
+    return certReadyBlob;
+  }
+
+  async function generateCertificate(student = currentCertStudent, canvasId = 'certCanvas'){
+    const liveStudent = getCertificateStudent(student);
+    if(!liveStudent?.photo){
+      throw new Error('Photo is required to generate a certificate');
+    }
+    currentCertStudent = liveStudent;
+    await renderCertificateToCanvas(liveStudent, document.getElementById(canvasId), CERT_PREVIEW_SIZE);
+    certReadyBlob = null;
+    certReadyBlobKey = '';
+    prepareCertBlob(liveStudent).catch(()=>{});
+  }
+
   async function openCertificateFromPhoto(student){
-    if(!student || !student.photo){
-      showToast('❌ Please upload student photo first', 3000);
+    const liveStudent = getCertificateStudent(student);
+    if(!liveStudent?.photo){
+      showToast('Please upload student photo first', 3000);
       return;
     }
 
-    certRecordId = student.id;
-    certChildName = student.childName || 'Student';
-    certDays = student.days || '';
-    certAge = student.age || '';
-    certPhone = student.phone || '';
-    certClass = student.class || '';
-    certPhotoDataUrl = student.photo;
-
-    // Show modal and generate certificate
+    currentCertStudent = liveStudent;
     document.getElementById('certModal').classList.add('active');
-    document.getElementById('certStep1').style.display='none';
-    document.getElementById('certPreviewWrap').style.display='none';
-    document.getElementById('certSaveStatus').style.display='none';
+    document.getElementById('certStep1').style.display = 'none';
+    document.getElementById('certPreviewWrap').style.display = 'block';
+    document.getElementById('certSaveStatus').style.display = 'block';
+    document.getElementById('certSaveStatus').textContent = 'Preview generated live from the stored photo. Download for print-quality output.';
 
-    // Show loading state
-    showToast('⏳ Generating certificate...', 1500);
-
-    // Generate certificate after a small delay to show loading
-    setTimeout(async () => {
-      await generateCertificate(); // Call the existing certificate generation with await
-      document.getElementById('certPreviewWrap').style.display='block';
-      prepareCertBlob().catch(()=>{});
-    }, 100);
+    showToast('Generating certificate preview...', 1500);
+    try{
+      await generateCertificate(liveStudent);
+      document.getElementById('certModal').querySelector('.modal-box').scrollTop = 0;
+    }catch(err){
+      console.error('Error generating certificate preview:', err);
+      showToast('Could not generate certificate preview', 3000);
+    }
   }
 
   document.getElementById('certModalClose').addEventListener('click',()=>{
     document.getElementById('certModal').classList.remove('active');
+    currentCertStudent = null;
   });
 
-  // Generate certificate canvas
-  async function generateCertCanvas(){
-    generateCertificate();
-  };
-
-  function wrapText(ctx, text, x, y, maxWidth, lineHeight){
-    const words = text.split(' ');
-    let line = '';
-    let yPos = y;
-    for(let n=0; n<words.length; n++){
-      const testLine = line + words[n] + ' ';
-      const metrics = ctx.measureText(testLine);
-      if(metrics.width > maxWidth && n > 0){
-        ctx.fillText(line.trim(), x, yPos);
-        line = words[n] + ' ';
-        yPos += lineHeight;
-      } else { line = testLine; }
+  document.getElementById('certGenerateBtn').addEventListener('click', async()=>{
+    if(!currentCertStudent){
+      showToast('No student selected', 2000);
+      return;
     }
-    ctx.fillText(line.trim(), x, yPos);
-    return yPos;
-  }
-
-  async function generateCertificate(){
-    const canvas = document.getElementById('certCanvas');
-    canvas.width  = 1080;
-    canvas.height = 1527;
-    const ctx = canvas.getContext('2d');
-    const W = canvas.width, H = canvas.height;
-    const cx = W / 2;
-
-    // ── HELPERS ──────────────────────────────
-    function roundRect(x,y,w,h,r,fill,stroke,lw=2){
-      ctx.beginPath();
-      ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
-      ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
-      ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
-      ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r);
-      ctx.closePath();
-      if(fill){ctx.fillStyle=fill; ctx.fill();}
-      if(stroke){ctx.strokeStyle=stroke; ctx.lineWidth=lw; ctx.stroke();}
+    try{
+      await generateCertificate(currentCertStudent);
+      showToast('Certificate preview refreshed', 1800);
+    }catch(err){
+      console.error('Error refreshing certificate preview:', err);
+      showToast('Could not refresh preview', 3000);
     }
-    function hLine(y, c1='rgba(255,255,255,0.15)', c2='rgba(255,255,255,0.7)'){
-      const g=ctx.createLinearGradient(60,0,W-60,0);
-      g.addColorStop(0,'transparent'); g.addColorStop(0.2,c1);
-      g.addColorStop(0.5,c2); g.addColorStop(0.8,c1); g.addColorStop(1,'transparent');
-      ctx.strokeStyle=g; ctx.lineWidth=1.5;
-      ctx.beginPath(); ctx.moveTo(60,y); ctx.lineTo(W-60,y); ctx.stroke();
-    }
-    function cornerDeco(x,y,sx,sy){
-      ctx.save(); ctx.translate(x,y); ctx.scale(sx,sy);
-      ctx.strokeStyle='rgba(255,255,255,0.5)'; ctx.lineWidth=2;
-      ctx.beginPath(); ctx.moveTo(0,50); ctx.lineTo(0,10);
-      ctx.arcTo(0,0,10,0,10); ctx.lineTo(50,0); ctx.stroke();
-      ctx.fillStyle='rgba(255,255,255,0.7)';
-      ctx.beginPath(); ctx.moveTo(8,0); ctx.lineTo(14,-7);
-      ctx.lineTo(20,0); ctx.lineTo(14,7); ctx.closePath(); ctx.fill();
-      ctx.restore();
-    }
+  });
 
-    // ── 1. COLORFUL BACKGROUND ───────────────
-    const bg = ctx.createLinearGradient(0,0,W,H);
-    const color = '#4D7A73'
-    bg.addColorStop(0,  color);
-    bg.addColorStop(0.3,color);
-    bg.addColorStop(0.6,color);
-    bg.addColorStop(1,  color);
-    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
-
-    const glow = ctx.createRadialGradient(cx,H*0.45,50,cx,H*0.45,600);
-    glow.addColorStop(0,'rgba(255,200,50,0.12)'); glow.addColorStop(1,'transparent');
-    ctx.fillStyle=glow; ctx.fillRect(0,0,W,H);
-
-    // ctx.save();
-    // ctx.globalAlpha=0.04;
-    // ctx.strokeStyle='#FFD700';
-    // ctx.lineWidth=1;
-    // for(let i=-H;i<W+H;i+=60){
-    //   ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i+H,H); ctx.stroke();
-    // }
-    // ctx.restore();
-
-    // ── 2. BORDERS ───────────────────────────
-    ctx.shadowColor='rgba(255,200,50,0.6)'; ctx.shadowBlur=20;
-    roundRect(12,12,W-24,H-24,16,null,'#FFD700',8);
-    ctx.shadowBlur=0;
-    roundRect(26,26,W-52,H-52,12,null,'rgba(255,215,0,0.4)',2);
-    roundRect(38,38,W-76,H-76,8,null,'rgba(255,215,0,0.15)',1);
-    cornerDeco(46,46, 1, 1); cornerDeco(W-46,46,-1, 1);
-    cornerDeco(46,H-46, 1,-1); cornerDeco(W-46,H-46,-1,-1);
-
-    // ── 3. BIBLE VERSE — no box ───────────────
-    ctx.textAlign='center';
-    ctx.fillStyle='rgba(255,240,180,0.95)';
-    ctx.font='italic 24px Georgia';
-    ctx.fillText('"Let the little children come to me."', cx, 96);
-    ctx.fillStyle='#FFD700';
-    ctx.font='22px Georgia';
-    ctx.fillText('Matthew 19:14', cx, 130);
-    hLine(158,'rgba(255,215,0,0.2)','rgba(255,215,0,0.8)');
-
-    // ── 4. CHURCH + VBS ──────────────────────
-    ctx.fillStyle='#FFD700';
-    ctx.font='bold 50px Jenson';
-    ctx.fillText('Vacation Bible School 2026', cx, 208);
-    ctx.fillStyle='rgba(255,255,255,0.9)';
-    ctx.font='35px Garamond';
-    ctx.fillText('LEF Church, Magatapalli', cx, 250);
-    hLine(275,'rgba(255,215,0,0.2)','rgba(255,215,0,0.8)');
-
-    // ── 5. CERTIFICATE OF PARTICIPATION ──────
-    ctx.save();
-    ctx.shadowColor='rgba(255,180,0,0.6)'; ctx.shadowBlur=18;
-    const titleGrad=ctx.createLinearGradient(cx-380,0,cx+380,0);
-    titleGrad.addColorStop(0,'#FF9A3C'); titleGrad.addColorStop(0.35,'#FFD700');
-    titleGrad.addColorStop(0.65,'#FFF0A0'); titleGrad.addColorStop(1,'#FF9A3C');
-    ctx.fillStyle=titleGrad;
-    ctx.font='bold 40px Georgia';
-    ctx.fillText('Certificate of Participation', cx, 342);
-    ctx.restore();
-    hLine(368,'rgba(255,165,0,0.2)','rgba(255,165,0,0.7)');
-
-    // ── 6. THEME — no box, plain text ────────
-    ctx.fillStyle='rgba(255,230,120,0.9)';
-    ctx.font='italic 28px Georgia';
-    ctx.fillText('Theme:', cx, 410);
-
-    ctx.save();
-    ctx.shadowColor='rgba(255,220,0,0.8)'; ctx.shadowBlur=14;
-    ctx.fillStyle='#FFD700';
-    ctx.font='bold 55px Georgia';
-    ctx.fillText('Signet Ring', cx, 478);
-    ctx.restore();
-
-    ctx.fillStyle='rgba(180,255,200,0.9)';
-    ctx.font='italic 28px Georgia';
-    ctx.fillText('Haggai 2:23', cx, 518);
-    hLine(544,'rgba(255,215,0,0.2)','rgba(255,215,0,0.6)');
-
-    // ── 7. PHOTO ─────────────────────────────
-    const photoR=118, photoCX=cx, photoCY=690;
-    ctx.save();
-    ctx.shadowColor='rgba(255,215,0,0.5)'; ctx.shadowBlur=30;
-    ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR+10,0,Math.PI*2);
-    ctx.fillStyle='rgba(255,215,0,0.08)'; ctx.fill();
-    ctx.restore();
-
-    if(certPhotoDataUrl){
-      // Load and draw photo properly
-      try{
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        await new Promise((resolve, reject) => {
-          img.onload = resolve;
-          img.onerror = reject;
-          img.src = certPhotoDataUrl;
-        });
-
-        // Draw photo circle
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(photoCX,photoCY,photoR,0,Math.PI*2);
-        ctx.clip();
-        const iw=img.naturalWidth||img.width||300;
-        const ih=img.naturalHeight||img.height||300;
-        const scale=Math.max((photoR*2)/iw,(photoR*2)/ih);
-        ctx.drawImage(img, photoCX-(iw*scale)/2, photoCY-(ih*scale)/2, iw*scale, ih*scale);
-        ctx.restore();
-
-        // Gold border
-        ctx.strokeStyle='#FFD700'; ctx.lineWidth=5;
-        ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR+3,0,Math.PI*2); ctx.stroke();
-        ctx.strokeStyle='rgba(255,215,0,0.35)'; ctx.lineWidth=2;
-        ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR+11,0,Math.PI*2); ctx.stroke();
-      } catch(e){
-        console.error('Error loading certificate photo:', e);
-      }
-    }
-    // If no photo — skip circle entirely, content moves up naturally
-
-    // ── 8. THIS IS TO CERTIFY ─────────────────
-    // Adjust Y position based on whether photo is present
-    const certifyY = certPhotoDataUrl ? 848 : 600;
-    const nameY    = certifyY + 60;   // name band starts here
-    const bodyY    = nameY + 140;     // body text starts here
-    const sigLineY = bodyY + (certClass ? 260 : 200);  // signature line — extra space if class shown
-    hLine(certifyY,'rgba(255,255,255,0.1)','rgba(255,255,255,0.4)');
-    ctx.fillStyle='rgba(220,220,255,0.85)';
-    ctx.font='italic 30px Georgia';
-    ctx.fillText('This is to certify that', cx, certifyY+46);
-
-    // ── 9. PARTICIPANT NAME ───────────────────
-    // French Script MT → fallback chain for canvas
-    // Canvas doesn't load system fonts by default, but we try the full chain
-    const nameFontStack = "'French Script MT', 'Edwardian Script ITC', 'Monotype Corsiva', cursive";
-    // Subtle highlight band behind name
-    const nameBand=ctx.createLinearGradient(60,nameY,W-60,nameY);
-    nameBand.addColorStop(0,'transparent');
-    nameBand.addColorStop(0.15,'rgba(255,100,150,0.1)');
-    nameBand.addColorStop(0.5,'rgba(255,150,80,0.15)');
-    nameBand.addColorStop(0.85,'rgba(255,100,150,0.1)');
-    nameBand.addColorStop(1,'transparent');
-    ctx.fillStyle=nameBand; ctx.fillRect(60,nameY,W-120,88);
-
-    ctx.save();
-    ctx.shadowColor='rgba(255,200,50,0.7)'; ctx.shadowBlur=12;
-    const nameGrad=ctx.createLinearGradient(cx-300,0,cx+300,0);
-    nameGrad.addColorStop(0,'#FFD580'); nameGrad.addColorStop(0.5,'#FFFFFF');
-    nameGrad.addColorStop(1,'#FFD580');
-    ctx.fillStyle=nameGrad;
-    ctx.font=`italic 80px ${nameFontStack}`;
-    ctx.fillText(certChildName, cx, nameY+74);
-    ctx.restore();
-
-    // Underline with diamond dots
-    const nw=ctx.measureText(certChildName).width;
-    const nx=cx-nw/1.2;
-    ctx.strokeStyle='rgba(255,215,0,0.8)'; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(nx,nameY+88); ctx.lineTo(cx+nw/1.2,nameY+88); ctx.stroke();
-    [nx-6, cx+nw/1.2+6].forEach(px=>{
-      ctx.fillStyle='#FFD700';
-      ctx.beginPath(); ctx.arc(px,nameY+88,4,0,Math.PI*2); ctx.fill();
-    });
-
-    // ── 10. BODY TEXT — 3 separate lines ──────
-    ctx.font='27px Georgia';
-
-    // Line 1 — plain
-    ctx.fillStyle='rgba(220,230,255,0.92)';
-    ctx.fillText('has successfully attended the Vacation Bible School 2026', cx, bodyY);
-
-    // Line 2 — "conducted by" plain + "LEF Church, Magatapalli" bold + " on"
-    // Draw in parts to make church name bold
-    ctx.font='27px Georgia';
-    const part1='conducted by ';
-    const part2='LEF Church, Magatapalli';
-    const part3=' held on';
-    const w1=ctx.measureText(part1).width;
-    const w3=ctx.measureText(part3).width;
-    ctx.font='bold 27px Georgia';
-    const w2=ctx.measureText(part2).width;
-    const totalW=w1+w2+w3;
-    const lineX=cx-totalW/2;
-    ctx.font='27px Georgia';
-    ctx.fillStyle='rgba(220,230,255,0.92)';
-    ctx.textAlign='left';
-    ctx.fillText(part1, lineX, bodyY+48);
-    ctx.font='bold 27px Georgia';
-    ctx.fillStyle='#FFD700';
-    ctx.fillText(part2, lineX+w1, bodyY+48);
-    ctx.font='27px Georgia';
-    ctx.fillStyle='rgba(220,230,255,0.92)';
-    ctx.fillText(part3, lineX+w1+w2, bodyY+48);
-    ctx.textAlign='center';
-
-    // Line 3 — date, highlighted
-    ctx.fillStyle='#FFD580';
-    ctx.font='italic 28px Georgia';
-    ctx.fillText('April 25, 26 & 27, 2026', cx, bodyY+96);
-
-    // Line 4 — Class (if assigned)
-    if(certClass){
-      const gap = 35; // spacing
-      ctx.font='27px Georgia';
-      ctx.fillStyle='rgba(220,230,255,0.92)';
-      const clsPart1 = 'as a participant in the ';
-      const clsPart2 = certClass;
-      const clsPart3 = ' Class';
-      ctx.font='27px Georgia';
-      const cw1 = ctx.measureText(clsPart1).width;
-      ctx.font='bold 27px Georgia';
-      const cw2 = ctx.measureText(clsPart2).width;
-      ctx.font='27px Georgia';
-      const cw3 = ctx.measureText(clsPart3).width;
-      const clsLineX = cx - (cw1+cw2+cw3)/2;
-      ctx.font='27px Georgia';
-      ctx.fillStyle='rgba(220,230,255,0.92)';
-      ctx.textAlign='left';
-      ctx.fillText(clsPart1, clsLineX, bodyY+144);
-      ctx.font='bold 27px Georgia';
-      ctx.fillStyle='rgba(180,255,200,0.95)';
-      ctx.fillText(clsPart2, clsLineX+cw1, bodyY+144);
-      ctx.textAlign='center';
-      ctx.font='27px Georgia';
-      ctx.fillStyle='rgba(220,230,255,0.92)';
-      ctx.fillText(clsPart3, clsLineX+cw1+cw2+gap, bodyY+144);
-      ctx.textAlign='center';
-    }
-
-    // ── 11. SIGNATURES ────────────────────────
-    // Teacher LEFT, Director RIGHT
-    hLine(sigLineY,'rgba(255,255,255,0.1)','rgba(255,255,255,0.4)');
-    const teachX=cx-210, dirX=cx+210, sigY=sigLineY+90;
-
-    ctx.strokeStyle='rgba(255,215,0,0.7)'; ctx.lineWidth=1.5;
-    ctx.beginPath(); ctx.moveTo(teachX-120,sigY); ctx.lineTo(teachX+120,sigY); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(dirX-120,sigY); ctx.lineTo(dirX+120,sigY); ctx.stroke();
-
-    ctx.fillStyle='rgba(255,230,150,0.9)'; ctx.font='italic 28px Georgia';
-    ctx.fillText('Teacher', teachX, sigY+40);
-    ctx.fillText('Director', dirX, sigY+40);
-
-    // ── 12. GOD BLESS ─────────────────────────
-    hLine(sigLineY+180,'rgba(255,255,255,0.1)','rgba(255,215,0,0.5)');
-    ctx.fillStyle='rgba(255,220,120,0.9)';
-    ctx.font='italic 28px Georgia';
-    ctx.fillText('May God bless you abundantly! 🙏', cx, sigLineY+228);
-
-    // Done - Generate certificate (don't auto-save)
-    document.getElementById('certPreviewWrap').style.display='block';
-    document.getElementById('certStep1').style.display='none';
-    document.getElementById('certModal').querySelector('.modal-box').scrollTop=0;
-    document.getElementById('certSaveStatus').style.display='none';
-    certReadyBlob=null;
-    prepareCertBlob().catch(()=>{});
-  }
-
-  // Save to Database button handler
   document.getElementById('certSaveDbBtn').addEventListener('click', async () => {
     const btn = document.getElementById('certSaveDbBtn');
+    if(!currentCertStudent) return;
     btn.disabled = true;
-    btn.textContent = '⏳ Saving...';
-
-    await saveCertificateToFirestore();
-
-    document.getElementById('certSaveStatus').style.display = 'block';
-    btn.textContent = '✅ Saved!';
-
+    btn.textContent = 'Refreshing...';
+    try{
+      await generateCertificate(currentCertStudent);
+      document.getElementById('certSaveStatus').style.display = 'block';
+      btn.textContent = 'Preview Ready';
+    }catch(err){
+      console.error('Error refreshing certificate preview:', err);
+      btn.textContent = 'Retry Preview';
+    }
     setTimeout(() => {
       btn.disabled = false;
-      btn.textContent = '💾 Save to Database';
+      btn.textContent = 'Refresh Preview';
     }, 2000);
   });
 
-  // Save certificate to Firestore (with compression)
-  async function saveCertificateToFirestore(){
-    if(!certRecordId) return;
+  document.getElementById('certDownloadBtn').addEventListener('click', async () => {
+    if(!currentCertStudent){
+      showToast('No student selected', 2000);
+      return;
+    }
     try{
-      const canvas = document.getElementById('certCanvas');
-
-      // Save as JPEG with compression to reduce size
-      const certDataUrl = canvas.toDataURL('image/jpeg', 0.85); // 85% quality JPEG
-
-      // Check size
-      if(certDataUrl.length > 1000000) { // ~1MB limit
-        showToast('⚠️ Compressing certificate...', 1500);
-        // Try even more compression
-        const certDataUrl2 = canvas.toDataURL('image/jpeg', 0.7); // 70% quality
-        if(certDataUrl2.length > 1000000){
-          throw new Error('Certificate too large even after compression');
-        }
-        // Use the more compressed version
-        await saveCertToFirebase(certDataUrl2);
-      } else {
-        await saveCertToFirebase(certDataUrl);
-      }
-
-    } catch(err){
-      console.error('❌ Error saving certificate:', err);
-      if(err.message.includes('too large')){
-        showToast('❌ Certificate too large. Try smaller photo.', 4000);
-      } else {
-        showToast('❌ Could not save certificate', 3000);
-      }
-    }
-  }
-
-  async function saveCertToFirebase(certDataUrl){
-    const {getFirestore, doc, updateDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-    const db = getFirestore();
-
-    await updateDoc(doc(db, 'registrations', certRecordId), {
-      certificate: certDataUrl,
-      certificateGeneratedAt: new Date().toISOString(),
-      certificateName: certChildName,
-      certificateAge: certAge,
-      certificateDays: certDays
-    });
-
-    // Update local data
-    allData = allData.map(r =>
-            r.id === certRecordId
-                    ? {...r, certificate: certDataUrl, certificateGeneratedAt: new Date().toISOString()}
-                    : r
-    );
-
-    showToast('✅ Certificate saved!', 2000);
-    applyFilters(); // Refresh table to show view button
-    console.log('✅ Certificate saved to Firestore');
-  }
-
-  // Download
-  document.getElementById('certDownloadBtn').addEventListener('click', () => {
-    const canvas = document.getElementById('certCanvas');
-    // Use JPEG for faster download
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
-    const a = document.createElement('a');
-    a.download = `VBS2026_Certificate_${certChildName.replace(/\s+/g,'_')}.jpg`;
-    a.href = dataUrl;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    showToast('📥 Certificate downloaded!', 2000);
-  });
-
-  // ── Certificate blob cache (same pattern as Rani Gold — iOS compatible) ──
-  let certReadyBlob = null;
-
-  // Pre-generate blob when certificate is generated (so share is instant)
-  const origGenerate = document.getElementById('certGenerateBtn');
-
-  async function prepareCertBlob(){
-    const canvas = document.getElementById('certCanvas');
-    certReadyBlob = await new Promise((res, rej) =>
-            canvas.toBlob(b => b ? res(b) : rej(new Error('toBlob failed')), 'image/png', 1.0)
-    );
-  }
-
-  // Share via WhatsApp — iOS 15 / iPhone 15 compatible
-  // Key fix: navigator.share() called DIRECTLY in click handler (same gesture stack)
-  // blob is pre-prepared before click, not inside async callback
-  document.getElementById('certShareBtn').addEventListener('click', async()=>{
-    const btn = document.getElementById('certShareBtn');
-    const origHTML = btn.innerHTML;
-    const phone   = certPhone ? certPhone.replace(/\D/g,'') : '';
-    const waPhone = phone.length===10 ? '91'+phone : phone;
-    const waMsg   = encodeURIComponent(
-            `🙏 Congratulations to *${certChildName}* for attending *VBS 2026* at LEF Church Magatapalli! ✝️\n\nTheme: Signet Ring — Haggai 2:23\n\n"Let the little children come to me." — Matthew 19:14`
-    );
-    const waUrl = waPhone
-            ? `https://wa.me/${waPhone}?text=${waMsg}`
-            : `https://wa.me/?text=${waMsg}`;
-
-    // If blob not ready yet (shouldn't happen but safety net)
-    if(!certReadyBlob){
-      btn.innerHTML = '⏳ Preparing…';
-      btn.style.pointerEvents = 'none';
-      try{
-        await prepareCertBlob();
-      }catch(e){
-        btn.innerHTML = origHTML;
-        btn.style.pointerEvents = '';
-        downloadCert();
-        return;
-      }
-      btn.innerHTML = origHTML;
-      btn.style.pointerEvents = '';
-    }
-
-    const fileName = `VBS2026_Certificate_${certChildName.replace(/\s+/g,'_')}.png`;
-    const file = new File([certReadyBlob], fileName, {type:'image/png'});
-
-    // navigator.share called directly here — same synchronous gesture stack (iOS requirement)
-    if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
-      navigator.share({
-        title: `VBS 2026 Certificate — ${certChildName}`,
-        files: [file]
-      }).catch(err=>{
-        if(err.name !== 'AbortError') downloadCert();
-      });
-    } else {
-      downloadCert();
-    }
-
-    function downloadCert(){
-      // Fallback: save image + open WhatsApp with number
-      const url = URL.createObjectURL(certReadyBlob);
+      const blob = await prepareCertBlob(currentCertStudent);
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
+      a.download = getCertificateFileName(currentCertStudent, 'jpg');
       a.href = url;
-      a.download = fileName;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      setTimeout(()=> URL.revokeObjectURL(url), 2000);
-      showToast('📥 Saved! Opening WhatsApp…', 3500);
-      setTimeout(()=>{ window.location.href = waUrl; }, 1500);
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      showToast('HD certificate downloaded!', 2200);
+    }catch(err){
+      console.error('Error downloading certificate:', err);
+      showToast('Could not download certificate', 3000);
     }
   });
 
-  // Custom Confirm Dialog
-  function showCustomConfirm(title, message){
-    return new Promise((resolve) => {
-      document.getElementById('customConfirmTitle').textContent = title;
-      document.getElementById('customConfirmMessage').textContent = message;
-      document.getElementById('customConfirmModal').classList.add('active');
+  document.getElementById('certShareBtn').addEventListener('click', async()=>{
+    const btn = document.getElementById('certShareBtn');
+    const origHTML = btn.innerHTML;
+    if(!currentCertStudent){
+      showToast('No student selected', 2000);
+      return;
+    }
 
-      const handleOk = () => {
-        document.getElementById('customConfirmModal').classList.remove('active');
-        cleanup();
-        resolve(true);
-      };
+    btn.innerHTML = 'Preparing...';
+    btn.style.pointerEvents = 'none';
 
-      const handleCancel = () => {
-        document.getElementById('customConfirmModal').classList.remove('active');
-        cleanup();
-        resolve(false);
-      };
+    try{
+      const blob = await prepareCertBlob(currentCertStudent);
+      const fileName = getCertificateFileName(currentCertStudent, 'jpg');
+      const file = new File([blob], fileName, {type:'image/jpeg'});
 
-      const cleanup = () => {
-        document.getElementById('customConfirmOkBtn').removeEventListener('click', handleOk);
-        document.getElementById('customConfirmCancelBtn').removeEventListener('click', handleCancel);
-      };
+      if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+        await navigator.share({
+          title: `VBS 2026 Certificate - ${currentCertStudent.childName || 'Student'}`,
+          files: [file]
+        });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+        showToast('HD certificate saved locally', 2500);
+      }
+    }catch(err){
+      if(err.name != 'AbortError'){
+        console.error('Error sharing certificate:', err);
+        showToast('Could not share certificate', 3000);
+      }
+    } finally {
+      btn.innerHTML = origHTML;
+      btn.style.pointerEvents = '';
+    }
+  });
 
-      document.getElementById('customConfirmOkBtn').addEventListener('click', handleOk);
-      document.getElementById('customConfirmCancelBtn').addEventListener('click', handleCancel);
-    });
-  }
-
-  // ══════ END CERTIFICATE MODULE ══════
+  // END CERTIFICATE MODULE
 
 
   // ══════════════════════════════════════════
@@ -3087,54 +3017,74 @@
   }
 
   // Photo upload handlers with compression
-  function handlePhotoUpload(file){
+  async function buildFirestorePhotoDataUrl(file){
+    const dataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+    const img = await loadImage(dataUrl);
+    const canvas = document.createElement('canvas');
+    let width = img.width;
+    let height = img.height;
+    let quality = 0.94;
+    let output = '';
+
+    const maxDimStart = 1800;
+    if(width > maxDimStart || height > maxDimStart){
+      if(width > height){
+        height = Math.round((height / width) * maxDimStart);
+        width = maxDimStart;
+      } else {
+        width = Math.round((width / height) * maxDimStart);
+        height = maxDimStart;
+      }
+    }
+
+    for(let attempt = 0; attempt < 12; attempt++){
+      canvas.width = Math.round(width);
+      canvas.height = Math.round(height);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      output = canvas.toDataURL('image/jpeg', quality);
+
+      if(output.length <= PHOTO_DATA_URL_LIMIT){
+        return output;
+      }
+
+      if(quality > 0.8){
+        quality -= 0.04;
+      } else {
+        width *= 0.9;
+        height *= 0.9;
+      }
+    }
+
+    throw new Error('Photo is too large. Please use a smaller image.');
+  }
+
+  async function handlePhotoUpload(file){
     if(!file) return;
 
-    // Check file size
-    if(file.size > 5 * 1024 * 1024) { // 5MB limit
-      showToast('❌ Photo too large. Please use a smaller image.', 3000);
+    if(file.size > 10 * 1024 * 1024) {
+      showToast('Photo too large. Please use an image under 10MB.', 3000);
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = e => {
-      const img = new Image();
-      img.onload = () => {
-        // Compress image
-        const canvas = document.createElement('canvas');
-        let width = img.width;
-        let height = img.height;
-
-        // Resize if too large
-        const maxDim = 800;
-        if(width > maxDim || height > maxDim){
-          if(width > height){
-            height = (height / width) * maxDim;
-            width = maxDim;
-          } else {
-            width = (width / height) * maxDim;
-            height = maxDim;
-          }
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
-
-        // Convert to compressed base64
-        tempPhotoData = canvas.toDataURL('image/jpeg', 0.8); // 80% quality JPEG
-        document.getElementById('photoTempImg').src = tempPhotoData;
-        document.getElementById('photoTempPreview').style.display = 'block';
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
+    try{
+      showToast('Preparing high-quality photo...', 1800);
+      tempPhotoData = await buildFirestorePhotoDataUrl(file);
+      document.getElementById('photoTempImg').src = tempPhotoData;
+      document.getElementById('photoTempPreview').style.display = 'block';
+    } catch(err){
+      console.error('Error preparing photo:', err);
+      showToast('Could not process photo', 3000);
+    }
   }
 
   document.getElementById('photoCameraInput').addEventListener('change', e => handlePhotoUpload(e.target.files[0]));
   document.getElementById('photoGalleryInput').addEventListener('change', e => handlePhotoUpload(e.target.files[0]));
-
   // Save photo to database
   document.getElementById('photoSaveBtn').addEventListener('click', async () => {
     if(!tempPhotoData || !currentPhotoStudent) {
@@ -3150,8 +3100,8 @@
       const {getFirestore, doc, updateDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
       const db = getFirestore();
 
-      // Validate data size (Firebase has limits)
-      if(tempPhotoData.length > 1000000) { // ~1MB limit
+      // Validate data size (Firestore document limit safety margin)
+      if(tempPhotoData.length > PHOTO_DATA_URL_LIMIT) {
         throw new Error('Photo is too large. Please use a smaller image.');
       }
 
@@ -3515,52 +3465,35 @@
 
     showToast('📥 ID Card downloaded!', 2000);
   });
-
-  // Share from view modal
-  document.getElementById('viewIdShareBtn').addEventListener('click', () => {
-    if(!currentViewIdStudent) return;
-
-    const name = currentViewIdStudent.childName;
-    const phone = currentViewIdStudent.phone;
-    const message = `🪪 VBS 2026 ID Card for *${name}*\n\nLEF Church Magatapalli\nApril 25-27, 2026`;
-
-    if(phone && phone.length === 10){
-      window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(message)}`, '_blank');
-    } else {
-      window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
-    }
-  });
-
-
-
-  // ══════════════════════════════════════════
-  // VIEW CERTIFICATE MODAL
-  // ══════════════════════════════════════════
-  let currentViewCertStudent = null; // Initialize at top level
+  let currentViewCertStudent = null;
 
   document.getElementById('viewCertModalClose').addEventListener('click', closeViewCertModal);
 
-  function openViewCertModal(student){
-    if(!student || !student.certificate){
-      showToast('❌ No certificate found for this student', 3000);
+  async function openViewCertModal(student){
+    const liveStudent = getCertificateStudent(student);
+    if(!liveStudent || !liveStudent.photo){
+      showToast('No photo found for this student', 3000);
       return;
     }
 
-    currentViewCertStudent = student;
+    currentViewCertStudent = liveStudent;
+    document.getElementById('viewCertStudentName').textContent = liveStudent.childName || 'Student';
 
-    document.getElementById('viewCertStudentName').textContent = student.childName || 'Student';
-
-    const generatedDate = student.certificateGeneratedAt
-            ? new Date(student.certificateGeneratedAt).toLocaleString('en-IN', {
+    const uploadedDate = liveStudent.photoUploadedAt
+            ? new Date(liveStudent.photoUploadedAt).toLocaleString('en-IN', {
               dateStyle: 'medium',
               timeStyle: 'short'
             })
-            : 'Unknown';
-    document.getElementById('viewCertGeneratedDate').textContent = 'Generated: ' + generatedDate;
-
-    document.getElementById('viewCertImage').src = student.certificate;
+            : 'Stored photo available';
+    document.getElementById('viewCertGeneratedDate').textContent = 'Generated live from photo: ' + uploadedDate;
 
     document.getElementById('viewCertModal').classList.add('active');
+    try{
+      await renderCertificateToCanvas(liveStudent, document.getElementById('viewCertCanvas'), CERT_PREVIEW_SIZE);
+    }catch(err){
+      console.error('Error rendering certificate preview:', err);
+      showToast('Could not render certificate preview', 3000);
+    }
   }
 
   function closeViewCertModal(){
@@ -3568,16 +3501,50 @@
     currentViewCertStudent = null;
   }
 
-  // Download from view modal
-  document.getElementById('viewCertDownloadBtn').addEventListener('click', () => {
+  document.getElementById('viewCertDownloadBtn').addEventListener('click', async () => {
+    if(!currentViewCertStudent) return;
+    try{
+      const blob = await prepareCertBlob(currentViewCertStudent);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = getCertificateFileName(currentViewCertStudent, 'jpg');
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      showToast('HD certificate downloaded!', 2200);
+    }catch(err){
+      console.error('Error downloading certificate:', err);
+      showToast('Could not download certificate', 3000);
+    }
+  });
+
+  document.getElementById('viewCertShareBtn').addEventListener('click', async () => {
     if(!currentViewCertStudent) return;
 
-    const a = document.createElement('a');
-    a.href = currentViewCertStudent.certificate;
-    a.download = `VBS2026_Certificate_${currentViewCertStudent.childName.replace(/\s+/g,'_')}.png`;
-    a.click();
-
-    showToast('📥 Certificate downloaded!', 2000);
+    try{
+      const blob = await prepareCertBlob(currentViewCertStudent);
+      const fileName = getCertificateFileName(currentViewCertStudent, 'jpg');
+      const file = new File([blob], fileName, {type:'image/jpeg'});
+      if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+        await navigator.share({
+          title: `VBS 2026 Certificate - ${currentViewCertStudent.childName || 'Student'}`,
+          files: [file]
+        });
+      } else {
+        const phone = currentViewCertStudent.phone ? currentViewCertStudent.phone.replace(/\D/g, '') : '';
+        const waUrl = phone.length === 10
+                ? `https://wa.me/91${phone}?text=${encodeURIComponent('Certificate ready to share')}`
+                : `https://wa.me/?text=${encodeURIComponent('Certificate ready to share')}`;
+        window.open(waUrl, '_blank');
+      }
+    }catch(err){
+      if(err.name !== 'AbortError'){
+        console.error('Error sharing certificate:', err);
+        showToast('Could not share certificate', 3000);
+      }
+    }
   });
 
   // Share from view modal
@@ -3905,7 +3872,7 @@
   function updateSendCertsStats(){
     const classFilter = document.getElementById('sendCertsClassFilter').value;
 
-    let filtered = allData.filter(r => r.certificate);
+    let filtered = allData.filter(r => r.photo);
     if(classFilter !== 'all'){
       if(classFilter === 'unassigned'){
         filtered = filtered.filter(r => !r.class);
@@ -3926,12 +3893,12 @@
     const classFilter = document.getElementById('sendCertsClassFilter').value;
     const btn = document.getElementById('sendCertsConfirmBtn');
     btn.disabled = true;
-    btn.textContent = '⏳ Sending...';
+    btn.textContent = 'Sending...';
 
     document.getElementById('sendCertsProgress').style.display = 'block';
     document.getElementById('sendCertsResult').style.display = 'none';
 
-    let filtered = allData.filter(r => r.certificate && r.phone && r.phone.length === 10);
+    let filtered = allData.filter(r => r.photo && r.phone && r.phone.length === 10);
     if(classFilter !== 'all'){
       if(classFilter === 'unassigned'){
         filtered = filtered.filter(r => !r.class);
@@ -3941,9 +3908,9 @@
     }
 
     if(filtered.length === 0){
-      showToast('❌ No certificates to send', 3000);
+      showToast('No photos available to generate certificates', 3000);
       btn.disabled = false;
-      btn.textContent = '📤 Send Certificates';
+      btn.textContent = 'Send Certificates';
       document.getElementById('sendCertsProgress').style.display = 'none';
       return;
     }
@@ -3969,18 +3936,16 @@
         console.error('Failed to send to', student.phone, err);
       }
 
-      // Small delay to avoid rate limiting
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
-    // Show results
     const resultDiv = document.getElementById('sendCertsResult');
     resultDiv.style.display = 'block';
     resultDiv.style.background = sent > 0 ? '#DCFCE7' : '#FEE2E2';
     resultDiv.style.color = sent > 0 ? '#166534' : '#DC2626';
     resultDiv.innerHTML = `
       <div style="font-weight:800;margin-bottom:8px;">
-        ${sent > 0 ? '✅' : '❌'} Sending Complete
+        ${sent > 0 ? 'Done' : 'Failed'}
       </div>
       <div style="font-size:0.9rem;">
         <strong>${sent}</strong> sent successfully<br>
@@ -3989,48 +3954,28 @@
       </div>
     `;
 
-    showToast(`✅ Sent ${sent} certificate(s)${failed > 0 ? ', ' + failed + ' failed' : ''}`, 4000);
+    showToast(`Sent ${sent} certificate message(s)${failed > 0 ? ', ' + failed + ' failed' : ''}`, 4000);
 
     btn.disabled = false;
-    btn.textContent = '📤 Send Certificates';
+    btn.textContent = 'Send Certificates';
   });
 
   async function sendCertificateToWhatsApp(student){
     const phone = student.phone;
     const name = student.childName;
-    const certificate = student.certificate;
+    const message = `Congratulations to *${name}* for completing VBS 2026 at LEF Church Magatapalli!
 
-    // Convert base64 to blob
-    const base64Data = certificate.split(',')[1];
-    const blob = base64ToBlob(base64Data, 'image/png');
+Theme: Signet Ring - Haggai 2:23
 
-    // WhatsApp message
-    const message = `🙏 Congratulations to *${name}* for completing VBS 2026 at LEF Church Magatapalli! ✝️\n\nTheme: Signet Ring — Haggai 2:23\n\n"Let the little children come to me." — Matthew 19:14\n\nHere is your certificate! God bless you! 🌟`;
+"Let the little children come to me." - Matthew 19:14
 
-    // WhatsApp Web API - Opens WhatsApp with pre-filled message
-    // For production, you would integrate with WhatsApp Business API
+Open the certificate from the admin panel to download or share the HD version.`;
     const whatsappUrl = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
-
-    // For now, we'll just open WhatsApp links
-    // In production, integrate with Twilio WhatsApp API or similar service
     window.open(whatsappUrl, '_blank');
-
-    // Simulate sending - in production, replace with actual API call
     return new Promise((resolve) => {
       setTimeout(resolve, 500);
     });
   }
-
-  function base64ToBlob(base64, mimeType){
-    const byteCharacters = atob(base64);
-    const byteNumbers = new Array(byteCharacters.length);
-    for(let i = 0; i < byteCharacters.length; i++){
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    return new Blob([byteArray], {type: mimeType});
-  }
-  // ══════════════════════════════════════════
 
 
   // ══════ CUSTOM CONFIRM DIALOG ══════
@@ -4151,7 +4096,7 @@
 
   // Remove photo button
   document.getElementById('certRemovePhotoBtn').addEventListener('click',()=>{
-    certPhotoDataUrl = null;
+    currentCertStudent = null;
     document.getElementById('certPhotoPreview').style.display='none';
     document.getElementById('certCameraInput').value='';
     document.getElementById('certGalleryInput').value='';
@@ -4721,12 +4666,12 @@
 
         <!-- Save Status -->
         <div id="certSaveStatus" style="display:none;background:#DCFCE7;border:2px solid #16A34A;color:#166534;padding:12px;border-radius:10px;margin-top:16px;font-weight:700;text-align:center;">
-          ✅ Certificate saved to database!
+          Live preview generated from stored photo.
         </div>
 
         <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
           <button class="cert-action-btn" id="certSaveDbBtn" style="background:#FCD34D;color:#92400E;flex:1;font-weight:800;">
-            💾 Save to Database
+            Refresh Preview
           </button>
           <button class="cert-action-btn" id="certShareBtn" style="background:var(--grass);color:var(--navy);">📤 Share</button>
           <button class="cert-action-btn" id="certDownloadBtn" style="background:var(--sky);color:var(--navy);">⬇ Download</button>
@@ -4968,7 +4913,7 @@
         <div style="font-size:0.85rem;color:#64748B;" id="viewCertGeneratedDate">Generated: --</div>
       </div>
 
-      <img id="viewCertImage" src="" alt="Certificate" style="width:100%;border-radius:12px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);">
+      <canvas id="viewCertCanvas" style="width:100%;height:auto;border-radius:12px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
 
       <div style="display:flex;gap:10px;margin-top:16px;">
         <button id="viewCertDownloadBtn" style="flex:1;background:#3B82F6;color:white;border:none;padding:12px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
@@ -4993,7 +4938,7 @@
       <div style="background:#FEF3C7;border:2px solid #F59E0B;border-radius:12px;padding:16px;margin-bottom:20px;">
         <div style="font-weight:700;color:#92400E;margin-bottom:8px;">⚠️ Important Information</div>
         <ul style="margin:0;padding-left:20px;color:#92400E;font-size:0.85rem;line-height:1.6;">
-          <li>This will send certificates to students with generated certificates</li>
+          <li>This will send WhatsApp messages for students who have an uploaded photo</li>
           <li>Only students with valid 10-digit phone numbers will receive messages</li>
           <li>Messages will be sent via WhatsApp Business API</li>
           <li>Make sure you have configured WhatsApp API credentials</li>
@@ -5004,7 +4949,7 @@
         <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;text-align:center;">
           <div>
             <div style="font-size:2rem;font-weight:800;color:#1E3A5F;" id="certsReadyCount">0</div>
-            <div style="font-size:0.75rem;color:#64748B;font-weight:700;">Certificates Ready</div>
+            <div style="font-size:0.75rem;color:#64748B;font-weight:700;">Photos Ready for Certificates</div>
           </div>
           <div>
             <div style="font-size:2rem;font-weight:800;color:#16A34A;" id="validPhonesCount">0</div>
