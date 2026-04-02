@@ -298,11 +298,10 @@
     .att-status.absent{background:#FEE2E2;color:#DC2626;}
     .att-status.muted{background:#E2E8F0;color:#64748B;}
     .att-inline-statuses{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
-    .att-inline-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:0.72rem;font-weight:800;line-height:1;}
+    .att-inline-pill{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border-radius:999px;font-size:0.72rem;font-weight:800;line-height:1;min-width:42px;}
     .att-inline-pill.present{background:#DCFCE7;color:#15803D;}
     .att-inline-pill.absent{background:#FEE2E2;color:#DC2626;}
     .att-inline-pill.muted{background:#E2E8F0;color:#64748B;}
-    .att-inline-mark{font-size:0.9rem;}
     /* Attendance stats */
     .c-present .s-num{color:#16A34A;} .c-absent .s-num{color:#DC2626;}
     .edit-btn{background:#DBEAFE;color:#1D4ED8;border:none;padding:5px 8px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:700;margin-right:3px;}
@@ -428,12 +427,18 @@
       .day-selector > div{width:100%;flex-wrap:wrap;}
       .day-selector label{font-size:0.95rem;}
       .day-dropdown{width:100%;padding:10px 12px;font-size:0.9rem;}
+      .search-box{width:100%;min-width:0;padding:9px 12px;font-size:0.82rem;}
+      .export-btn,.import-btn,.send-certs-btn{display:none !important;}
+      .filter-row{padding:10px 14px;gap:8px;}
+      .filter-select{min-width:0;flex:1 1 calc(50% - 4px);padding:7px 10px;font-size:0.78rem;}
       .attendance-table-card .table-header{padding:14px 16px;}
       .attendance-table-card h3{font-size:1.05rem;}
       .att-table-simple thead{display:none;}
       .att-table-simple td{padding:0;border-bottom:none;}
-      .att-mobile-cell{padding:12px 0 !important;}
-      .att-mobile-card{background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+      .att-mobile-cell{padding:12px 8px !important;}
+      .att-mobile-cell{border-top:1px solid #E2E8F0;}
+      .att-mobile-card,
+      .att-mobile-readonly{background:transparent;border:none;border-radius:0;padding:6px 0;box-shadow:none;}
       .att-mobile-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:0;}
       .att-mobile-name{font-weight:800;color:var(--navy);font-size:0.95rem;line-height:1.35;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;}
       .att-name-toggle{background:none;border:none;padding:0;margin:0;text-align:left;cursor:pointer;}
@@ -451,9 +456,12 @@
       #view-registrations td,
       #view-documents td,
       #view-archive td{padding:0;border-bottom:none;}
-      .mobile-record-cell{padding:12px 0 !important;}
-      .mobile-record-card{background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
-      .mobile-record-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;}
+      .mobile-record-cell{padding:12px 8px !important;}
+      .mobile-record-cell{border-top:1px solid #E2E8F0;}
+      .mobile-record-card{background:transparent;border:none;border-radius:0;padding:6px 0;box-shadow:none;}
+      .mobile-record-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px;}
+      .mobile-record-head-main{display:flex;align-items:flex-start;gap:10px;min-width:0;flex:1;}
+      .mobile-record-head-tools{display:flex;align-items:center;gap:8px;flex-shrink:0;}
       .mobile-record-title{font-weight:800;color:var(--navy);font-size:0.96rem;line-height:1.35;}
       .mobile-record-sub{font-size:0.76rem;color:#64748B;font-weight:700;margin-top:3px;}
       .mobile-record-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;align-items:center;}
@@ -466,6 +474,11 @@
       .mobile-record-line em{font-style:normal;color:#64748B;font-size:0.74rem;display:inline-block;width:14px;flex:0 0 14px;text-align:center;}
       .mobile-record-line span{text-align:left;min-width:0;overflow-wrap:anywhere;flex:1;}
       .mobile-record-actions{display:flex;flex-wrap:wrap;gap:8px;}
+      .mobile-doc-photo-btn{border:none;background:transparent;padding:0;cursor:pointer;flex-shrink:0;}
+      .mobile-doc-photo{width:52px;height:52px;border-radius:14px;object-fit:cover;border:2px solid #E2E8F0;background:#F8FAFC;display:flex;align-items:center;justify-content:center;}
+      .mobile-doc-photo.placeholder{font-size:1.2rem;color:#64748B;}
+      .mobile-head-icon-btn{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:none;border-radius:10px;cursor:pointer;font-size:0.9rem;font-weight:800;}
+      .mobile-head-check{margin-left:2px;}
       .mobile-record-actions .edit-btn,
       .mobile-record-actions .del-btn,
       .mobile-record-actions .photo-btn,
@@ -1813,24 +1826,27 @@
            </select>`
               : `<span class="badge b-days">${cls?'Class '+cls:'—'}</span>`;
       const childName = r.childName||((r.childFirst||'')+(r.childLast?' '+r.childLast:''));
+      const shortChildName = childName.length > 20 ? `${childName.slice(0,20)}...` : childName;
       const sourceType = r.source === 'imported'
               ? `<span class="badge b-imported">Imported</span>`
               : `<span class="badge b-online">Online</span>`;
-      const editBtn   = `<button class="edit-btn" data-id="${r.id}" title="Edit record">✏️</button>`;
-      const delBtn    = `<button class="del-btn" data-id="${r.id}" style="margin-left:2px">🗑</button>`;
+      const editBtn   = `<button class="edit-btn mobile-head-icon-btn" data-id="${r.id}" title="Edit record">✏️</button>`;
+      const delBtn    = `<button class="del-btn mobile-head-icon-btn" data-id="${r.id}" style="margin-left:2px">🗑</button>`;
       const actionBtns = isAdmin ? editBtn + delBtn : '';
-      const chk = isAdmin ? `<input type="checkbox" class="row-check rec-check" data-id="${r.id}">` : '';
+      const chk = isAdmin ? `<input type="checkbox" class="row-check rec-check mobile-head-check" data-id="${r.id}">` : '';
 
       if(isMobile){
         return `<tr>
           <td colspan="13" class="mobile-record-cell">
             <div class="mobile-record-card">
               <div class="mobile-record-head">
-                <div>
-                  <div class="mobile-record-title">${i+1}. ${childName}</div>
+                <div class="mobile-record-head-main">
+                  <div>
+                  <div class="mobile-record-title">${i+1}. ${shortChildName}</div>
                   <div class="mobile-record-sub">${r.parentName||'—'}</div>
+                  </div>
                 </div>
-                ${isAdmin ? chk : ''}
+                <div class="mobile-record-head-tools">${actionBtns}${isAdmin ? chk : ''}</div>
               </div>
               <div class="mobile-record-meta">
                 <span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span>
@@ -1844,7 +1860,6 @@
                 <div class="mobile-record-line"><strong>Village</strong><em>:</em><span>${r.address||'—'}</span></div>
                 <div class="mobile-record-line"><strong>Church</strong><em>:</em><span>${r.church||'—'}</span></div>
               </div>
-              <div class="mobile-record-actions">${actionBtns}</div>
             </div>
           </td>
         </tr>`;
@@ -2017,9 +2032,10 @@
     const renderInlineStatusPill = (record, dayKey) => {
       const attendance = (typeof record.attendance === 'object' && record.attendance) ? record.attendance : {};
       const dayAtt = attendance[dayKey] || '';
-      if(dayAtt === 'present') return `<span class="att-inline-pill present">D${dayKey==='25'?'1':dayKey==='26'?'2':'3'} <span class="att-inline-mark">&#10003;</span></span>`;
-      if(dayAtt === 'absent') return `<span class="att-inline-pill absent">D${dayKey==='25'?'1':dayKey==='26'?'2':'3'} <span class="att-inline-mark">&#10005;</span></span>`;
-      return `<span class="att-inline-pill muted">D${dayKey==='25'?'1':dayKey==='26'?'2':'3'} <span class="att-inline-mark">-</span></span>`;
+      const dayLabel = `D${dayKey==='25'?'1':dayKey==='26'?'2':'3'}`;
+      if(dayAtt === 'present') return `<span class="att-inline-pill present">${dayLabel}</span>`;
+      if(dayAtt === 'absent') return `<span class="att-inline-pill absent">${dayLabel}</span>`;
+      return `<span class="att-inline-pill muted">${dayLabel}</span>`;
     };
 
     tb.innerHTML = data.map((r, i) => {
@@ -2045,7 +2061,7 @@
         }
         return `<tr>
           <td class="att-mobile-cell">
-            <div class="att-mobile-card">
+            <div class="att-mobile-readonly">
               <div class="att-mobile-top">
                 <button type="button" class="att-mobile-name att-name-toggle" data-full-name="${childName.replace(/"/g,'&quot;')}" title="${childName.replace(/"/g,'&quot;')}">${i+1}. ${shortChildName}</button>
                 <div class="att-mobile-status-grid">
@@ -2157,52 +2173,48 @@
 
     tb.innerHTML = data.map((r, i) => {
       const childName = r.childName || ((r.childFirst||'') + (r.childLast?' '+r.childLast:''));
+      const shortChildName = childName.length > 20 ? `${childName.slice(0,20)}...` : childName;
 
       // Photo preview
       const photoPreview = r.photo
-              ? `<img src="${r.photo}" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #E2E8F0;">`
-              : `<div style="width:50px;height:50px;border-radius:50%;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:1.5rem;">📷</div>`;
+              ? `<img src="${r.photo}" class="mobile-doc-photo" alt="${childName.replace(/"/g,'&quot;')}">`
+              : `<div class="mobile-doc-photo placeholder">📷</div>`;
+      const photoTrigger = `<button class="photo-btn mobile-doc-photo-btn" data-id="${r.id}" title="${r.photo ? 'View Photo' : 'Upload Photo'}">${photoPreview}</button>`;
 
       // Document buttons
       const photoBtn = r.photo
               ? `<button class="photo-btn" data-id="${r.id}" title="View Photo" style="background:#8B5CF6;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;">📷</button>`
               : `<button class="photo-btn" data-id="${r.id}" title="Upload Photo" style="background:#F59E0B;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;">📷+</button>`;
 
-      const idCardBtn = r.photo
-              ? `<button class="id-card-btn" data-id="${r.id}" title="Generate ID Card" style="background:#3B82F6;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">🪪</button>`
-              : '';
-
-      const certBtn = r.photo
-              ? `<button class="cert-btn" data-id="${r.id}" title="Generate Certificate" style="background:#10B981;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">📜</button>`
-              : '';
-
-      const viewIdBtn = r.idCard
-              ? `<button class="view-id-btn" data-id="${r.id}" title="View ID Card" style="background:#2563EB;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">👁️🪪</button>`
-              : '';
+      const idCardBtn = r.idCard
+              ? `<button class="view-id-btn" data-id="${r.id}" title="View ID Card" style="background:#2563EB;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">🪪</button>`
+              : (r.photo ? `<button class="id-card-btn" data-id="${r.id}" title="Generate ID Card" style="background:#3B82F6;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">🪪</button>` : '');
 
       const viewCertBtn = r.certificate
-              ? `<button class="view-cert-btn" data-id="${r.id}" title="View Certificate" style="background:#059669;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">👁️📜</button>`
+              ? `<button class="view-cert-btn" data-id="${r.id}" title="View Certificate" style="background:#059669;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">📜</button>`
               : '';
 
-      const docBtns = photoBtn + idCardBtn + certBtn + viewIdBtn + viewCertBtn;
+      const docBtns = idCardBtn + viewCertBtn;
 
       if(isMobile){
         return `<tr>
           <td colspan="8" class="mobile-record-cell">
             <div class="mobile-record-card">
               <div class="mobile-record-head">
-                <div>
-                  <div class="mobile-record-title">${i+1}. ${childName}</div>
+                <div class="mobile-record-head-main">
+                  ${photoTrigger}
+                  <div>
+                  <div class="mobile-record-title">${i+1}. ${shortChildName}</div>
                   <div class="mobile-record-sub">${r.address||'—'}</div>
+                  </div>
                 </div>
-                ${photoPreview}
+                <div class="mobile-record-head-tools">${docBtns}</div>
               </div>
               <div class="mobile-record-meta">
                 <span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span>
                 <span class="badge b-online">Age ${r.age||'—'}</span>
                 <span class="badge b-days">${r.class||'Unassigned'}</span>
               </div>
-              <div class="mobile-record-actions">${docBtns}</div>
             </div>
           </td>
         </tr>`;
@@ -2279,6 +2291,34 @@
         openViewIdCardModal(student);
       });
     });
+  }
+
+  async function saveGeneratedIdCardToFirestore(student){
+    const canvas = document.getElementById('idCardCanvas');
+    const idCardData = canvas.toDataURL('image/png');
+    const generatedAt = new Date().toISOString();
+    const {getFirestore, doc, updateDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    await updateDoc(doc(getFirestore(), 'registrations', student.id), {
+      idCard: idCardData,
+      idCardGeneratedAt: generatedAt
+    });
+    allData = allData.map(r => r.id === student.id ? {...r, idCard: idCardData, idCardGeneratedAt: generatedAt} : r);
+  }
+
+  async function autoGenerateDocumentsForStudent(student){
+    if(!student?.photo) return;
+    await generateIDCard(student, {showModal:false});
+    await saveGeneratedIdCardToFirestore(student);
+
+    certRecordId = student.id;
+    certChildName = student.childName || 'Student';
+    certDays = student.days || '';
+    certAge = student.age || '';
+    certPhone = student.phone || '';
+    certClass = student.class || '';
+    certPhotoDataUrl = student.photo;
+    await generateCertificate();
+    await saveCertificateToFirestore();
   }
 
   function exportCSV(){
@@ -3076,11 +3116,20 @@
       });
 
       // Update local data
+      const updatedStudent = {
+        ...currentPhotoStudent,
+        photo: tempPhotoData,
+        photoUploadedAt: new Date().toISOString()
+      };
       allData = allData.map(r =>
               r.id === currentPhotoStudent.id
-                      ? {...r, photo: tempPhotoData, photoUploadedAt: new Date().toISOString()}
+                      ? updatedStudent
                       : r
       );
+      currentPhotoStudent = updatedStudent;
+
+      showToast('⏳ Generating ID card and certificate...', 2200);
+      await autoGenerateDocumentsForStudent(updatedStudent);
 
       console.log('Photo saved successfully');
       showToast('✅ Photo saved successfully!', 2000);
@@ -3130,15 +3179,18 @@
     document.getElementById('idCardModal').classList.remove('active');
   }
 
-  async function generateIDCard(student){
+  async function generateIDCard(student, options = {}){
     if(!student || !student.photo){
       showToast('❌ Please upload student photo first', 3000);
       return;
     }
 
+    const {showModal = true} = options;
     currentIdStudent = student;
-    document.getElementById('idCardModal').classList.add('active');
-    document.getElementById('idCardSaveStatus').style.display = 'none';
+    if(showModal){
+      document.getElementById('idCardModal').classList.add('active');
+      document.getElementById('idCardSaveStatus').style.display = 'none';
+    }
 
     const canvas = document.getElementById('idCardCanvas');
     const ctx = canvas.getContext('2d');
@@ -4492,6 +4544,7 @@
     tb.innerHTML = archiveData.map((r,i)=>{
       const archivedOn = r.archivedAt ? new Date(r.archivedAt).toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
       const childName = r.childName||((r.childFirst||'')+(r.childLast?' '+r.childLast:''));
+      const shortChildName = childName.length > 20 ? `${childName.slice(0,20)}...` : childName;
       const days = (r.days||'—').replace('All 3 Days (Apr 25, 26 & 27)','All 3 Days');
       const src = r.source==='imported'
               ? `<span class="badge b-imported">⬆ Imported</span>`
@@ -4501,11 +4554,13 @@
           <td colspan="11" class="mobile-record-cell">
             <div class="mobile-record-card">
               <div class="mobile-record-head">
-                <div>
-                  <div class="mobile-record-title">${i+1}. ${childName}</div>
+                <div class="mobile-record-head-main">
+                  <div>
+                  <div class="mobile-record-title">${i+1}. ${shortChildName}</div>
                   <div class="mobile-record-sub">${archivedOn}</div>
+                  </div>
                 </div>
-                ${src}
+                <div class="mobile-record-head-tools">${src}</div>
               </div>
               <div class="mobile-record-meta">
                 <span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span>
@@ -4513,9 +4568,9 @@
                 <span class="badge b-days">${days}</span>
               </div>
               <div class="mobile-record-lines">
-                <div class="mobile-record-line"><strong>Parent</strong><span>${r.parentName||'—'}</span></div>
-                <div class="mobile-record-line"><strong>Phone</strong><span>${r.phone||'—'}</span></div>
-                <div class="mobile-record-line"><strong>Village</strong><span>${r.address||'—'}</span></div>
+                <div class="mobile-record-line"><strong>Parent</strong><em>:</em><span>${r.parentName||'—'}</span></div>
+                <div class="mobile-record-line"><strong>Phone</strong><em>:</em><span>${r.phone||'—'}</span></div>
+                <div class="mobile-record-line"><strong>Village</strong><em>:</em><span>${r.address||'—'}</span></div>
               </div>
               <div class="mobile-record-actions">
                 <button class="arch-restore-btn" style="background:#DCFCE7;color:#166534;border:none;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:700;" data-id="${r.id}" title="Restore to registrations">↩ Restore</button>
