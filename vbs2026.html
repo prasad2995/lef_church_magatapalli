@@ -244,7 +244,8 @@
     .admin-topbar{background:var(--navy);color:white;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;gap:12px;flex-wrap:wrap;}
     .admin-topbar .logo{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--sun);}
     .admin-topbar .logo span{color:rgba(255,255,255,.65);font-size:0.8rem;font-family:'Nunito',sans-serif;font-weight:600;display:block;}
-    .role-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:0.78rem;font-weight:800;font-family:'Nunito',sans-serif;}
+    .role-badge{display:inline-flex;align-items:center;max-width:220px;padding:6px 12px;border-radius:20px;font-size:0.78rem;font-weight:800;font-family:'Nunito',sans-serif;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .role-badge.teacher-badge{background:#DCFCE7;color:#166534;border:1px solid rgba(22,101,52,.18);}
     .role-admin{background:#FEF3C7;color:#92400E;}
     .role-viewer{background:#DBEAFE;color:#1E40AF;}
     .topbar-right{display:flex;gap:10px;align-items:center;}
@@ -253,14 +254,19 @@
     .logout-btn:hover{background:rgba(255,255,255,.25);}
     .refresh-btn{background:var(--sun);color:var(--navy);border:none;padding:8px 18px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;}
     .admin-content{padding:0;}
-    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:26px;}
-    .stat-card{background:white;border-radius:18px;padding:22px;border:2px solid #E2E8F0;box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:center;}
-    .stat-card .s-num{font-family:'Fredoka One',cursive;font-size:2.5rem;line-height:1;}
-    .stat-card .s-label{font-weight:700;font-size:0.8rem;color:#64748B;margin-top:4px;}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:18px;}
+    .admin-panel:not(.teacher-mode) #statsGrid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .admin-panel:not(.teacher-mode) #statsGrid .c-total{order:1;}
+    .admin-panel:not(.teacher-mode) #statsGrid .c-today{order:2;}
+    .admin-panel:not(.teacher-mode) #statsGrid .c-boys{order:3;}
+    .admin-panel:not(.teacher-mode) #statsGrid .c-girls{order:4;}
+    .stat-card{background:white;border-radius:16px;padding:14px 12px;border:2px solid #E2E8F0;box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:center;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+    .stat-card .s-num{font-family:'Fredoka One',cursive;font-size:1.85rem;line-height:1;}
+    .stat-card .s-label{font-weight:700;font-size:0.74rem;color:#64748B;margin-top:6px;}
     .c-total .s-num{color:var(--coral);}.c-boys .s-num{color:#2563EB;}.c-girls .s-num{color:var(--purple);}.c-today .s-num{color:#16A34A;}
     .table-card{background:white;border-radius:18px;border:2px solid #E2E8F0;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;}
     .table-header{padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #F1F5F9;flex-wrap:wrap;gap:12px;}
-    .table-header h3{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--navy);}
+    .table-header h3{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--navy);line-height:1.2;}
     .search-box{padding:10px 14px;border:2px solid #E2E8F0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.88rem;outline:none;width:200px;}
     .search-box:focus{border-color:var(--coral);}
     .export-btn{background:#4ADE80;color:var(--navy);border:none;padding:10px 18px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;}
@@ -280,7 +286,7 @@
     .loading-row{text-align:center;padding:40px;color:#94A3B8;font-weight:700;}
     .del-btn{background:#FEE2E2;color:#DC2626;border:none;padding:5px 8px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:700;}
     /* Attendance buttons */
-    .att-wrap{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+    .att-wrap{display:flex;gap:8px;align-items:center;flex-wrap:nowrap;}
     .att-btn{border:none;padding:0;border-radius:999px;cursor:pointer;font-size:0.95rem;font-weight:800;transition:all .15s;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;line-height:1;}
     .att-present{background:#DCFCE7;color:#15803D;}.att-present:hover,.att-present.active{background:#16A34A;color:white;}
     .att-absent{background:#FEE2E2;color:#DC2626;}.att-absent:hover,.att-absent.active{background:#DC2626;color:white;}
@@ -290,7 +296,7 @@
     .att-btn:disabled.active,
     .att-btn:disabled:hover{background:#CBD5E1;color:#475569;box-shadow:none;}
     .att-all-days{display:grid;gap:10px;}
-    .att-day-group{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 10px;border:1px solid #E2E8F0;border-radius:12px;background:#F8FAFC;}
+    .att-day-group{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 10px;border:1px solid #E2E8F0;border-radius:12px;background:#F8FAFC;min-height:52px;}
     .att-day-group.locked{cursor:not-allowed;opacity:.92;}
     .att-day-label{font-size:0.74rem;font-weight:800;letter-spacing:.08em;color:#64748B;text-transform:uppercase;min-width:28px;}
     .att-status{display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 10px;border-radius:999px;font-size:0.95rem;font-weight:800;line-height:1;}
@@ -368,6 +374,9 @@
     .del-btn:hover{background:#FECACA;}
     .viewer-notice{background:#EFF6FF;border:2px solid #93C5FD;border-radius:12px;padding:14px 20px;margin-bottom:20px;color:#1E40AF;font-weight:700;font-size:0.9rem;display:none;align-items:center;gap:10px;}
     .viewer-notice.show{display:flex;}
+    .admin-panel.teacher-mode .viewer-notice{display:none;flex-direction:column;align-items:flex-start;gap:4px;}
+    .admin-panel.teacher-mode .viewer-notice.show{display:flex;}
+    .viewer-notice-sub{font-size:0.82rem;font-weight:800;color:#1D4ED8;}
 
     /* TAB NAVIGATION */
     /* ── LEFT SIDEBAR NAV ── */
@@ -400,8 +409,8 @@
     .admin-panel.teacher-mode .att-mobile-class{display:none;}
     .admin-panel.teacher-mode #view-registrations .mobile-record-meta > :nth-child(4){display:none;}
     .admin-panel.teacher-mode .att-mobile-card{position:relative;}
-    .admin-panel.teacher-mode .att-mobile-actions{position:absolute;top:12px;right:12px;display:flex;}
-    .admin-panel.teacher-mode .att-mobile-top{padding-right:92px;}
+    .admin-panel.teacher-mode .att-mobile-actions{position:absolute;top:50%;right:12px;display:flex;transform:translateY(-50%);}
+    .admin-panel.teacher-mode .att-mobile-top{padding-right:102px;min-height:44px;align-items:center;}
     @media(max-width:700px){
       .admin-topbar{padding:14px 16px;}
       .sidebar-toggle{display:inline-flex;align-items:center;justify-content:center;}
@@ -414,25 +423,25 @@
       .dash-tab .tab-icon{width:24px;min-width:24px;}
       .dash-tab span.tab-label{display:inline;}
       .dash-main{padding:16px;}
-      #statsGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px;}
-      #statsGrid .stat-card{padding:14px 10px;border-radius:14px;}
-      #statsGrid .s-num{font-size:1.6rem;}
-      #statsGrid .s-label{font-size:0.72rem;}
-      #attendanceStatsGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px;}
-      #attendanceStatsGrid .stat-card{padding:14px 10px;border-radius:14px;}
-      #attendanceStatsGrid .s-num{font-size:1.6rem;}
-      #attendanceStatsGrid .s-label{font-size:0.72rem;}
+      #statsGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:16px;}
+      #statsGrid .stat-card{padding:12px 8px;border-radius:14px;}
+      #statsGrid .s-num{font-size:1.45rem;}
+      #statsGrid .s-label{font-size:0.68rem;}
+      #attendanceStatsGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+      #attendanceStatsGrid .stat-card{padding:12px 8px;border-radius:14px;}
+      #attendanceStatsGrid .s-num{font-size:1.45rem;}
+      #attendanceStatsGrid .s-label{font-size:0.68rem;}
       .attendance-header{padding:14px;margin-bottom:14px;}
       .day-selector{align-items:stretch;}
       .day-selector > div{width:100%;flex-wrap:wrap;}
-      .day-selector label{font-size:0.95rem;}
-      .day-dropdown{width:100%;padding:10px 12px;font-size:0.9rem;}
+      .day-selector label{font-size:0.86rem;}
+      .day-dropdown{width:auto;min-width:120px;max-width:160px;padding:8px 10px;font-size:0.8rem;}
       .search-box{width:100%;min-width:0;padding:9px 12px;font-size:0.82rem;}
       .export-btn,.import-btn,.send-certs-btn{display:none !important;}
       .filter-row{padding:10px 14px;gap:8px;}
       .filter-select{min-width:0;flex:1 1 calc(50% - 4px);padding:7px 10px;font-size:0.78rem;}
       .attendance-table-card .table-header{padding:14px 16px;}
-      .attendance-table-card h3{font-size:1.05rem;}
+      .attendance-table-card h3{font-size:0.98rem;line-height:1.25;}
       .att-table-simple thead{display:none;}
       .att-table-simple td{padding:0;border-bottom:none;}
       .att-mobile-cell{padding:12px 8px !important;}
@@ -449,7 +458,7 @@
       .att-mobile-actions .att-day-group{display:flex;align-items:center;gap:8px;padding:0;border:none;background:transparent;}
       .att-mobile-actions .att-day-label{display:none;}
       .att-mobile-actions .att-wrap{gap:8px;flex-wrap:nowrap;}
-      .att-mobile-actions .att-btn{width:36px;height:36px;padding:0;font-size:0.82rem;justify-content:center;}
+      .att-mobile-actions .att-btn{width:34px;height:34px;padding:0;font-size:0.82rem;justify-content:center;}
       #view-registrations table thead,
       #view-documents table thead,
       #view-archive table thead{display:none;}
@@ -462,7 +471,7 @@
       .mobile-record-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px;}
       .mobile-record-head-main{display:flex;align-items:flex-start;gap:10px;min-width:0;flex:1;}
       .mobile-record-head-tools{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-      .mobile-record-title{font-weight:800;color:var(--navy);font-size:0.96rem;line-height:1.35;}
+      .mobile-record-title{font-weight:800;color:var(--navy);font-size:0.96rem;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
       .mobile-record-sub{font-size:0.76rem;color:#64748B;font-weight:700;margin-top:3px;}
       .mobile-record-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;align-items:center;}
       .mobile-record-meta .badge,
@@ -474,9 +483,13 @@
       .mobile-record-line em{font-style:normal;color:#64748B;font-size:0.74rem;display:inline-block;width:14px;flex:0 0 14px;text-align:center;}
       .mobile-record-line span{text-align:left;min-width:0;overflow-wrap:anywhere;flex:1;}
       .mobile-record-actions{display:flex;flex-wrap:wrap;gap:8px;}
-      .mobile-doc-photo-btn{border:none;background:transparent;padding:0;cursor:pointer;flex-shrink:0;}
-      .mobile-doc-photo{width:52px;height:52px;border-radius:14px;object-fit:cover;border:2px solid #E2E8F0;background:#F8FAFC;display:flex;align-items:center;justify-content:center;}
-      .mobile-doc-photo.placeholder{font-size:1.2rem;color:#64748B;}
+    .mobile-doc-photo-btn{border:none;background:transparent;padding:0;cursor:pointer;flex-shrink:0;}
+    .mobile-doc-photo{width:52px;height:52px;border-radius:14px;object-fit:cover;border:2px solid #E2E8F0;background:#F8FAFC;display:flex;align-items:center;justify-content:center;}
+    .mobile-doc-photo.placeholder{font-size:1.2rem;color:#64748B;}
+    .doc-photo-thumb{width:56px;height:56px;max-width:56px;max-height:56px;border-radius:12px;object-fit:cover;border:2px solid #E2E8F0;background:#F8FAFC;display:block;box-shadow:0 1px 4px rgba(15,23,42,.08);}
+    .doc-photo-thumb.placeholder{display:flex;align-items:center;justify-content:center;font-size:1rem;color:#64748B;}
+    #documentsTableBody .doc-photo-thumb{width:56px !important;height:56px !important;max-width:56px !important;max-height:56px !important;}
+    #documentsTableBody td:nth-child(2){width:84px;min-width:84px;}
       .mobile-head-icon-btn{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:none;border-radius:10px;cursor:pointer;font-size:0.9rem;font-weight:800;}
       .mobile-head-check{margin-left:2px;}
       .mobile-record-actions .edit-btn,
@@ -500,7 +513,7 @@
     .day-dropdown:focus{border-color:var(--coral);}
     .attendance-table-card{background:white;border-radius:18px;border:2px solid #E2E8F0;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;}
     .attendance-table-card .table-header{padding:18px 22px;border-bottom:2px solid #F1F5F9;}
-    .attendance-table-card h3{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--navy);}
+    .attendance-table-card h3{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--navy);line-height:1.2;}
     .att-table-simple{width:100%;}
     .att-table-simple th{background:#F8FAFC;padding:14px 16px;text-align:left;font-weight:800;font-size:0.85rem;color:#64748B;}
     .att-table-simple td{padding:14px 16px;border-bottom:1px solid #F1F5F9;font-size:0.9rem;}
@@ -880,7 +893,7 @@
       </div>
       <div class="table-card">
         <div class="table-header">
-          <h3 id="tableTitle">📋 All Registrations</h3>
+          <h3 class="registrations-title">📋 All Registrations</h3>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
             <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search name, phone…">
             <button class="export-btn" id="exportBtn" style="display:none">⬇ Export CSV</button>
@@ -980,7 +993,7 @@
 
       <div class="attendance-header">
         <div class="day-selector">
-          <div>
+          <div id="attendanceDaySelector">
             <label>📅 Select Day:</label>
             <select class="day-dropdown" id="dayDropdown">
               <option value="25">Day 1 (Apr 25)</option>
@@ -1008,7 +1021,7 @@
 
       <div class="attendance-table-card">
         <div class="table-header">
-          <h3 id="attendanceTableTitle">📝 Attendance - Day 1 (Apr 25)</h3>
+          <h3 class="attendance-table-title">📝 Attendance - Day 1 (Apr 25)</h3>
         </div>
         <div class="table-wrap">
           <table class="att-table-simple">
@@ -1359,6 +1372,7 @@
   const db   = getFirestore(app);
 
   let allData = [], currentRole = null, teacherClass = null;
+  const TEACHER_NAME_LIMIT = 20;
   const TEACHER_TAB_OPTIONS = [
     {key:'registrations', label:'Registrations', desc:'Allow teachers to view the registrations table for their class.'},
     {key:'documents', label:'Documents', desc:'Allow teachers to view student documents for their class.'},
@@ -1366,6 +1380,10 @@
     {key:'analytics', label:'Analytics', desc:'Allow teachers to see analytics based on their class data.'},
   ];
   const DEFAULT_TEACHER_TABS = {registrations:true, documents:false, attendance:true, analytics:false};
+  function truncateTeacherName(name){
+    const safeName = (name || '').trim();
+    return safeName.length > TEACHER_NAME_LIMIT ? `${safeName.slice(0, TEACHER_NAME_LIMIT)}...` : safeName;
+  }
   const ATTENDANCE_DAY_OPTIONS = [
     {key:'25', label:'Day 1 (D1)'},
     {key:'26', label:'Day 2 (D2)'},
@@ -1453,10 +1471,13 @@
   let selectedDay = '25';
   let selectedAttClass = 'all'; // For admin class filter in attendance view
 
-  document.getElementById('dayDropdown').addEventListener('change', function(){
-    selectedDay = this.value;
-    renderAttendanceView();
-  });
+  const dayDropdownEl = document.getElementById('dayDropdown');
+  if(dayDropdownEl){
+    dayDropdownEl.addEventListener('change', function(){
+      selectedDay = this.value;
+      renderAttendanceView();
+    });
+  }
 
   document.getElementById('classFilterDropdown').addEventListener('change', function(){
     selectedAttClass = this.value;
@@ -1566,6 +1587,7 @@
     document.querySelectorAll('.dash-view').forEach(v=>v.classList.remove('active'));
     document.querySelector(`.dash-tab[data-tab="${tabName}"]`)?.classList.add('active');
     document.getElementById('view-' + tabName)?.classList.add('active');
+    if(currentRole === 'teacher') updateTeacherNotice(tabName, selectedDay);
     if(tabName === 'attendance') renderAttendanceView();
     if(tabName === 'documents') renderDocumentsView();
     if(tabName === 'analytics') renderAnalytics();
@@ -1575,20 +1597,33 @@
     closeSidebarMenu();
   }
 
+  function updateTeacherNotice(tabName='registrations', day='25'){
+    if(currentRole !== 'teacher') return;
+    const viewerNotice = document.getElementById('viewerNotice');
+    if(!viewerNotice) return;
+    const dayNames = {'25': 'Day 1 (Apr 25)', '26': 'Day 2 (Apr 26)', '27': 'Day 3 (Apr 27)'};
+    const teacherName = document.getElementById('loggedInEmail')?.textContent?.trim() || '';
+    const mainText = (tabName === 'attendance' && teacherClass)
+      ? `${teacherClass} Class Attendance - ${dayNames[day] || dayNames['25']}`
+      : teacherClass
+        ? `${teacherClass} Class Students`
+        : 'Teacher Dashboard';
+    viewerNotice.innerHTML = `<div>${mainText}</div>${teacherName ? `<div class="viewer-notice-sub">Teacher : ${teacherName}</div>` : ''}`;
+    viewerNotice.classList.add('show');
+  }
+
   function openTeacherDashboard(tc){
     currentRole  = 'teacher';
     teacherClass = tc.class;
     document.getElementById('adminPanel').classList.add('teacher-mode');
 
     const badge = document.getElementById('roleBadge');
-    badge.textContent = '🟢 '+tc.label;
-    badge.className   = 'role-badge';
-    badge.style.cssText = 'background:#DCFCE7;color:#166534;';
+    badge.textContent = '🟢 Teacher';
+    badge.className   = 'role-badge teacher-badge';
+    badge.style.cssText = '';
 
     document.getElementById('loggedInEmail').textContent = tc.label;
-    document.getElementById('viewerNotice').innerHTML =
-            `👩‍🏫 <strong>${tc.label}</strong> — Showing ${tc.class} students only.`;
-    document.getElementById('viewerNotice').classList.add('show');
+    updateTeacherNotice();
     document.getElementById('exportBtn').style.display   = 'none';
     document.getElementById('importBtn').style.display   = 'none';
     document.getElementById('sendCertsBtn').style.display = 'none';
@@ -1737,7 +1772,7 @@
     if(statAbsent) statAbsent.textContent  = absentCount;
     // Label for total
     const lbl = document.getElementById('stat-total-label');
-    if(lbl) lbl.textContent = (currentRole==='teacher' && teacherClass) ? 'Class '+teacherClass+' Students' : 'Total Registrations';
+    if(lbl) lbl.textContent = (currentRole==='teacher' && teacherClass) ? 'Total' : 'Total Registrations';
   }
 
   function populateRegistrationFilters(){
@@ -1803,13 +1838,10 @@
     const todayCard=document.getElementById('stat-today-card');
     if(todayCard) todayCard.style.display = isTeacher ? 'none' : '';
     // Table title
-    const titleEl=document.getElementById('tableTitle');
+    const titleEl=document.querySelector('.registrations-title');
     if(titleEl){
       if(isTeacher && teacherClass){
-        // Find teacher email based on current user
-        const teacherEmail = auth.currentUser?.email || '';
-        const tName = TEACHER_MAP[teacherEmail]?.label || '';
-        titleEl.textContent=`📋 ${teacherClass} Students${tName?' — '+tName:''}`;
+        titleEl.textContent=`📋 ${teacherClass} Students`;
       } else {
         titleEl.textContent='📋 All Registrations';
       }
@@ -1826,7 +1858,7 @@
            </select>`
               : `<span class="badge b-days">${cls?'Class '+cls:'—'}</span>`;
       const childName = r.childName||((r.childFirst||'')+(r.childLast?' '+r.childLast:''));
-      const shortChildName = childName.length > 20 ? `${childName.slice(0,20)}...` : childName;
+      const shortChildName = isTeacher ? truncateTeacherName(childName) : childName;
       const sourceType = r.source === 'imported'
               ? `<span class="badge b-imported">Imported</span>`
               : `<span class="badge b-online">Online</span>`;
@@ -1842,7 +1874,7 @@
               <div class="mobile-record-head">
                 <div class="mobile-record-head-main">
                   <div>
-                  <div class="mobile-record-title">${i+1}. ${shortChildName}</div>
+                  <div class="mobile-record-title" title="${childName.replace(/"/g,'&quot;')}">${i+1}. ${shortChildName}</div>
                   <div class="mobile-record-sub">${r.parentName||'—'}</div>
                   </div>
                 </div>
@@ -1941,6 +1973,8 @@
     const isAdmin = currentRole === 'admin';
     const isViewer = currentRole === 'viewer';
     const isTeacher = currentRole === 'teacher';
+    const daySelector = document.getElementById('attendanceDaySelector');
+    if(daySelector) daySelector.style.display = isTeacher ? 'flex' : 'none';
 
     const classFilterContainer = document.getElementById('classFilterContainer');
     if(classFilterContainer) classFilterContainer.style.display = (isAdmin || isViewer) ? 'flex' : 'none';
@@ -1976,7 +2010,14 @@
       }
     }
 
-    document.getElementById('attendanceTableTitle').textContent = 'Attendance - ' + dayNames[day];
+    const attendanceTitle = document.querySelector('.attendance-table-title');
+    if(attendanceTitle){
+      attendanceTitle.textContent = (isTeacher && teacherClass)
+        ? `${teacherClass} Class Attendance - ${dayNames[day]}`
+        : 'Attendance Overview';
+      attendanceTitle.style.display = isTeacher ? 'none' : '';
+    }
+    if(isTeacher) updateTeacherNotice('attendance', day);
 
     let data = [...allData];
     if(isTeacher && teacherClass){
@@ -1994,9 +2035,15 @@
     let absentCount = 0;
     data.forEach(r => {
       const attendance = (typeof r.attendance === 'object' && r.attendance) ? r.attendance : {};
-      const dayAtt = attendance[day] || '';
-      if(dayAtt === 'present') presentCount++;
-      else if(dayAtt === 'absent') absentCount++;
+      if(isTeacher){
+        const dayAtt = attendance[day] || '';
+        if(dayAtt === 'present') presentCount++;
+        else if(dayAtt === 'absent') absentCount++;
+        return;
+      }
+      const values = Object.values(attendance);
+      if(values.includes('present')) presentCount++;
+      if(values.includes('absent')) absentCount++;
     });
 
     document.getElementById('att-stat-present').textContent = presentCount;
@@ -2040,7 +2087,7 @@
 
     tb.innerHTML = data.map((r, i) => {
       const childName = r.childName || ((r.childFirst||'') + (r.childLast?' '+r.childLast:''));
-      const shortChildName = childName.length > 20 ? `${childName.slice(0, 20)}...` : childName;
+      const shortChildName = truncateTeacherName(childName);
       const teacherActionMarkup = renderDayButtons(r, day, false);
       const d1Status = renderStatusCell(r, '25');
       const d2Status = renderStatusCell(r, '26');
@@ -2052,7 +2099,7 @@
           <td class="att-mobile-cell">
             <div class="att-mobile-card">
               <div class="att-mobile-top">
-                <div class="att-mobile-name">${i+1}. ${childName}</div>
+                <div class="att-mobile-name" title="${childName.replace(/"/g,'&quot;')}">${i+1}. ${shortChildName}</div>
                 <div class="att-mobile-actions">${teacherActionMarkup}</div>
               </div>
             </div>
@@ -2078,14 +2125,14 @@
       if(isTeacher){
         return `<tr>
           <td><strong style="color:#94A3B8">${i+1}</strong></td>
-          <td><strong>${childName}</strong></td>
+          <td><strong title="${childName.replace(/"/g,'&quot;')}">${shortChildName}</strong></td>
           <td>${teacherActionMarkup}</td>
         </tr>`;
       }
 
       return `<tr>
         <td><strong style="color:#94A3B8">${i+1}</strong></td>
-        <td><strong>${childName}</strong></td>
+        <td><strong title="${childName.replace(/"/g,'&quot;')}">${childName}</strong></td>
         <td>${d1Status}</td>
         <td>${d2Status}</td>
         <td>${d3Status}</td>
@@ -2177,8 +2224,8 @@
 
       // Photo preview
       const photoPreview = r.photo
-              ? `<img src="${r.photo}" class="mobile-doc-photo" alt="${childName.replace(/"/g,'&quot;')}">`
-              : `<div class="mobile-doc-photo placeholder">📷</div>`;
+              ? `<img src="${r.photo}" class="doc-photo-thumb" alt="${childName.replace(/"/g,'&quot;')}" width="56" height="56" style="width:56px;height:56px;max-width:56px;max-height:56px;object-fit:cover;">`
+              : `<div class="doc-photo-thumb placeholder" style="width:56px;height:56px;max-width:56px;max-height:56px;">📷</div>`;
       const photoTrigger = `<button class="photo-btn mobile-doc-photo-btn" data-id="${r.id}" title="${r.photo ? 'View Photo' : 'Upload Photo'}">${photoPreview}</button>`;
 
       // Document buttons
