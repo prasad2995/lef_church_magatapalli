@@ -735,6 +735,7 @@
         <div class="form-group">
           <label>Age *</label>
           <select id="childAge"><option value="">Select age</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>29</option><option>30</option><option>30+</option></select>
+          <select id="childAge"><option value="">Select age</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option><option>30+</option></select>
         </div>
         <div class="form-group">
           <label>Gender *</label>
@@ -2506,23 +2507,24 @@
   async function renderCertificateToCanvas(student, canvas, size = CERT_PREVIEW_SIZE){
     if(!student?.photo) throw new Error('Photo is required to generate a certificate');
 
+    const certChildName = student.childName || 'Student';
+    const certClass = student.class || '';
+    const certPhotoDataUrl = student.photo || null;
+
     canvas.width = size.width;
     canvas.height = size.height;
     const ctx = canvas.getContext('2d');
     const W = canvas.width;
     const H = canvas.height;
     const cx = W / 2;
-    const sx = W / 1080;
-    const sy = H / 1527;
-    const s = Math.min(sx, sy);
-    const childName = student.childName || 'Student';
-    const certClass = student.class || '';
+
+    // ── SCALE HELPERS ──
+    const sx = W/1080, sy = H/1527, s = Math.min(sx,sy);
+    const x = v=>v*sx, y = v=>v*sy, fs = v=>`${Math.round(v*s)}px`;
+
     const photoImg = await loadImage(student.photo);
 
-    const x = value => value * sx;
-    const y = value => value * sy;
-    const fs = value => `${Math.round(value * s)}px`;
-
+    // ── HELPERS ──
     function roundRect(px, py, pw, ph, pr, fill, stroke, lw = 2){
       ctx.beginPath();
       ctx.moveTo(px + pr, py);
@@ -2539,274 +2541,445 @@
       if(stroke){ ctx.strokeStyle = stroke; ctx.lineWidth = lw * s; ctx.stroke(); }
     }
 
-    function hLine(py, c1 = 'rgba(255,255,255,0.15)', c2 = 'rgba(255,255,255,0.7)'){
-      const g = ctx.createLinearGradient(x(60), 0, W - x(60), 0);
-      g.addColorStop(0, 'transparent');
-      g.addColorStop(0.2, c1);
-      g.addColorStop(0.5, c2);
-      g.addColorStop(0.8, c1);
-      g.addColorStop(1, 'transparent');
-      ctx.strokeStyle = g;
-      ctx.lineWidth = 1.5 * s;
+    function star(cx2,cy2,r,fill){
+      ctx.save(); ctx.translate(cx2,cy2); ctx.rotate(-Math.PI/2);
       ctx.beginPath();
-      ctx.moveTo(x(60), py);
-      ctx.lineTo(W - x(60), py);
-      ctx.stroke();
+      for(let i=0;i<5;i++){
+        const a1=i*Math.PI*2/5, a2=a1+Math.PI/5;
+        if(i===0) ctx.moveTo(r*Math.cos(a1),r*Math.sin(a1));
+        else ctx.lineTo(r*Math.cos(a1),r*Math.sin(a1));
+        ctx.lineTo(r*0.4*Math.cos(a2),r*0.4*Math.sin(a2));
+      }
+      ctx.closePath(); ctx.fillStyle=fill; ctx.fill(); ctx.restore();
     }
 
-    function cornerDeco(px, py, scaleX, scaleY){
-      ctx.save();
-      ctx.translate(px, py);
-      ctx.scale(scaleX * s, scaleY * s);
-      ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(0,50);
-      ctx.lineTo(0,10);
-      ctx.arcTo(0,0,10,0,10);
-      ctx.lineTo(50,0);
-      ctx.stroke();
-      ctx.fillStyle = 'rgba(255,255,255,0.7)';
-      ctx.beginPath();
-      ctx.moveTo(8,0);
-      ctx.lineTo(14,-7);
-      ctx.lineTo(20,0);
-      ctx.lineTo(14,7);
-      ctx.closePath();
-      ctx.fill();
+    function drawCloud(cx2,cy2,w,h,clr){
+      ctx.save(); ctx.fillStyle=clr;
+      const r=h/2;
+      ctx.beginPath(); ctx.ellipse(cx2,cy2,w/2,r*0.7,0,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx2-w*0.22,cy2+r*0.1,w*0.26,r*0.6,0,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx2+w*0.22,cy2+r*0.1,w*0.26,r*0.6,0,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx2,cy2+r*0.3,w*0.32,r*0.55,0,0,Math.PI*2); ctx.fill();
       ctx.restore();
     }
 
-    const bg = ctx.createLinearGradient(0, 0, W, H);
-    bg.addColorStop(0, '#4D7A73');
-    bg.addColorStop(0.3, '#4D7A73');
-    bg.addColorStop(0.6, '#4D7A73');
-    bg.addColorStop(1, '#4D7A73');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, W, H);
-
-    const glow = ctx.createRadialGradient(cx, H * 0.45, x(50), cx, H * 0.45, x(600));
-    glow.addColorStop(0, 'rgba(255,200,50,0.12)');
-    glow.addColorStop(1, 'transparent');
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, W, H);
-
-    ctx.shadowColor = 'rgba(255,200,50,0.6)';
-    ctx.shadowBlur = x(20);
-    roundRect(x(12), y(12), W - x(24), H - y(24), x(16), null, '#FFD700', 8);
-    ctx.shadowBlur = 0;
-    roundRect(x(26), y(26), W - x(52), H - y(52), x(12), null, 'rgba(255,215,0,0.4)', 2);
-    roundRect(x(38), y(38), W - x(76), H - y(76), x(8), null, 'rgba(255,215,0,0.15)', 1);
-    cornerDeco(x(46), y(46), 1, 1);
-    cornerDeco(W - x(46), y(46), -1, 1);
-    cornerDeco(x(46), H - y(46), 1, -1);
-    cornerDeco(W - x(46), H - y(46), -1, -1);
-
-    ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(255,240,180,0.95)';
-    ctx.font = `italic ${fs(24)} Georgia`;
-    ctx.fillText('"Let the little children come to me."', cx, y(96));
-    ctx.fillStyle = '#FFD700';
-    ctx.font = `${fs(22)} Georgia`;
-    ctx.fillText('Matthew 19:14', cx, y(130));
-    hLine(y(158), 'rgba(255,215,0,0.2)', 'rgba(255,215,0,0.8)');
-
-    ctx.fillStyle = '#FFD700';
-    ctx.font = `bold ${fs(50)} Jenson`;
-    ctx.fillText('Vacation Bible School 2026', cx, y(208));
-    ctx.fillStyle = 'rgba(255,255,255,0.9)';
-    ctx.font = `${fs(35)} Garamond`;
-    ctx.fillText('LEF Church, Magatapalli', cx, y(250));
-    hLine(y(275), 'rgba(255,215,0,0.2)', 'rgba(255,215,0,0.8)');
-
-    ctx.save();
-    ctx.shadowColor = 'rgba(255,180,0,0.6)';
-    ctx.shadowBlur = x(18);
-    const titleGrad = ctx.createLinearGradient(cx - x(380), 0, cx + x(380), 0);
-    titleGrad.addColorStop(0, '#FF9A3C');
-    titleGrad.addColorStop(0.35, '#FFD700');
-    titleGrad.addColorStop(0.65, '#FFF0A0');
-    titleGrad.addColorStop(1, '#FF9A3C');
-    ctx.fillStyle = titleGrad;
-    ctx.font = `bold ${fs(40)} Georgia`;
-    ctx.fillText('Certificate of Participation', cx, y(342));
-    ctx.restore();
-    hLine(y(368), 'rgba(255,165,0,0.2)', 'rgba(255,165,0,0.7)');
-
-    ctx.fillStyle = 'rgba(255,230,120,0.9)';
-    ctx.font = `italic ${fs(28)} Georgia`;
-    ctx.fillText('Theme:', cx, y(410));
-
-    ctx.save();
-    ctx.shadowColor = 'rgba(255,220,0,0.8)';
-    ctx.shadowBlur = x(14);
-    ctx.fillStyle = '#FFD700';
-    ctx.font = `bold ${fs(55)} Georgia`;
-    ctx.fillText('Signet Ring', cx, y(478));
-    ctx.restore();
-
-    ctx.fillStyle = 'rgba(180,255,200,0.9)';
-    ctx.font = `italic ${fs(28)} Georgia`;
-    ctx.fillText('Haggai 2:23', cx, y(518));
-    hLine(y(544), 'rgba(255,215,0,0.2)', 'rgba(255,215,0,0.6)');
-
-    const photoR = x(118);
-    const photoCX = cx;
-    const photoCY = y(690);
-    ctx.save();
-    ctx.shadowColor = 'rgba(255,215,0,0.5)';
-    ctx.shadowBlur = x(30);
-    ctx.beginPath();
-    ctx.arc(photoCX, photoCY, photoR + x(10), 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255,215,0,0.08)';
-    ctx.fill();
-    ctx.restore();
-
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(photoCX, photoCY, photoR, 0, Math.PI * 2);
-    ctx.clip();
-    const iw = photoImg.naturalWidth || photoImg.width || 300;
-    const ih = photoImg.naturalHeight || photoImg.height || 300;
-    const scale = Math.max((photoR * 2) / iw, (photoR * 2) / ih);
-    ctx.drawImage(photoImg, photoCX - (iw * scale) / 2, photoCY - (ih * scale) / 2, iw * scale, ih * scale);
-    ctx.restore();
-
-    ctx.strokeStyle = '#FFD700';
-    ctx.lineWidth = x(5);
-    ctx.beginPath();
-    ctx.arc(photoCX, photoCY, photoR + x(3), 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.strokeStyle = 'rgba(255,215,0,0.35)';
-    ctx.lineWidth = x(2);
-    ctx.beginPath();
-    ctx.arc(photoCX, photoCY, photoR + x(11), 0, Math.PI * 2);
-    ctx.stroke();
-
-    const certifyY = y(848);
-    const nameY = certifyY + y(60);
-    const bodyY = nameY + y(140);
-    const sigLineY = bodyY + (certClass ? y(260) : y(200));
-    hLine(certifyY, 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.4)');
-    ctx.fillStyle = 'rgba(220,220,255,0.85)';
-    ctx.font = `italic ${fs(30)} Georgia`;
-    ctx.fillText('This is to certify that', cx, certifyY + y(46));
-
-    const nameFontStack = "'French Script MT', 'Edwardian Script ITC', 'Monotype Corsiva', cursive";
-    const nameBand = ctx.createLinearGradient(x(60), nameY, W - x(60), nameY);
-    nameBand.addColorStop(0, 'transparent');
-    nameBand.addColorStop(0.15, 'rgba(255,100,150,0.1)');
-    nameBand.addColorStop(0.5, 'rgba(255,150,80,0.15)');
-    nameBand.addColorStop(0.85, 'rgba(255,100,150,0.1)');
-    nameBand.addColorStop(1, 'transparent');
-    ctx.fillStyle = nameBand;
-    ctx.fillRect(x(60), nameY, W - x(120), y(88));
-
-    ctx.save();
-    ctx.shadowColor = 'rgba(255,200,50,0.7)';
-    ctx.shadowBlur = x(12);
-    const nameGrad = ctx.createLinearGradient(cx - x(300), 0, cx + x(300), 0);
-    nameGrad.addColorStop(0, '#FFD580');
-    nameGrad.addColorStop(0.5, '#FFFFFF');
-    nameGrad.addColorStop(1, '#FFD580');
-    ctx.fillStyle = nameGrad;
-    ctx.font = `italic ${fs(80)} ${nameFontStack}`;
-    ctx.fillText(childName, cx, nameY + y(74));
-    ctx.restore();
-
-    const nw = ctx.measureText(childName).width;
-    const nx = cx - nw / 1.2;
-    ctx.strokeStyle = 'rgba(255,215,0,0.8)';
-    ctx.lineWidth = x(2);
-    ctx.beginPath();
-    ctx.moveTo(nx, nameY + y(88));
-    ctx.lineTo(cx + nw / 1.2, nameY + y(88));
-    ctx.stroke();
-    [nx - x(6), cx + nw / 1.2 + x(6)].forEach(px => {
-      ctx.fillStyle = '#FFD700';
-      ctx.beginPath();
-      ctx.arc(px, nameY + y(88), x(4), 0, Math.PI * 2);
-      ctx.fill();
-    });
-
-    ctx.font = `${fs(27)} Georgia`;
-    ctx.fillStyle = 'rgba(220,230,255,0.92)';
-    ctx.fillText('has successfully attended the Vacation Bible School 2026', cx, bodyY);
-
-    const part1 = 'conducted by ';
-    const part2 = 'LEF Church, Magatapalli';
-    const part3 = ' held on';
-    ctx.font = `${fs(27)} Georgia`;
-    const w1 = ctx.measureText(part1).width;
-    ctx.font = `bold ${fs(27)} Georgia`;
-    const w2 = ctx.measureText(part2).width;
-    const w3 = ctx.measureText(part3).width;
-    const totalW = w1 + w2 + w3;
-    const lineX = cx - totalW / 2;
-    ctx.font = `${fs(27)} Georgia`;
-    ctx.fillStyle = 'rgba(220,230,255,0.92)';
-    ctx.textAlign = 'left';
-    ctx.fillText(part1, lineX, bodyY + y(48));
-    ctx.font = `bold ${fs(27)} Georgia`;
-    ctx.fillStyle = '#FFD700';
-    ctx.fillText(part2, lineX + w1, bodyY + y(48));
-    ctx.font = `${fs(27)} Georgia`;
-    ctx.fillStyle = 'rgba(220,230,255,0.92)';
-    ctx.fillText(part3, lineX + w1 + w2, bodyY + y(48));
-    ctx.textAlign = 'center';
-
-    ctx.fillStyle = '#FFD580';
-    ctx.font = `italic ${fs(28)} Georgia`;
-    ctx.fillText('April 25, 26 & 27, 2026', cx, bodyY + y(96));
-
-    if(certClass){
-      const gap = x(35);
-      const clsPart1 = 'as a participant in the ';
-      const clsPart2 = certClass;
-      const clsPart3 = ' Class';
-      ctx.font = `${fs(27)} Georgia`;
-      const cw1 = ctx.measureText(clsPart1).width;
-      ctx.font = `bold ${fs(27)} Georgia`;
-      const cw2 = ctx.measureText(clsPart2).width;
-      ctx.font = `${fs(27)} Georgia`;
-      const cw3 = ctx.measureText(clsPart3).width;
-      const clsLineX = cx - (cw1 + cw2 + cw3) / 2;
-      ctx.font = `${fs(27)} Georgia`;
-      ctx.fillStyle = 'rgba(220,230,255,0.92)';
-      ctx.textAlign = 'left';
-      ctx.fillText(clsPart1, clsLineX, bodyY + y(144));
-      ctx.font = `bold ${fs(27)} Georgia`;
-      ctx.fillStyle = 'rgba(180,255,200,0.95)';
-      ctx.fillText(clsPart2, clsLineX + cw1, bodyY + y(144));
-      ctx.textAlign = 'center';
-      ctx.font = `${fs(27)} Georgia`;
-      ctx.fillStyle = 'rgba(220,230,255,0.92)';
-      ctx.fillText(clsPart3, clsLineX + cw1 + cw2 + gap, bodyY + y(144));
+    function drawRainbow(cx2,cy2,radius){
+      const colors=['#FF4444','#FF8C00','#FFD700','#4CAF50','#2196F3','#9C27B0'];
+      colors.forEach((c,i)=>{
+        const r2=radius-(i*x(18));
+        ctx.beginPath(); ctx.arc(cx2,cy2,r2,Math.PI,0);
+        ctx.strokeStyle=c; ctx.lineWidth=x(16); ctx.stroke();
+      });
     }
 
-    hLine(sigLineY, 'rgba(255,255,255,0.1)', 'rgba(255,255,255,0.4)');
-    const teachX = cx - x(210);
-    const dirX = cx + x(210);
-    const sigY = sigLineY + y(90);
-    ctx.strokeStyle = 'rgba(255,215,0,0.7)';
-    ctx.lineWidth = x(1.5);
-    ctx.beginPath();
-    ctx.moveTo(teachX - x(120), sigY);
-    ctx.lineTo(teachX + x(120), sigY);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(dirX - x(120), sigY);
-    ctx.lineTo(dirX + x(120), sigY);
-    ctx.stroke();
-    ctx.fillStyle = 'rgba(255,230,150,0.9)';
-    ctx.font = `italic ${fs(28)} Georgia`;
-    ctx.fillText('Teacher', teachX, sigY + y(40));
-    ctx.fillText('Director', dirX, sigY + y(40));
+    function drawKite(ox,oy,sz){
+      ctx.save(); ctx.translate(ox,oy); ctx.rotate(0.4);
+      ctx.beginPath(); ctx.moveTo(0,-sz); ctx.lineTo(sz*0.6,0);
+      ctx.lineTo(0,sz); ctx.lineTo(-sz*0.6,0); ctx.closePath();
+      ctx.fillStyle='#FF6B6B'; ctx.fill();
+      ctx.strokeStyle='#CC0000'; ctx.lineWidth=x(2); ctx.stroke();
+      // Cross
+      ctx.strokeStyle='rgba(255,255,255,0.6)'; ctx.lineWidth=x(1.5);
+      ctx.beginPath(); ctx.moveTo(-sz*0.6,0); ctx.lineTo(sz*0.6,0); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0,-sz); ctx.lineTo(0,sz); ctx.stroke();
+      // Tail
+      ctx.strokeStyle='#FF8C00'; ctx.lineWidth=x(2);
+      ctx.beginPath(); ctx.moveTo(0,sz);
+      ctx.quadraticCurveTo(sz*0.5,sz*1.6,-sz*0.2,sz*2.2); ctx.stroke();
+      ctx.restore();
+    }
 
-    hLine(sigLineY + y(180), 'rgba(255,255,255,0.1)', 'rgba(255,215,0,0.5)');
-    ctx.fillStyle = 'rgba(255,220,120,0.9)';
-    ctx.font = `italic ${fs(28)} Georgia`;
-    ctx.fillText('May God bless you abundantly!', cx, sigLineY + y(228));
+    function drawSun(ox,oy,r){
+      ctx.save(); ctx.translate(ox,oy);
+      // Rays
+      for(let i=0;i<8;i++){
+        ctx.save(); ctx.rotate(i*Math.PI/4);
+        ctx.strokeStyle='#FFD700'; ctx.lineWidth=x(3);
+        ctx.beginPath(); ctx.moveTo(0,r+x(8)); ctx.lineTo(0,r+x(22)); ctx.stroke();
+        ctx.restore();
+      }
+      ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2);
+      const sg=ctx.createRadialGradient(0,0,0,0,0,r);
+      sg.addColorStop(0,'#FFF176'); sg.addColorStop(1,'#FFD700');
+      ctx.fillStyle=sg; ctx.fill();
+      ctx.restore();
+    }
+
+    function drawFlower(ox,oy,r,petalColor){
+      ctx.save(); ctx.translate(ox,oy);
+      for(let i=0;i<6;i++){
+        ctx.save(); ctx.rotate(i*Math.PI/3);
+        ctx.beginPath(); ctx.ellipse(0,-r*0.9,r*0.4,r*0.6,0,0,Math.PI*2);
+        ctx.fillStyle=petalColor; ctx.fill(); ctx.restore();
+      }
+      ctx.beginPath(); ctx.arc(0,0,r*0.45,0,Math.PI*2);
+      ctx.fillStyle='#FFD700'; ctx.fill();
+      ctx.restore();
+    }
+
+    function drawButterfly(ox,oy,sz){
+      ctx.save(); ctx.translate(ox,oy);
+      [[1,'#FF9800'],[-1,'#FF5722']].forEach(([flip,c])=>{
+        ctx.save(); ctx.scale(flip,1);
+        ctx.beginPath(); ctx.ellipse(sz*0.4,-sz*0.2,sz*0.5,sz*0.35,-0.4,0,Math.PI*2);
+        ctx.fillStyle=c+'CC'; ctx.fill();
+        ctx.beginPath(); ctx.ellipse(sz*0.35,sz*0.3,sz*0.35,sz*0.25,0.3,0,Math.PI*2);
+        ctx.fillStyle=c+'99'; ctx.fill();
+        ctx.restore();
+      });
+      ctx.strokeStyle='#5D4037'; ctx.lineWidth=x(2);
+      ctx.beginPath(); ctx.moveTo(0,-sz*0.5); ctx.lineTo(0,sz*0.5); ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawHeart(ox,oy,sz,c){
+      ctx.save(); ctx.translate(ox,oy);
+      ctx.beginPath(); ctx.moveTo(0,sz*0.3);
+      ctx.bezierCurveTo(-sz*1.2,-sz*0.5,-sz*1.5,sz*0.8,0,sz*1.4);
+      ctx.bezierCurveTo(sz*1.5,sz*0.8,sz*1.2,-sz*0.5,0,sz*0.3);
+      ctx.fillStyle=c; ctx.fill(); ctx.restore();
+    }
+
+    // ────────────────────────────────────────
+    // 1. WHITE BACKGROUND with soft blue border
+    // ────────────────────────────────────────
+    ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,W,H);
+
+    // Soft sky-blue gradient top area
+    const skyGrad=ctx.createLinearGradient(0,0,0,y(300));
+    skyGrad.addColorStop(0,'#E8F4FD'); skyGrad.addColorStop(1,'#FFFFFF');
+    ctx.fillStyle=skyGrad; ctx.fillRect(0,0,W,y(300));
+
+    // Outer border — playful thick rounded
+    roundRect(x(14),y(14),W-x(28),H-y(28),x(28),null,'#4FC3F7',x(12));
+    roundRect(x(26),y(26),W-x(52),H-y(52),x(20),null,'#81D4FA',x(4));
+
+    // ────────────────────────────────────────
+    // 2. CORNER DECORATIONS
+    // ────────────────────────────────────────
+    // Clouds
+    drawCloud(x(100),y(80),x(130),y(65),'rgba(255,255,255,0.95)');
+    drawCloud(x(100),y(80),x(130),y(65),'rgba(173,216,230,0.4)');
+    drawCloud(W-x(100),y(90),x(110),y(55),'rgba(255,255,255,0.95)');
+    drawCloud(W-x(100),y(90),x(110),y(55),'rgba(173,216,230,0.4)');
+    // Bottom clouds
+    drawCloud(x(120),H-y(150),x(140),y(70),'rgba(200,240,200,0.7)');
+    drawCloud(W-x(130),H-y(160),x(120),y(60),'rgba(200,240,200,0.7)');
+
+    // Rainbow (top left corner)
+    ctx.save(); ctx.globalAlpha=0.75;
+    drawRainbow(x(30),y(35),x(120));
+    ctx.restore();
+
+    // Stars scattered
+    [[x(200),y(60),x(22),'#FFD700'],[x(880),y(50),x(18),'#FFD700'],[x(950),y(130),x(14),'#FFC107'],
+     [x(150),y(130),x(16),'#FFB300'],[x(840),y(160),x(20),'#FFD700']].forEach(([sx2,sy2,sr,sc])=>star(sx2,sy2,sr,sc));
+
+    // Kite top right
+    drawKite(W-x(80),y(70),x(40));
+
+    // Sun bottom right
+    drawSun(W-x(75),y(220),x(38));
+
+    // Flowers & butterflies scattered
+    drawFlower(x(55),y(250),x(18),'#FF80AB');
+    drawFlower(W-x(50),y(280),x(16),'#CE93D8');
+    drawButterfly(x(920),y(210),x(22));
+    drawButterfly(x(80),y(340),x(18));
+
+    // Hearts
+    drawHeart(x(490),y(60),x(8),'rgba(255,120,150,0.5)');
+    drawHeart(x(600),y(75),x(6),'rgba(255,100,130,0.4)');
+    drawHeart(x(440),y(80),x(5),'rgba(255,150,170,0.4)');
+
+    // ────────────────────────────────────────
+    // 3. CERTIFICATE TITLE
+    // ────────────────────────────────────────
+    ctx.textAlign='center';
+    // "Certificate" in big playful pink
+    ctx.save();
+    ctx.shadowColor='rgba(233,30,99,0.25)'; ctx.shadowBlur=x(12);
+    ctx.fillStyle='#E91E63';
+    ctx.font=`bold ${fs(88)} 'Fredoka One', cursive`;
+    ctx.fillText('Certificate', cx, y(185));
+    ctx.restore();
+
+    ctx.fillStyle='#555';
+    ctx.font=`${fs(38)} Georgia`;
+    ctx.fillText('of Participation', cx, y(235));
+
+    // Divider dots row
+    const dotColors=['#FF5722','#FF9800','#FFC107','#4CAF50','#2196F3','#9C27B0'];
+    const dotSpacing=x(60);
+    const dotStartX=cx-dotSpacing*2.5;
+    dotColors.forEach((c,i)=>{
+      ctx.beginPath(); ctx.arc(dotStartX+i*dotSpacing,y(268),x(7),0,Math.PI*2);
+      ctx.fillStyle=c; ctx.fill();
+    });
+
+    // ── STARS ROW ──
+    const starColors=['#FFD700','#FFD700','#FFD700','#FFD700','#FFD700'];
+    // Medal in center
+    // Draw medal
+    const medalX=cx, medalY=y(340);
+    ctx.save();
+    ctx.shadowColor='rgba(255,180,0,0.5)'; ctx.shadowBlur=x(15);
+    // Ribbon
+    ctx.fillStyle='#FF5722';
+    ctx.beginPath(); ctx.moveTo(medalX-x(22),medalY-x(28)); ctx.lineTo(medalX+x(22),medalY-x(28));
+    ctx.lineTo(medalX+x(14),medalY+x(8)); ctx.lineTo(medalX,medalY-x(4));
+    ctx.lineTo(medalX-x(14),medalY+x(8)); ctx.closePath(); ctx.fill();
+    // Medal circle
+    ctx.beginPath(); ctx.arc(medalX,medalY-x(32),x(28),0,Math.PI*2);
+    const mg=ctx.createRadialGradient(medalX,medalY-x(32),0,medalX,medalY-x(32),x(28));
+    mg.addColorStop(0,'#FFF9C4'); mg.addColorStop(0.5,'#FFD700'); mg.addColorStop(1,'#F57F17');
+    ctx.fillStyle=mg; ctx.fill();
+    ctx.strokeStyle='#F57F17'; ctx.lineWidth=x(3); ctx.stroke();
+    // Star on medal
+    star(medalX,medalY-x(32),x(16),'#FFFFFF');
+    ctx.restore();
+    // Stars on each side of medal
+    [-2,-1,1,2].forEach(i=>{
+      star(medalX+i*x(80),medalY-x(28),x(26),'#FFD700');
+    });
+
+    // ────────────────────────────────────────
+    // 4. PRESENTED TO
+    // ────────────────────────────────────────
+    ctx.fillStyle='#666';
+    ctx.font=`italic ${fs(30)} Georgia`;
+    ctx.fillText('Presented to:', cx, y(430));
+
+    // ────────────────────────────────────────
+    // 5. PHOTO CIRCLE (if available)
+    // ────────────────────────────────────────
+    const photoR=x(95), photoCX=cx, photoCY=y(600);
+    if(photoImg){
+      ctx.save();
+      // Shadow
+      ctx.shadowColor='rgba(0,0,0,0.15)'; ctx.shadowBlur=x(20);
+      ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR+x(6),0,Math.PI*2);
+      ctx.fillStyle='white'; ctx.fill();
+      ctx.restore();
+      // Photo clip
+      ctx.save();
+      ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR,0,Math.PI*2); ctx.clip();
+      const iw=photoImg.naturalWidth||photoImg.width||300;
+      const ih=photoImg.naturalHeight||photoImg.height||300;
+      const sc2=Math.max((photoR*2)/iw,(photoR*2)/ih);
+      ctx.drawImage(photoImg, photoCX-(iw*sc2)/2, photoCY-(ih*sc2)/2, iw*sc2, ih*sc2);
+      ctx.restore();
+      // Colorful ring
+      ctx.strokeStyle='#4FC3F7'; ctx.lineWidth=x(5);
+      ctx.beginPath(); ctx.arc(photoCX,photoCY,photoR+x(4),0,Math.PI*2); ctx.stroke();
+    }
+
+    // ────────────────────────────────────────
+    // 6. CHILD NAME — big, playful, colorful
+    // ────────────────────────────────────────
+    const nameTopY = certPhotoDataUrl ? y(830) : y(580);
+
+    ctx.save();
+    ctx.shadowColor='rgba(233,30,99,0.3)'; ctx.shadowBlur=x(10);
+    // Pink-to-purple gradient name
+    const ng=ctx.createLinearGradient(cx-x(300),0,cx+x(300),0);
+    ng.addColorStop(0,'#E91E63'); ng.addColorStop(0.5,'#9C27B0'); ng.addColorStop(1,'#E91E63');
+    ctx.fillStyle=ng;
+    ctx.font=`italic bold ${fs(75)} 'French Script MT','Edwardian Script ITC','Monotype Corsiva',cursive`;
+    ctx.fillText(certChildName, cx, nameTopY);
+    ctx.restore();
+
+    // Wavy underline in rainbow colors
+    const nw2=ctx.measureText(certChildName).width*0.85;
+    const ux=cx-nw2/2, uy=nameTopY+y(18), uw=nw2;
+    const waveColors=['#FF5722','#FF9800','#FFC107','#4CAF50','#2196F3'];
+    const segW=uw/waveColors.length;
+    waveColors.forEach((c,i)=>{
+      ctx.beginPath();
+      const sx3=ux+i*segW, ex3=sx3+segW;
+      const midY=uy+(i%2===0?y(8):-y(8));
+      ctx.moveTo(sx3,uy);
+      ctx.quadraticCurveTo((sx3+ex3)/2,midY,ex3,uy);
+      ctx.strokeStyle=c; ctx.lineWidth=x(4); ctx.stroke();
+    });
+
+    // ────────────────────────────────────────
+    // 7. BODY TEXT
+    // ────────────────────────────────────────
+    const bodyTop = nameTopY + y(70);
+
+    ctx.fillStyle='#444';
+    ctx.font=`${fs(28)} Georgia`;
+    ctx.fillText('For outstanding participation in', cx, bodyTop);
+
+    ctx.fillStyle='#1565C0';
+    ctx.font=`bold ${fs(30)} Georgia`;
+    ctx.fillText('Vacation Bible School 2026', cx, bodyTop+y(46));
+
+    ctx.fillStyle='#444';
+    ctx.font=`${fs(26)} Georgia`;
+    ctx.fillText('conducted by', cx, bodyTop+y(90));
+
+    ctx.fillStyle='#2E7D32';
+    ctx.font=`bold ${fs(28)} Georgia`;
+    ctx.fillText('LEF Church, Magatapalli', cx, bodyTop+y(130));
+
+    ctx.fillStyle='#555';
+    ctx.font=`italic ${fs(25)} Georgia`;
+    ctx.fillText('on April 25, 26 & 27', cx, bodyTop+y(170));
+
+    if(certClass){
+      const clsPre='as a student of ';
+      const clsVal=certClass;
+      const clsPost=' Class';
+
+      ctx.font=`${fs(25)} Georgia`;
+      const wPre=ctx.measureText(clsPre).width;
+      const wPost=ctx.measureText(clsPost).width;
+
+      ctx.font=`bold ${fs(25)} Georgia`;
+      const wVal=ctx.measureText(clsVal).width;
+
+      const totalW = wPre + wVal + wPost;
+      const startX = cx - totalW/2;
+
+      ctx.textAlign='left';
+      ctx.font=`${fs(25)} Georgia`;
+      ctx.fillStyle='#444';
+      ctx.fillText(clsPre, startX, bodyTop+y(210));
+      
+      ctx.font=`bold ${fs(25)} Georgia`;
+      ctx.fillStyle='#E91E63';
+      ctx.fillText(clsVal, startX + wPre, bodyTop+y(210));
+      
+      ctx.font=`${fs(25)} Georgia`;
+      ctx.fillStyle='#444';
+      ctx.fillText(clsPost, startX + wPre + wVal, bodyTop+y(210));
+      
+      ctx.textAlign='center';
+    }
+
+    // ────────────────────────────────────────
+    // 8. COLORFUL BOTTOM STRIP + RAINBOW + KIDS ILLUSTRATION
+    // ────────────────────────────────────────
+    const grassTop = H-y(130);
+
+    // Grass
+    const grassGrad=ctx.createLinearGradient(0,grassTop,0,H);
+    grassGrad.addColorStop(0,'#66BB6A'); grassGrad.addColorStop(1,'#388E3C');
+    ctx.fillStyle=grassGrad;
+    ctx.beginPath();
+    ctx.moveTo(0,grassTop+y(30));
+    for(let gx=0;gx<=W;gx+=x(40)){
+      ctx.quadraticCurveTo(gx+x(20),grassTop,gx+x(40),grassTop+y(30));
+    }
+    ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath(); ctx.fill();
+
+    // Rainbow above grass
+    ctx.save(); ctx.globalAlpha=0.85;
+    drawRainbow(cx,grassTop+y(10),x(130));
+    ctx.restore();
+
+    // Signature section (above grass)
+    const sigY2=grassTop-y(80);
+
+    let certTeacherName = 'Teacher';
+    let certTeacherSig = null;
+    let certDirectorName = 'Director';
+    let certDirectorSig = null;
+
+    if (typeof cachedTeacherProfiles !== 'undefined') {
+      for (const key in cachedTeacherProfiles) {
+        if (key.startsWith('teacher') && cachedTeacherProfiles[key].class === certClass && cachedTeacherProfiles[key].name) {
+          certTeacherName = cachedTeacherProfiles[key].name;
+          certTeacherSig = cachedTeacherProfiles[key].signature;
+          break;
+        }
+      }
+      if (cachedTeacherProfiles['_director']) {
+        certDirectorName = cachedTeacherProfiles['_director'].name || 'Director';
+        certDirectorSig = cachedTeacherProfiles['_director'].signature;
+      }
+    }
+
+    // 1. Draw Teacher Signature
+    if (certTeacherSig && certTeacherSig.startsWith('data:image')) {
+      try {
+        const tSigImg = await loadImage(certTeacherSig);
+        const ratio = tSigImg.height / tSigImg.width;
+        const w = x(180);
+        const h = w * ratio;
+        ctx.drawImage(tSigImg, x(250) - w/2, sigY2 - h - y(5), w, h);
+      } catch(e) { console.error('Teacher signature load failed', e); }
+    } else {
+      ctx.save();
+      ctx.fillStyle = '#1e3a8a';
+      ctx.font = `italic ${fs(45)} 'French Script MT', 'Edwardian Script ITC', 'Monotype Corsiva', cursive`;
+      ctx.fillText(certTeacherName, x(250), sigY2 - y(10));
+      ctx.restore();
+    }
+
+    // 2. Draw Director Signature
+    if (certDirectorSig && certDirectorSig.startsWith('data:image')) {
+      try {
+        const dSigImg = await loadImage(certDirectorSig);
+        const ratio = dSigImg.height / dSigImg.width;
+        const w = x(180);
+        const h = w * ratio;
+        ctx.drawImage(dSigImg, W-x(250) - w/2, sigY2 - h - y(5), w, h);
+      } catch(e) { console.error('Director signature load failed', e); }
+    } else {
+      ctx.save();
+      ctx.fillStyle = '#1e3a8a';
+      ctx.font = `italic ${fs(45)} 'French Script MT', 'Edwardian Script ITC', 'Monotype Corsiva', cursive`;
+      ctx.fillText(certDirectorName, W-x(250), sigY2 - y(10));
+      ctx.restore();
+    }
+
+    ctx.strokeStyle='#BDBDBD'; ctx.lineWidth=x(1.5);
+    ctx.beginPath(); ctx.moveTo(x(120),sigY2); ctx.lineTo(x(380),sigY2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W-x(380),sigY2); ctx.lineTo(W-x(120),sigY2); ctx.stroke();
+
+    ctx.fillStyle='#555'; ctx.font=`italic ${fs(24)} Georgia`;
+    ctx.fillText('Teacher', x(250), sigY2+y(30));
+    ctx.fillText('Director', W-x(250), sigY2+y(30));
+
+    // Small colorful flowers along grass
+    [[x(80),grassTop+y(20),x(14),'#FF80AB'],
+     [x(200),grassTop+y(15),x(12),'#FFD54F'],
+     [W-x(80),grassTop+y(22),x(14),'#80CBC4'],
+     [W-x(200),grassTop+y(14),x(12),'#CE93D8'],
+     [x(500),grassTop+y(10),x(11),'#FFCC02'],
+    ].forEach(([fx,fy,fr,fc])=>drawFlower(fx,fy,fr,fc));
+
+    // Colorful pencils / crayons at bottom corners
+    function drawCrayon(ox,oy,rot,c){
+      ctx.save(); ctx.translate(ox,oy); ctx.rotate(rot);
+      ctx.fillStyle=c;
+      roundRect(-x(10),-y(60),x(20),y(55),x(5),c,null);
+      ctx.fillStyle='#F5F5F5';
+      roundRect(-x(10),-y(75),x(20),y(20),x(4),'#F5F5F5',null);
+      ctx.fillStyle='#FFC107';
+      ctx.beginPath(); ctx.moveTo(-x(10),-y(60)); ctx.lineTo(x(10),-y(60));
+      ctx.lineTo(0,-y(85)); ctx.closePath(); ctx.fill();
+      ctx.restore();
+    }
+    drawCrayon(x(60),H-y(30),-0.3,'#F44336');
+    drawCrayon(x(140),H-y(20),0.1,'#2196F3');
+    drawCrayon(W-x(60),H-y(30),0.3,'#4CAF50');
+    drawCrayon(W-x(140),H-y(20),-0.1,'#FF9800');
+
+    // Bible verse (moved to green background)
+    ctx.fillStyle='#FFFFFF';
+    ctx.font=`italic ${fs(23)} Georgia`;
+    ctx.shadowColor='rgba(0,0,0,0.2)'; ctx.shadowBlur=x(4);
+    ctx.fillText('"Let the little children come to me." — Matthew 19:14', cx, H-y(70));
+    ctx.shadowBlur=0;
+
+    // God bless text
+    ctx.fillStyle='#FFFFFF';
+    ctx.font=`bold italic ${fs(22)} Georgia`;
+    ctx.fillText('May God bless you abundantly!', cx, H-y(30));
   }
 
   async function prepareCertBlob(student = currentCertStudent){
@@ -4148,7 +4321,22 @@ Open the certificate from the admin panel to download or share the HD version.`;
       const list = document.getElementById('teacherMgmtList');
       if(!list) return;
       const classNames = ['', 'Beginner', 'Primary', 'Junior', 'Intermediate', 'Senior', 'Young Adult'];
-      list.innerHTML = Array.from({length:6},(_,i)=>{
+
+      let html = `
+        <div class="teacher-row" style="background:#F8FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:12px;margin-bottom:16px;">
+          <span class="teacher-num" style="color:#0284C7;font-size:0.85rem;">DIR</span>
+          <input class="teacher-name-input" id="directorNameInput" placeholder="Director Name" value="${profiles['_director']?.name||''}" style="flex:1;min-width:140px;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <input type="file" class="sig-upload-input" data-key="_director" accept="image/*" style="display:none" id="sig__director">
+            <button type="button" onclick="document.getElementById('sig__director').click()" style="background:#F1F5F9;border:1px solid #CBD5E1;padding:6px 10px;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;color:#334155;">Upload Signature</button>
+            <img class="sig-preview" data-key="_director" src="${profiles['_director']?.signature||''}" style="height:30px;max-width:80px;object-fit:contain;border:1px dashed #CBD5E1;border-radius:4px;display:${profiles['_director']?.signature?'inline-block':'none'};">
+            <button type="button" class="clear-sig-btn" data-key="_director" style="display:${profiles['_director']?.signature?'inline-block':'none'};background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;padding:4px 8px;border-radius:6px;cursor:pointer;font-size:0.75rem;" title="Remove Signature">✕</button>
+          </div>
+        </div>
+        <hr style="border:none;border-top:1px dashed #E2E8F0;margin-bottom:12px;">
+      `;
+
+      html += Array.from({length:6},(_,i)=>{
         const key = `teacher${i+1}`;
         const p   = profiles[key]||{};
         const clsOpts = classNames.map(c=>
@@ -4158,13 +4346,61 @@ Open the certificate from the admin panel to download or share the HD version.`;
           <span class="teacher-num">T${i+1}</span>
           <input class="teacher-name-input" data-key="${key}" placeholder="Teacher ${i+1} name" value="${p.name||''}">
           <select class="teacher-class-sel" data-key="${key}">${clsOpts}</select>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <input type="file" class="sig-upload-input" data-key="${key}" accept="image/*" style="display:none" id="sig_${key}">
+            <button type="button" onclick="document.getElementById('sig_${key}').click()" style="background:#F1F5F9;border:1px solid #CBD5E1;padding:5px 8px;border-radius:8px;font-size:0.7rem;font-weight:700;cursor:pointer;color:#334155;" title="Upload Signature">Upload Sig</button>
+            <img class="sig-preview" data-key="${key}" src="${p.signature||''}" style="height:26px;max-width:60px;object-fit:contain;border:1px dashed #CBD5E1;border-radius:4px;display:${p.signature?'inline-block':'none'};">
+            <button type="button" class="clear-sig-btn" data-key="${key}" style="display:${p.signature?'inline-block':'none'};background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;padding:4px 6px;border-radius:6px;cursor:pointer;font-size:0.7rem;" title="Remove Signature">✕</button>
+          </div>
           <span class="teacher-saved-badge" id="badge-${key}" style="display:none;color:#16A34A;font-weight:700;font-size:0.8rem;">✅</span>
         </div>`;
       }).join('');
+      list.innerHTML = html;
 
       // Wire live duplicate class warning
       document.querySelectorAll('.teacher-class-sel').forEach(sel=>{
         sel.addEventListener('change', checkDuplicateClasses);
+      });
+
+      // File Upload Listeners
+      document.querySelectorAll('.sig-upload-input').forEach(inp => {
+        inp.addEventListener('change', async (e) => {
+          const file = e.target.files[0];
+          if(!file) return;
+          if(file.size > 2 * 1024 * 1024) { showToast('⚠️ Image must be under 2MB', 3000); return; }
+          try {
+            const dataUrl = await new Promise((res, rej) => {
+              const r = new FileReader(); r.onload = ev => res(ev.target.result); r.onerror = rej; r.readAsDataURL(file);
+            });
+            const img = await loadImage(dataUrl);
+            const canvas = document.createElement('canvas');
+            let w = img.width; let h = img.height;
+            if (h > 150) { w = Math.round((w / h) * 150); h = 150; } // Limit height to 150px
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            const b64 = canvas.toDataURL('image/png'); // Preserve transparency
+            const key = inp.dataset.key;
+            const prev = document.querySelector(`.sig-preview[data-key="${key}"]`);
+            prev.src = b64;
+            prev.style.display = 'inline-block';
+            document.querySelector(`.clear-sig-btn[data-key="${key}"]`).style.display = 'inline-block';
+          } catch(err) {
+            console.error(err);
+            showToast('❌ Failed to process signature', 3000);
+          }
+        });
+      });
+
+      // Clear Signature Listeners
+      document.querySelectorAll('.clear-sig-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const key = btn.dataset.key;
+          const prev = document.querySelector(`.sig-preview[data-key="${key}"]`);
+          prev.src = '';
+          prev.style.display = 'none';
+          btn.style.display = 'none';
+          document.getElementById(`sig_${key}`).value = '';
+        });
       });
     });
   }
@@ -4210,12 +4446,19 @@ Open the certificate from the admin panel to download or share the HD version.`;
     const btn = document.getElementById('saveAllTeachersBtn');
     btn.disabled=true; btn.textContent='⏳ Saving to server…';
     const profiles = {...cachedTeacherProfiles};
+
+    if(!profiles['_director']) profiles['_director']={};
+    profiles['_director'].name = document.getElementById('directorNameInput')?.value.trim() || '';
+    profiles['_director'].signature = document.querySelector(`.sig-preview[data-key="_director"]`)?.getAttribute('src') || '';
+
     document.querySelectorAll('.teacher-name-input').forEach(inp=>{
       const key = inp.dataset.key;
       const sel = document.querySelector(`.teacher-class-sel[data-key="${key}"]`);
+      const sig = document.querySelector(`.sig-preview[data-key="${key}"]`)?.getAttribute('src') || '';
       if(!profiles[key]) profiles[key]={};
       profiles[key].name  = inp.value.trim();
       profiles[key].class = sel ? sel.value : '';
+      profiles[key].signature = sig;
     });
     try{
       await saveTeacherProfiles(profiles);
@@ -4701,7 +4944,7 @@ Open the certificate from the admin panel to download or share the HD version.`;
             <option>13</option><option>14</option><option>15</option><option>16</option><option>17</option>
             <option>18</option><option>19</option><option>20</option><option>21</option><option>22</option>
             <option>23</option><option>24</option><option>25</option><option>26</option><option>27</option>
-            <option>29</option><option>30</option><option>30+</option></select>
+            <option>28</option><option>29</option><option>30</option><option>30+</option></select>
         </div>
         <div class="edit-form-group"><label>Gender</label>
           <select id="editGender"><option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option></select>
@@ -4997,4 +5240,3 @@ Open the certificate from the admin panel to download or share the HD version.`;
 
 </body>
 </html>
-
