@@ -2692,6 +2692,15 @@
     drawHeart(x(600),y(75),x(6),'rgba(255,100,130,0.4)');
     drawHeart(x(440),y(80),x(5),'rgba(255,150,170,0.4)');
 
+    // Scattered middle stars/flowers to fill white space
+    [[x(150), y(420), x(14), '#FFD700'],
+     [W-x(150), y(450), x(16), '#FF80AB'],
+     [x(120), y(580), x(18), '#38BDF8'],
+     [W-x(120), y(600), x(14), '#4ADE80']
+    ].forEach(([fx,fy,fr,fc]) => star(fx,fy,fr,fc));
+    
+    drawHeart(W-x(180), y(520), x(10), 'rgba(255,150,170,0.5)');
+
     // ────────────────────────────────────────
     // 3. CERTIFICATE TITLE
     // ────────────────────────────────────────
@@ -2747,8 +2756,8 @@
     // 4. PRESENTED TO
     // ────────────────────────────────────────
     ctx.fillStyle='#666';
-    ctx.font=`italic ${fs(30)} Georgia`;
-    ctx.fillText('Presented to:', cx, y(430));
+    ctx.font=`italic ${fs(28)} Georgia`;
+    ctx.fillText('This certificate is awarded to', cx, y(430));
 
     // ────────────────────────────────────────
     // 5. PHOTO CIRCLE (if available)
@@ -2807,57 +2816,69 @@
     // 7. BODY TEXT
     // ────────────────────────────────────────
     const bodyTop = nameTopY + y(70);
-
-    ctx.fillStyle='#444';
-    ctx.font=`${fs(28)} Georgia`;
-    ctx.fillText('For outstanding participation in', cx, bodyTop);
-
-    ctx.fillStyle='#1565C0';
-    ctx.font=`bold ${fs(30)} Georgia`;
-    ctx.fillText('Vacation Bible School 2026', cx, bodyTop+y(46));
+    const pronoun = student.gender === 'Female' ? 'her' : (student.gender === 'Male' ? 'his' : 'their');
 
     ctx.fillStyle='#444';
     ctx.font=`${fs(26)} Georgia`;
-    ctx.fillText('conducted by', cx, bodyTop+y(90));
+    ctx.fillText(`in recognition of ${pronoun} active participation in the`, cx, bodyTop);
+
+    // Line 2: VBS + conducted by + Church
+    ctx.font=`bold ${fs(28)} Georgia`;
+    const wVBS = ctx.measureText('Vacation Bible School 2026').width;
+    ctx.font=`${fs(26)} Georgia`;
+    const wCond = ctx.measureText(' conducted by ').width;
+    ctx.font=`bold ${fs(28)} Georgia`;
+    const wChurch = ctx.measureText('LEF Church, Magatapalli,').width;
+
+    const startX2 = cx - (wVBS + wCond + wChurch)/2;
+    ctx.textAlign='left';
+
+    ctx.fillStyle='#1565C0';
+    ctx.font=`bold ${fs(28)} Georgia`;
+    ctx.fillText('Vacation Bible School 2026', startX2, bodyTop+y(55));
+
+    ctx.fillStyle='#444';
+    ctx.font=`${fs(26)} Georgia`;
+    ctx.fillText(' conducted by ', startX2 + wVBS, bodyTop+y(55));
 
     ctx.fillStyle='#2E7D32';
     ctx.font=`bold ${fs(28)} Georgia`;
-    ctx.fillText('LEF Church, Magatapalli', cx, bodyTop+y(130));
+    ctx.fillText('LEF Church, Magatapalli,', startX2 + wVBS + wCond, bodyTop+y(55));
 
-    ctx.fillStyle='#555';
-    ctx.font=`italic ${fs(25)} Georgia`;
-    ctx.fillText('on April 25, 26 & 27', cx, bodyTop+y(170));
-
+    // Line 3: Dates + Class
     if(certClass){
-      const clsPre='as a student of ';
+      const clsPre='as a student of the ';
       const clsVal=certClass;
-      const clsPost=' Class';
+      const clsPost=' Class.';
 
       ctx.font=`${fs(25)} Georgia`;
-      const wPre=ctx.measureText(clsPre).width;
-      const wPost=ctx.measureText(clsPost).width;
-
+      const wp1=ctx.measureText('held from April 25 to 27, 2026, ' + clsPre).width;
       ctx.font=`bold ${fs(25)} Georgia`;
-      const wVal=ctx.measureText(clsVal).width;
-
-      const totalW = wPre + wVal + wPost;
-      const startX = cx - totalW/2;
-
-      ctx.textAlign='left';
+      const wp2=ctx.measureText(clsVal).width;
       ctx.font=`${fs(25)} Georgia`;
+      const wp3=ctx.measureText(clsPost).width;
+
+      const startX3 = cx - (wp1 + wp2 + wp3)/2;
+
       ctx.fillStyle='#444';
-      ctx.fillText(clsPre, startX, bodyTop+y(210));
+      ctx.font=`${fs(25)} Georgia`;
+      ctx.fillText('held from April 25 to 27, 2026, ' + clsPre, startX3, bodyTop+y(110));
       
       ctx.font=`bold ${fs(25)} Georgia`;
       ctx.fillStyle='#E91E63';
-      ctx.fillText(clsVal, startX + wPre, bodyTop+y(210));
+      ctx.fillText(clsVal, startX3 + wp1, bodyTop+y(110));
       
       ctx.font=`${fs(25)} Georgia`;
       ctx.fillStyle='#444';
-      ctx.fillText(clsPost, startX + wPre + wVal, bodyTop+y(210));
-      
-      ctx.textAlign='center';
+      ctx.fillText(clsPost, startX3 + wp1 + wp2, bodyTop+y(110));
+    } else {
+      ctx.fillStyle='#555';
+      ctx.font=`${fs(25)} Georgia`;
+      const txt = 'held from April 25 to 27, 2026.';
+      ctx.fillText(txt, cx - ctx.measureText(txt).width/2, bodyTop+y(110));
     }
+
+    ctx.textAlign='center';
 
     // ────────────────────────────────────────
     // 8. COLORFUL BOTTOM STRIP + RAINBOW + KIDS ILLUSTRATION
@@ -5145,7 +5166,7 @@ Open the certificate from the admin panel to download or share the HD version.`;
 
 <!-- VIEW CERTIFICATE MODAL -->
 <div class="modal-overlay" id="viewCertModal">
-  <div class="modal-box" style="max-width:700px;height: auto">
+  <div class="modal-box" style="max-width:700px;max-height:90vh;overflow-y:auto;">
     <div style="background:linear-gradient(135deg,#10B981,#059669);padding:20px 24px;border-radius:21px 21px 0 0;display:flex;align-items:center;justify-content:space-between;">
       <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:white;">👁️ View Certificate</div>
       <button id="viewCertModalClose" style="background:rgba(255,255,255,.2);border:none;color:white;font-size:1.3rem;cursor:pointer;border-radius:50%;width:34px;height:34px;">✕</button>
