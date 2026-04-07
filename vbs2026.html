@@ -734,7 +734,6 @@
       <div class="form-row">
         <div class="form-group">
           <label>Age *</label>
-          <select id="childAge"><option value="">Select age</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>29</option><option>30</option><option>30+</option></select>
           <select id="childAge"><option value="">Select age</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option><option>30+</option></select>
         </div>
         <div class="form-group">
@@ -746,21 +745,8 @@
         <div class="form-group"><label>Parent/Guardian Name</label><input type="text" id="parentName" placeholder="Full name"></div>
         <div class="form-group"><label>Phone Number *</label><input type="tel" id="parentPhone" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" pattern="[0-9]*"><div class="field-err" id="phoneErr">⚠️ Please enter a valid 10-digit mobile number</div></div>
       </div>
-      <div class="form-group"><label>Email Address</label><input type="email" id="parentEmail" placeholder="your@email.com"></div>
       <div class="form-group"><label>Address / Village *</label><input type="text" id="address" placeholder="Village / Town name"></div>
       <div class="form-group"><label>Church / Denomination</label><input type="text" id="church" placeholder="e.g. LEF Church, Magatapalli"></div>
-      <div class="form-group">
-        <label>Class</label>
-        <select id="childClass">
-          <option value="">Select class (optional)</option>
-          <option value="Beginner">Beginner</option>
-          <option value="Primary">Primary</option>
-          <option value="Junior">Junior</option>
-          <option value="Intermediate">Intermediate</option>
-          <option value="Senior">Senior</option>
-          <option value="Young Adult">Young Adult</option>
-        </select>
-      </div>
       <div class="form-group">
         <label>Days Attending</label>
         <select id="days">
@@ -826,29 +812,27 @@
     <button class="modal-close" id="modalCloseBtn">✕</button>
     <div style="font-size:2.5rem;margin-bottom:12px">🔐</div>
     <h2>Secure Login</h2>
-    <p>Select your role and enter your password.</p>
-    <div class="role-select-group" style="flex-wrap:wrap;">
+    <p style="color:#64748B;font-size:0.95rem;margin-bottom:20px;">Select your role to access the dashboard.</p>
+    <div class="role-select-group" style="flex-wrap:wrap;gap:12px;margin-bottom:20px;">
       <button class="role-pick-btn active" id="roleAdminBtn" data-role="admin">
         <span class="role-pick-icon">🔴</span>
         <span class="role-pick-label">Admin</span>
       </button>
       <button class="role-pick-btn" id="roleViewerBtn" data-role="viewer">
         <span class="role-pick-icon">🟡</span>
-        <span class="role-pick-label">Viewer</span>
+        <span class="role-pick-label">Coordinator</span>
+      </button>
+      <button class="role-pick-btn" id="roleTeacherBtn" data-role="teacher">
+        <span class="role-pick-icon">👩‍🏫</span>
+        <span class="role-pick-label">Teacher</span>
       </button>
     </div>
-    <div style="margin:10px 0 6px;font-weight:700;font-size:0.8rem;color:#16A34A;letter-spacing:1px;">👩‍🏫 TEACHER LOGIN</div>
-    <select id="teacherRoleSelect" class="modal-input" style="margin-bottom:4px;cursor:pointer;">
-      <option value="">— Select Teacher —</option>
-      <option value="teacher1">Teacher 1 (Beginner)</option>
-      <option value="teacher2">Teacher 2 (Primary)</option>
-      <option value="teacher3">Teacher 3 (Junior)</option>
-      <option value="teacher4">Teacher 4 (Intermediate)</option>
-      <option value="teacher5">Teacher 5 (Senior)</option>
-      <option value="teacher6">Teacher 6 (Young Adult)</option>
-    </select>
+    <div id="teacherSelectWrapper" style="display:none;margin-bottom:16px;text-align:left;background:#F8FAFC;padding:12px;border-radius:12px;border:1px solid #E2E8F0;">
+      <label style="font-weight:800;font-size:0.85rem;color:var(--navy);margin-bottom:8px;display:block;">Select Your Profile:</label>
+      <select id="teacherRoleSelect" class="modal-input" style="cursor:pointer;margin-bottom:0;font-weight:700;color:#1E3A5F;"></select>
+    </div>
     <input type="password" class="modal-input" id="loginPass" placeholder="Enter password" style="margin-top:4px;">
-    <button class="modal-btn" id="loginBtn">🔓 Sign In</button>
+    <button class="modal-btn" id="loginBtn" style="margin-top:12px;">🔓 Sign In</button>
     <div class="modal-err" id="loginErr"></div>
     <div class="modal-loading" id="loginLoading">⏳ Signing in…</div>
   </div>
@@ -1189,7 +1173,7 @@
       en: {
         childName:"Child's Name *", // en age:"Age *", gender:"Gender",
         parentName:"Parent/Guardian Name *", phone:"Phone Number *",
-        email:"Email Address", address:"Address / Village",
+        address:"Address / Village",
         church:"Church / Denomination", days:"Days Attending",
         submit:"🙏 Complete Registration",
         regHeader:"📋 Register Now!", regSub:"April 25, 26 & 27, 2026",
@@ -1202,7 +1186,7 @@
       te: {
         childName:"పేరు *", age:"వయసు *", gender:"లింగం",
         parentName:"తల్లిదండ్రుల పేరు *", phone:"ఫోన్ నంబర్ *",
-        email:"ఇమెయిల్", address:"చిరునామా / గ్రామం",
+        address:"చిరునామా / గ్రామం",
         church:"చర్చ్ / సంస్థ", days:"హాజరయ్యే రోజులు",
         submit:"🙏 నమోదు పూర్తి చేయండి",
         regHeader:"📋 ఇప్పుడే నమోదు చేయండి!", regSub:"ఏప్రిల్ 25, 26 & 27, 2026",
@@ -1219,7 +1203,7 @@
     const labelMap = {  // (cost handled via data-te)
       'childName': L.childName, 'childAge': L.age, 'childGender': L.gender,
       'parentName': L.parentName, 'parentPhone': L.phone,
-      'parentEmail': L.email, 'address': L.address,
+      'address': L.address,
       'church': L.church, 'days': L.days,
     };
     Object.entries(labelMap).forEach(([id, text])=>{
@@ -1357,16 +1341,16 @@
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey:            "AIzaSyCyRi40MzD1EvwxfX5X5iyvO2u8LD7k4CE",
-    authDomain:        "vbs-magatapalli.firebaseapp.com",
-    projectId:         "vbs-magatapalli",
-    storageBucket:     "vbs-magatapalli.firebasestorage.app",
-    messagingSenderId: "476386962924",
-    appId:             "1:476386962924:web:9b95d60eee3201af8d24c9"
+    apiKey: "AIzaSyDOfENBl1a8mkAEZomt_D05okuEcPsgcPo",
+    authDomain: "vbs-magatapalli-46600.firebaseapp.com",
+    projectId: "vbs-magatapalli-46600",
+    storageBucket: "vbs-magatapalli-46600.firebasestorage.app",
+    messagingSenderId: "91676318303",
+    appId: "1:91676318303:web:2130ad4da02e69fe8299ea"
   };
 
   const ADMIN_EMAIL  = "admin@lefmagatapalli.com";
-  const VIEWER_EMAIL = "viewer@lefmagatapalli.com";
+  const VIEWER_EMAIL = "coordinator@lefmagatapalli.com";
 
   const app  = initializeApp(firebaseConfig);
   const auth = getAuth(app);
@@ -1505,23 +1489,17 @@
   let selectedRole = 'admin';
   // Teacher email → class mapping (Firebase authenticated)
   const TEACHER_MAP = {
-    'teacher1@lefmagatapalli.com': {class:'Beginner', label:'Teacher 1'},
-    'teacher2@lefmagatapalli.com': {class:'Primary', label:'Teacher 2'},
-    'teacher3@lefmagatapalli.com': {class:'Junior', label:'Teacher 3'},
-    'teacher4@lefmagatapalli.com': {class:'Intermediate', label:'Teacher 4'},
-    'teacher5@lefmagatapalli.com': {class:'Senior', label:'Teacher 5'},
-    'teacher6@lefmagatapalli.com': {class:'Young Adult', label:'Teacher 6'},
+    'beginner@lefmagatapalli.com': {class:'Beginner', label:'Teacher 1'},
+    'primary@lefmagatapalli.com': {class:'Primary', label:'Teacher 2'},
+    'junior@lefmagatapalli.com': {class:'Junior', label:'Teacher 3'},
+    'intermediate@lefmagatapalli.com': {class:'Intermediate', label:'Teacher 4'},
+    'senior@lefmagatapalli.com': {class:'Senior', label:'Teacher 5'},
+    'young_adult@lefmagatapalli.com': {class:'Young Adult', label:'Teacher 6'},
   };
   // role → email map for login
   const ROLE_EMAIL_MAP = {
     admin:    'admin@lefmagatapalli.com',
-    viewer:   'viewer@lefmagatapalli.com',
-    teacher1: 'teacher1@lefmagatapalli.com',
-    teacher2: 'teacher2@lefmagatapalli.com',
-    teacher3: 'teacher3@lefmagatapalli.com',
-    teacher4: 'teacher4@lefmagatapalli.com',
-    teacher5: 'teacher5@lefmagatapalli.com',
-    teacher6: 'teacher6@lefmagatapalli.com',
+    viewer:   'coordinator@lefmagatapalli.com',
   };
 
   function pickRole(role){
@@ -1529,23 +1507,28 @@
     document.querySelectorAll('.role-pick-btn').forEach(btn=>{
       btn.classList.toggle('active', btn.dataset.role===role);
     });
-    const tSel = document.getElementById('teacherRoleSelect');
-    if(tSel && !role.startsWith('teacher')) tSel.value = '';
+    const tWrap = document.getElementById('teacherSelectWrapper');
+    if(tWrap) tWrap.style.display = (role === 'teacher') ? 'block' : 'none';
     document.getElementById('loginPass').focus();
   }
   document.querySelectorAll('.role-pick-btn').forEach(btn=>{
     btn.addEventListener('click',()=>pickRole(btn.dataset.role));
   });
   document.getElementById('teacherRoleSelect').addEventListener('change', function(){
-    if(this.value){
-      selectedRole = this.value;
-      document.querySelectorAll('.role-pick-btn').forEach(b=>b.classList.remove('active'));
-      document.getElementById('loginPass').focus();
-    }
+    document.getElementById('loginPass').focus();
   });
 
   async function doLogin(){
-    const email = ROLE_EMAIL_MAP[selectedRole] || '';
+    let actualRoleKey = selectedRole;
+    if (selectedRole === 'teacher') {
+      actualRoleKey = document.getElementById('teacherRoleSelect').value;
+      if (!actualRoleKey) {
+        const errEl = document.getElementById('loginErr');
+        errEl.innerHTML='⚠️ Please select a teacher profile.'; errEl.style.display='block'; return;
+      }
+    }
+
+    const email = ROLE_EMAIL_MAP[actualRoleKey] || '';
     const pass  = document.getElementById('loginPass').value;
     const errEl = document.getElementById('loginErr');
     errEl.style.display='none';
@@ -1558,7 +1541,6 @@
 
     try {
       await signInWithEmailAndPassword(auth, email, pass);
-      closeModal();
 
       if(email === ADMIN_EMAIL){
         currentRole = 'admin';
@@ -1566,10 +1548,18 @@
       } else if(email === VIEWER_EMAIL){
         currentRole = 'viewer';
         openDashboard();
+      } else if(actualRoleKey && actualRoleKey.startsWith('teacher')) {
+        const p = cachedTeacherProfiles[actualRoleKey] || {};
+        openTeacherDashboard({
+          class: p.class || '',
+          label: p.name || actualRoleKey.replace('teacher', 'Teacher ')
+        });
       } else if(TEACHER_MAP[email]){
-        // Firebase-authenticated teacher
         openTeacherDashboard(TEACHER_MAP[email]);
       }
+      
+      // Close modal and reset state AFTER dashboard is opened
+      closeModal();
     } catch(e){
       document.getElementById('loginLoading').style.display='none';
       document.getElementById('loginBtn').disabled=false;
@@ -2242,7 +2232,8 @@
               ? `<button class="view-cert-btn" data-id="${r.id}" title="View Certificate" style="background:#059669;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.85rem;margin-left:2px;">📜</button>`
               : '';
 
-      const docBtns = idCardBtn + viewCertBtn;
+      const docBtns = photoBtn + idCardBtn + viewCertBtn;
+      const desktopPhotoTrigger = `<button class="photo-btn" data-id="${r.id}" title="${r.photo ? 'View Photo' : 'Upload Photo'}" style="background:transparent;border:none;cursor:pointer;padding:0;outline:none;display:block;">${photoPreview}</button>`;
 
       if(isMobile){
         return `<tr>
@@ -2270,7 +2261,7 @@
 
       return `<tr>
         <td><strong style="color:#94A3B8">${i+1}</strong></td>
-        <td>${photoPreview}</td>
+        <td>${desktopPhotoTrigger}</td>
         <td><strong>${childName}</strong></td>
         <td>${r.age||'—'}</td>
         <td><span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span></td>
@@ -2346,8 +2337,9 @@
 
   function exportCSV(){
     if(!allData.length){ alert('No registrations to export yet.'); return; }
-    const hdr=['#','Child Name','Age','Gender','Parent','Phone','Email','Address','Church','Days','Special','Registered On'];
-    const rows=allData.map((r,i)=>{ let d=''; try{ d=r.createdAt.toDate().toLocaleString(); }catch{} return [i+1,`${r.childName||r.childFirst||''} ${r.childName?'':(r.childLast||'')}`,r.age,r.gender,r.parentName,r.phone,r.email,r.address,r.church,r.days,r.special,d].map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(','); });
+    const hdr=['#','Child Name','Age','Gender','Parent','Phone','Address','Church','Days','Special','Registered On'];
+    const rows=allData.map((r,i)=>{ let d=''; try{ d=r.createdAt.toDate().toLocaleString(); }catch{} return [i+1,`${r.childName||r.childFirst||''} ${r.childName?'':(r.childLast||'')}`,r.age,r.gender,r.parentName,r.phone,r.address,r.church,r.days,r.special,d].map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(','); });
+
     const blob=new Blob([[hdr.join(','),...rows].join('\n')],{type:'text/csv'});
     Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:`VBS_Registrations_${new Date().toISOString().slice(0,10)}.csv`}).click();
   }
@@ -2363,6 +2355,19 @@
     document.getElementById('successOverlay').classList.remove('active');
     document.getElementById('regModal').classList.remove('active');
   });
+
+
+  function getClassForAge(ageStr) {
+    const age = parseInt(ageStr, 10);
+    if (isNaN(age)) return '';
+    if (age >= 4 && age <= 5) return 'Beginner';
+    if (age >= 6 && age <= 8) return 'Primary';
+    if (age >= 9 && age <= 11) return 'Junior';
+    if (age >= 12 && age <= 14) return 'Intermediate';
+    if (age >= 15 && age <= 17) return 'Senior';
+    if (age >= 18 && age <= 24) return 'Young Adult';
+    return '';
+  }
 
   async function submitReg(){
     const cn  = document.getElementById('childName').value.trim();
@@ -2399,10 +2404,8 @@
       // Always save English values regardless of current language
       const genderEl   = document.getElementById('childGender');
       const daysEl2    = document.getElementById('days');
-      const classEl    = document.getElementById('childClass');
       const genderVal  = genderEl.options[genderEl.selectedIndex]?.value || genderEl.value;
       const daysVal    = daysEl2.options[daysEl2.selectedIndex]?.value  || daysEl2.value;
-      const classVal   = classEl.options[classEl.selectedIndex]?.value  || classEl.value;
 
       await addDoc(collection(db,'registrations'),{
         childName:  cn,
@@ -2410,11 +2413,10 @@
         gender:     genderVal,    // always English: Male / Female
         parentName: pn,
         phone:      ph,
-        email:      document.getElementById('parentEmail').value.trim(),
         address:    address,
         church:     document.getElementById('church').value.trim(),
         days:       daysVal,      // always English: Day 1 Only – April 25 etc.
-        class:      classVal,     // optional class field
+        class:      getClassForAge(age),
         source:     'online',
         createdAt:  serverTimestamp()
       });
@@ -2435,7 +2437,7 @@
       document.getElementById('successOverlay').classList.add('active');
 
       // Clear form
-      ['childName','parentName','parentPhone','parentEmail','address','church'].forEach(id=>document.getElementById(id).value='');
+      ['childName','parentName','parentPhone','address','church'].forEach(id=>document.getElementById(id).value='');
       document.getElementById('childAge').value='';
       document.getElementById('childGender').value='';
 
@@ -2910,13 +2912,20 @@
     let certDirectorSig = null;
 
     if (typeof cachedTeacherProfiles !== 'undefined') {
+      const classTeachers = [];
       for (const key in cachedTeacherProfiles) {
         if (key.startsWith('teacher') && cachedTeacherProfiles[key].class === certClass && cachedTeacherProfiles[key].name) {
-          certTeacherName = cachedTeacherProfiles[key].name;
-          certTeacherSig = cachedTeacherProfiles[key].signature;
-          break;
+          classTeachers.push(cachedTeacherProfiles[key]);
         }
       }
+      
+      if (classTeachers.length > 0) {
+        // Pick primary teacher, otherwise default to first available for that class
+        const primary = classTeachers.find(t => t.isPrimary) || classTeachers[0];
+        certTeacherName = primary.name;
+        certTeacherSig = primary.signature;
+      }
+
       if (cachedTeacherProfiles['_director']) {
         certDirectorName = cachedTeacherProfiles['_director'].name || 'Director';
         certDirectorSig = cachedTeacherProfiles['_director'].signature;
@@ -3772,7 +3781,6 @@
     document.getElementById('editGender').value     = r.gender||'';
     document.getElementById('editParentName').value = r.parentName||'';
     document.getElementById('editPhone').value      = r.phone||'';
-    document.getElementById('editEmail').value      = r.email||'';
     document.getElementById('editAddress').value    = r.address||'';
     document.getElementById('editChurch').value     = r.church||'';
     document.getElementById('editDays').value       = r.days||'All 3 Days (Apr 25, 26 & 27)';
@@ -3798,7 +3806,6 @@
       gender:     document.getElementById('editGender').value,
       parentName: pn,
       phone:      document.getElementById('editPhone').value.trim(),
-      email:      document.getElementById('editEmail').value.trim(),
       address:    document.getElementById('editAddress').value.trim(),
       church:     document.getElementById('editChurch').value.trim(),
       days:       document.getElementById('editDays').value,
@@ -3820,7 +3827,6 @@
         gender:     document.getElementById('editGender').value,
         parentName: pn,
         phone:      document.getElementById('editPhone').value.trim(),
-        email:      document.getElementById('editEmail').value.trim(),
         address:    document.getElementById('editAddress').value.trim(),
         church:     document.getElementById('editChurch').value.trim(),
         days:       document.getElementById('editDays').value,
@@ -4007,11 +4013,10 @@
           gender:     row['gender']||'',
           parentName: row['parent']||row['parentname']||row['parent/guardian name']||'',
           phone:      phone,
-          email:      row['email']||'',
           address:    row['address']||row['village']||'',
           church:     row['church']||'',
           days:       row['days']||row['days attending']||'All 3 Days (Apr 25, 26 & 27)',
-          class:      row['class']||'',
+          class:      row['class']||getClassForAge(row['age']||''),
           source:     'imported',
           createdAt:  serverTimestamp(),
         };
@@ -4257,30 +4262,47 @@ Open the certificate from the admin panel to download or share the HD version.`;
   function syncTeacherMapFromProfiles(profiles){
     profiles = normalizeTeacherProfiles(profiles);
     cachedTeacherProfiles = profiles;
-    for(let i=1;i<=6;i++){
-      const email=`teacher${i}@lefmagatapalli.com`;
-      const p = profiles[`teacher${i}`];
-      if(p && TEACHER_MAP[email]){
-        TEACHER_MAP[email].label = p.name || `Teacher ${i}`;
-        if(p.class) TEACHER_MAP[email].class = p.class;
+
+    // Clear existing dynamically generated maps
+    Object.keys(ROLE_EMAIL_MAP).forEach(k => { if(k.startsWith('teacher')) delete ROLE_EMAIL_MAP[k]; });
+    for (let k in TEACHER_MAP) delete TEACHER_MAP[k];
+
+    const CLASS_EMAIL_MAP = {
+      'Beginner': 'beginner@lefmagatapalli.com',
+      'Primary': 'primary@lefmagatapalli.com',
+      'Junior': 'junior@lefmagatapalli.com',
+      'Intermediate': 'intermediate@lefmagatapalli.com',
+      'Senior': 'senior@lefmagatapalli.com',
+      'Young Adult': 'young_adult@lefmagatapalli.com'
+    };
+
+    Object.keys(profiles).forEach(k => {
+      if(k.startsWith('teacher')){
+        const tClass = profiles[k].class || '';
+        const email = CLASS_EMAIL_MAP[tClass] || `${k}@lefmagatapalli.com`;
+        TEACHER_MAP[email] = { class: tClass, label: profiles[k].name || k.replace('teacher', 'Teacher ') };
+        ROLE_EMAIL_MAP[k] = email;
       }
-    }
+    });
     updateTeacherDropdown(profiles);
   }
 
   function updateTeacherDropdown(profiles){
     const sel = document.getElementById('teacherRoleSelect');
     if(!sel) return;
-    for(let i=1;i<=6;i++){
-      const opt = sel.querySelector(`option[value="teacher${i}"]`);
-      if(opt){
-        const p = (profiles||cachedTeacherProfiles)[`teacher${i}`];
-        const name = p?.name;
-        const cls = p?.class;
-        // Show name with class
-        opt.textContent = name ? `${name} (${cls || 'No Class'})` : `Teacher ${i}`;
-      }
-    }
+    sel.innerHTML = '<option value="">— Select Teacher Profile —</option>';
+    const classOrder = {'Beginner':1, 'Primary':2, 'Junior':3, 'Intermediate':4, 'Senior':5, 'Young Adult':6, '':99, 'unassigned':99};
+    const teacherKeys = Object.keys(profiles).filter(k=>k.startsWith('teacher')).sort((a,b)=>{
+      return (classOrder[profiles[a].class||'']||99) - (classOrder[profiles[b].class||'']||99);
+    });
+    teacherKeys.forEach(k => {
+      const p = profiles[k];
+      const opt = document.createElement('option');
+      opt.value = k;
+      const tName = p.name || k.replace('teacher','Teacher ');
+      opt.textContent = `${tName} (${p.class || 'No Class'})`;
+      sel.appendChild(opt);
+    });
   }
 
   // Load profiles on startup and sync
@@ -4343,127 +4365,164 @@ Open the certificate from the admin panel to download or share the HD version.`;
       if(!list) return;
       const classNames = ['', 'Beginner', 'Primary', 'Junior', 'Intermediate', 'Senior', 'Young Adult'];
 
+      // Determine max index
+      let maxTeacherIdx = 6;
+      Object.keys(profiles).forEach(k => {
+        if(k.startsWith('teacher')){
+          const num = parseInt(k.replace('teacher',''), 10);
+          if(num > maxTeacherIdx) maxTeacherIdx = num;
+        }
+      });
+      for(let i=1; i<=maxTeacherIdx; i++){
+        if(!profiles[`teacher${i}`]) profiles[`teacher${i}`] = {};
+      }
+
       let html = `
-        <div class="teacher-row" style="background:#F8FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:12px;margin-bottom:16px;">
-          <span class="teacher-num" style="color:#0284C7;font-size:0.85rem;">DIR</span>
-          <input class="teacher-name-input" id="directorNameInput" placeholder="Director Name" value="${profiles['_director']?.name||''}" style="flex:1;min-width:140px;">
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <div class="teacher-row" style="background:white;border:1px solid #E2E8F0;border-radius:16px;padding:20px;margin-bottom:20px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+          <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:16px;">
+            <span class="teacher-num" style="background:#FEF3C7;color:#92400E;padding:8px 12px;border-radius:8px;font-size:0.95rem;font-weight:900;">DIRECTOR</span>
+            <div style="flex:1; min-width:200px;">
+              <input class="teacher-name-input" id="directorNameInput" placeholder="Director Name" value="${profiles['_director']?.name||''}" style="width:100%; padding:12px 16px; border:2px solid #E2E8F0; border-radius:10px; font-family:'Nunito',sans-serif; font-size:0.95rem; outline:none; background:#F8FAFC; transition:border-color 0.2s;">
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:flex-end; flex-wrap:wrap; gap:12px; padding-top:16px; border-top:2px dashed #F1F5F9;">
             <input type="file" class="sig-upload-input" data-key="_director" accept="image/*" style="display:none" id="sig__director">
-            <button type="button" onclick="document.getElementById('sig__director').click()" style="background:#F1F5F9;border:1px solid #CBD5E1;padding:6px 10px;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;color:#334155;">Upload Signature</button>
-            <img class="sig-preview" data-key="_director" src="${profiles['_director']?.signature||''}" style="height:30px;max-width:80px;object-fit:contain;border:1px dashed #CBD5E1;border-radius:4px;display:${profiles['_director']?.signature?'inline-block':'none'};">
-            <button type="button" class="clear-sig-btn" data-key="_director" style="display:${profiles['_director']?.signature?'inline-block':'none'};background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;padding:4px 8px;border-radius:6px;cursor:pointer;font-size:0.75rem;" title="Remove Signature">✕</button>
+            <button type="button" onclick="document.getElementById('sig__director').click()" style="background:white;border:2px solid #CBD5E1;padding:8px 14px;border-radius:10px;font-size:0.85rem;font-weight:800;cursor:pointer;color:#475569;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--coral)';this.style.color='var(--coral)'" onmouseout="this.style.borderColor='#CBD5E1';this.style.color='#475569'">
+              ✍️ Upload Signature
+            </button>
+            <img class="sig-preview" data-key="_director" src="${profiles['_director']?.signature||''}" style="height:38px;max-width:100px;object-fit:contain;border:2px dashed #CBD5E1;border-radius:8px;display:${profiles['_director']?.signature?'block':'none'};background:#F8FAFC;padding:4px;">
+            <button type="button" class="clear-sig-btn" data-key="_director" style="display:${profiles['_director']?.signature?'block':'none'};background:#FEE2E2;color:#DC2626;border:none;padding:8px;border-radius:8px;cursor:pointer;font-size:1rem;" title="Remove Signature">🗑</button>
           </div>
         </div>
-        <hr style="border:none;border-top:1px dashed #E2E8F0;margin-bottom:12px;">
       `;
 
-      html += Array.from({length:6},(_,i)=>{
-        const key = `teacher${i+1}`;
-        const p   = profiles[key]||{};
+      function getTeacherRowHtml(key, p) {
+        const num = key.replace('teacher','');
         const clsOpts = classNames.map(c=>
                 `<option value="${c}" ${(p.class||'')=== c?'selected':''}>${c?c:'No class assigned'}</option>`
         ).join('');
-        return `<div class="teacher-row">
-          <span class="teacher-num">T${i+1}</span>
-          <input class="teacher-name-input" data-key="${key}" placeholder="Teacher ${i+1} name" value="${p.name||''}">
-          <select class="teacher-class-sel" data-key="${key}">${clsOpts}</select>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <input type="file" class="sig-upload-input" data-key="${key}" accept="image/*" style="display:none" id="sig_${key}">
-            <button type="button" onclick="document.getElementById('sig_${key}').click()" style="background:#F1F5F9;border:1px solid #CBD5E1;padding:5px 8px;border-radius:8px;font-size:0.7rem;font-weight:700;cursor:pointer;color:#334155;" title="Upload Signature">Upload Sig</button>
-            <img class="sig-preview" data-key="${key}" src="${p.signature||''}" style="height:26px;max-width:60px;object-fit:contain;border:1px dashed #CBD5E1;border-radius:4px;display:${p.signature?'inline-block':'none'};">
-            <button type="button" class="clear-sig-btn" data-key="${key}" style="display:${p.signature?'inline-block':'none'};background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;padding:4px 6px;border-radius:6px;cursor:pointer;font-size:0.7rem;" title="Remove Signature">✕</button>
+        const isPrimary = p.isPrimary ? 'checked' : '';
+        const safeClass = p.class ? p.class.replace(/\s+/g,'_') : 'unassigned';
+        
+        return `<div class="teacher-row" style="background:white;border:1px solid #E2E8F0;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+          <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:16px;">
+            <span class="teacher-num" style="background:#EFF6FF;color:#1D4ED8;padding:8px 12px;border-radius:8px;font-size:0.95rem;font-weight:900;">T${num}</span>
+            <div style="flex:1; min-width:200px;">
+              <input class="teacher-name-input" data-key="${key}" placeholder="Teacher ${num} name" value="${p.name||''}" style="width:100%; padding:12px 16px; border:2px solid #E2E8F0; border-radius:10px; font-family:'Nunito',sans-serif; font-size:0.95rem; outline:none; background:#F8FAFC; transition:border-color 0.2s;">
+            </div>
+            <div style="flex:1; min-width:180px;">
+              <select class="teacher-class-sel" data-key="${key}" style="width:100%; padding:12px 16px; border:2px solid #E2E8F0; border-radius:10px; font-family:'Nunito',sans-serif; font-size:0.95rem; outline:none; cursor:pointer; background:white; font-weight:700; color:#1E3A5F;">${clsOpts}</select>
+            </div>
           </div>
-          <span class="teacher-saved-badge" id="badge-${key}" style="display:none;color:#16A34A;font-weight:700;font-size:0.8rem;">✅</span>
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; padding-top:16px; border-top:2px dashed #F1F5F9;">
+            <label style="display:flex;align-items:center;gap:8px;font-size:0.9rem;font-weight:800;color:#475569;cursor:pointer;background:#F8FAFC;padding:8px 14px;border-radius:10px;border:1px solid #E2E8F0;">
+              <input type="radio" name="primary_${safeClass}" class="primary-teacher-radio" data-key="${key}" value="true" ${isPrimary} style="accent-color:var(--coral);width:18px;height:18px;cursor:pointer;">
+              Primary Teacher
+            </label>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <input type="file" class="sig-upload-input" data-key="${key}" accept="image/*" style="display:none" id="sig_${key}">
+              <button type="button" onclick="document.getElementById('sig_${key}').click()" style="background:white;border:2px solid #CBD5E1;padding:8px 14px;border-radius:10px;font-size:0.85rem;font-weight:800;cursor:pointer;color:#475569;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--coral)';this.style.color='var(--coral)'" onmouseout="this.style.borderColor='#CBD5E1';this.style.color='#475569'">
+                ✍️ Upload Signature
+              </button>
+              <img class="sig-preview" data-key="${key}" src="${p.signature||''}" style="height:38px;max-width:100px;object-fit:contain;border:2px dashed #CBD5E1;border-radius:8px;display:${p.signature?'block':'none'};background:#F8FAFC;padding:4px;">
+              <button type="button" class="clear-sig-btn" data-key="${key}" style="display:${p.signature?'block':'none'};background:#FEE2E2;color:#DC2626;border:none;padding:8px;border-radius:8px;cursor:pointer;font-size:1rem;" title="Remove Signature">🗑</button>
+            </div>
+          </div>
         </div>`;
-      }).join('');
+      }
+
+      const classOrder = {'Beginner':1, 'Primary':2, 'Junior':3, 'Intermediate':4, 'Senior':5, 'Young Adult':6, '':99, 'unassigned':99};
+      const sortedKeys = Object.keys(profiles).filter(k=>k.startsWith('teacher')).sort((a,b)=>{
+        return (classOrder[profiles[a].class||'']||99) - (classOrder[profiles[b].class||'']||99);
+      });
+
+      html += sortedKeys.map(k => getTeacherRowHtml(k, profiles[k])).join('');
       list.innerHTML = html;
 
-      // Wire live duplicate class warning
-      document.querySelectorAll('.teacher-class-sel').forEach(sel=>{
-        sel.addEventListener('change', checkDuplicateClasses);
+      // Wire dynamic update for the primary teacher radio group
+      list.querySelectorAll('.teacher-class-sel').forEach(sel => {
+        sel.addEventListener('change', (e) => {
+          const row = e.target.closest('.teacher-row');
+          const radio = row.querySelector('.primary-teacher-radio');
+          const newClass = e.target.value ? e.target.value.replace(/\s+/g,'_') : 'unassigned';
+          radio.name = 'primary_' + newClass;
+        });
       });
 
-      // File Upload Listeners
-      document.querySelectorAll('.sig-upload-input').forEach(inp => {
-        inp.addEventListener('change', async (e) => {
-          const file = e.target.files[0];
-          if(!file) return;
-          if(file.size > 2 * 1024 * 1024) { showToast('⚠️ Image must be under 2MB', 3000); return; }
-          try {
-            const dataUrl = await new Promise((res, rej) => {
-              const r = new FileReader(); r.onload = ev => res(ev.target.result); r.onerror = rej; r.readAsDataURL(file);
-            });
-            const img = await loadImage(dataUrl);
-            const canvas = document.createElement('canvas');
-            let w = img.width; let h = img.height;
-            if (h > 150) { w = Math.round((w / h) * 150); h = 150; } // Limit height to 150px
-            canvas.width = w; canvas.height = h;
-            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-            const b64 = canvas.toDataURL('image/png'); // Preserve transparency
-            const key = inp.dataset.key;
+      function attachSigListeners(container) {
+        container.querySelectorAll('.sig-upload-input').forEach(inp => {
+          inp.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            if(file.size > 2 * 1024 * 1024) { showToast('⚠️ Image must be under 2MB', 3000); return; }
+            try {
+              const dataUrl = await new Promise((res, rej) => {
+                const r = new FileReader(); r.onload = ev => res(ev.target.result); r.onerror = rej; r.readAsDataURL(file);
+              });
+              const img = await loadImage(dataUrl);
+              const canvas = document.createElement('canvas');
+              let w = img.width; let h = img.height;
+              if (h > 150) { w = Math.round((w / h) * 150); h = 150; } // Limit height to 150px
+              canvas.width = w; canvas.height = h;
+              canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+              const b64 = canvas.toDataURL('image/png'); // Preserve transparency
+              const key = inp.dataset.key;
+              const prev = document.querySelector(`.sig-preview[data-key="${key}"]`);
+              prev.src = b64;
+              prev.style.display = 'inline-block';
+              document.querySelector(`.clear-sig-btn[data-key="${key}"]`).style.display = 'inline-block';
+            } catch(err) {
+              console.error(err);
+              showToast('❌ Failed to process signature', 3000);
+            }
+          });
+        });
+
+        container.querySelectorAll('.clear-sig-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const key = btn.dataset.key;
             const prev = document.querySelector(`.sig-preview[data-key="${key}"]`);
-            prev.src = b64;
-            prev.style.display = 'inline-block';
-            document.querySelector(`.clear-sig-btn[data-key="${key}"]`).style.display = 'inline-block';
-          } catch(err) {
-            console.error(err);
-            showToast('❌ Failed to process signature', 3000);
-          }
+            prev.src = '';
+            prev.style.display = 'none';
+            btn.style.display = 'none';
+            document.getElementById(`sig_${key}`).value = '';
+          });
         });
-      });
+      }
 
-      // Clear Signature Listeners
-      document.querySelectorAll('.clear-sig-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const key = btn.dataset.key;
-          const prev = document.querySelector(`.sig-preview[data-key="${key}"]`);
-          prev.src = '';
-          prev.style.display = 'none';
-          btn.style.display = 'none';
-          document.getElementById(`sig_${key}`).value = '';
-        });
-      });
-    });
-  }
+      attachSigListeners(list);
 
-  function checkDuplicateClasses(){
-    const classMap = {};
-    document.querySelectorAll('.teacher-class-sel').forEach(sel=>{
-      if(!sel.value) return;
-      if(!classMap[sel.value]) classMap[sel.value]=[];
-      classMap[sel.value].push(sel.dataset.key);
-    });
-    // Reset borders
-    document.querySelectorAll('.teacher-class-sel').forEach(sel=>{ sel.style.borderColor=''; });
-    let hasDup = false;
-    Object.entries(classMap).forEach(([cls,keys])=>{
-      if(keys.length>1){
-        hasDup = true;
-        // Get teacher names for warning
-        const names = keys.map(k=>{
-          const inp = document.querySelector(`.teacher-name-input[data-key="${k}"]`);
-          return inp?.value.trim() || k.replace('teacher','Teacher ');
+      if(!document.getElementById('addTeacherBtn')){
+        const addBtn = document.createElement('button');
+        addBtn.id = 'addTeacherBtn';
+        addBtn.type = 'button';
+        addBtn.textContent = '+ Add Teacher';
+        addBtn.style.cssText = 'margin-top:12px;background:#EFF6FF;color:#1D4ED8;border:2px dashed #93C5FD;border-radius:10px;padding:10px;font-family:"Fredoka One",cursive;font-size:0.95rem;cursor:pointer;width:100%;transition:background 0.2s;';
+        addBtn.onmouseover = () => addBtn.style.background = '#DBEAFE';
+        addBtn.onmouseout = () => addBtn.style.background = '#EFF6FF';
+        list.parentNode.insertBefore(addBtn, document.getElementById('saveAllTeachersBtn'));
+
+        addBtn.addEventListener('click', () => {
+          maxTeacherIdx++;
+          const newKey = `teacher${maxTeacherIdx}`;
+          profiles[newKey] = { name: '', class: '' };
+          const div = document.createElement('div');
+          div.innerHTML = getTeacherRowHtml(newKey, profiles[newKey]);
+          const newRow = div.firstElementChild;
+          list.appendChild(newRow);
+          attachSigListeners(newRow);
+
+          newRow.querySelector('.teacher-class-sel').addEventListener('change', (e) => {
+            const radio = newRow.querySelector('.primary-teacher-radio');
+            const newClass = e.target.value ? e.target.value.replace(/\s+/g,'_') : 'unassigned';
+            radio.name = 'primary_' + newClass;
+          });
         });
-        keys.forEach(key=>{
-          const sel = document.querySelector(`.teacher-class-sel[data-key="${key}"]`);
-          if(sel) sel.style.borderColor='#DC2626';
-        });
-        // Show which teachers conflict
-        const otherNames = [...new Set(names)].join(' & ');
-        showToast(`⚠️ ${cls} already assigned to: ${otherNames}`, 4000);
       }
     });
-    return !hasDup;
   }
 
   document.getElementById('saveAllTeachersBtn').addEventListener('click', async()=>{
-    if(!checkDuplicateClasses()){
-      const msg = document.getElementById('teacherSaveMsg');
-      msg.style.cssText='background:#FEE2E2;color:#DC2626;display:block;';
-      msg.textContent='❌ Resolve duplicate class assignments before saving.';
-      setTimeout(()=>msg.style.display='none', 4000);
-      return;
-    }
     const btn = document.getElementById('saveAllTeachersBtn');
     btn.disabled=true; btn.textContent='⏳ Saving to server…';
     const profiles = {...cachedTeacherProfiles};
@@ -4472,14 +4531,17 @@ Open the certificate from the admin panel to download or share the HD version.`;
     profiles['_director'].name = document.getElementById('directorNameInput')?.value.trim() || '';
     profiles['_director'].signature = document.querySelector(`.sig-preview[data-key="_director"]`)?.getAttribute('src') || '';
 
-    document.querySelectorAll('.teacher-name-input').forEach(inp=>{
+    document.querySelectorAll('.teacher-name-input[data-key]').forEach(inp=>{
       const key = inp.dataset.key;
+      if(key === '_director') return;
       const sel = document.querySelector(`.teacher-class-sel[data-key="${key}"]`);
       const sig = document.querySelector(`.sig-preview[data-key="${key}"]`)?.getAttribute('src') || '';
+      const isPrimary = document.querySelector(`.primary-teacher-radio[data-key="${key}"]`)?.checked || false;
       if(!profiles[key]) profiles[key]={};
       profiles[key].name  = inp.value.trim();
       profiles[key].class = sel ? sel.value : '';
       profiles[key].signature = sig;
+      profiles[key].isPrimary = isPrimary;
     });
     try{
       await saveTeacherProfiles(profiles);
@@ -4972,7 +5034,6 @@ Open the certificate from the admin panel to download or share the HD version.`;
         </div>
         <div class="edit-form-group"><label>Parent/Guardian Name *</label><input type="text" id="editParentName" placeholder="Full name"></div>
         <div class="edit-form-group"><label>Phone Number</label><input type="tel" id="editPhone" placeholder="10-digit number" maxlength="10" inputmode="numeric"></div>
-        <div class="edit-form-group"><label>Email Address</label><input type="email" id="editEmail" placeholder="email@example.com"></div>
         <div class="edit-form-group"><label>Address / Village</label><input type="text" id="editAddress" placeholder="Village / Town"></div>
         <div class="edit-form-group"><label>Church / Denomination</label><input type="text" id="editChurch" placeholder="Church name"></div>
         <div class="edit-form-group" style="grid-column:1/-1"><label>Days Attending</label>
@@ -5010,7 +5071,7 @@ Open the certificate from the admin panel to download or share the HD version.`;
     </div>
     <div style="padding:22px 24px;">
       <p style="color:#555;font-size:0.88rem;margin-bottom:16px;line-height:1.6;">Import registrations from a CSV file. Expected columns:<br>
-        <code style="background:#F1F5F9;padding:2px 6px;border-radius:4px;font-size:0.8rem;">Child Name, Age, Gender, Parent, Phone, Email, Address, Church, Days</code>
+        <code style="background:#F1F5F9;padding:2px 6px;border-radius:4px;font-size:0.8rem;">Child Name, Age, Gender, Parent, Phone, Address, Church, Days</code>
       </p>
       <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
         <label style="background:#0EA5E9;color:white;padding:10px 20px;border-radius:10px;font-weight:800;cursor:pointer;font-size:0.88rem;" for="importFileInput2">📂 Choose CSV File</label>
