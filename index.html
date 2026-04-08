@@ -1,411 +1,442 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LEF Church Magatapalli</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --gold: #C9A84C;
-    --gold-light: #E8C97A;
-    --gold-pale: #F5E6C0;
-    --deep: #0D1B2A;
-    --deep2: #142236;
-    --cream: #FDF8EE;
-    --text: #2C1A0E;
-    --muted: #7A6A58;
-    --accent: #8B2020;
-    --white: #FFFFFF;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEF Church Magatapalli</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-pale: #F5E6C0;
+      --deep: #0D1B2A;
+      --deep2: #142236;
+      --cream: #FDF8EE;
+      --text: #2C1A0E;
+      --muted: #7A6A58;
+      --accent: #8B2020;
+      --white: #FFFFFF;
+    }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; }
 
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    overflow-x: hidden;
-  }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
 
-  /* ── NAVBAR ── */
-  nav {
-    position: fixed; top: 0; width: 100%; z-index: 100;
-    background: rgba(13,27,42,0.97);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(201,168,76,0.3);
-    padding: 0 2rem;
-  }
-  .nav-inner {
-    max-width: 1100px; margin: 0 auto;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 64px;
-  }
-  .nav-logo {
-    font-family: 'Cinzel Decorative', serif;
-    color: var(--gold);
-    font-size: 1rem;
-    letter-spacing: 0.05em;
-    text-decoration: none;
-  }
-  .nav-links { display: flex; gap: 1.8rem; list-style: none; }
-  .nav-links a {
-    color: rgba(255,255,255,0.8);
-    text-decoration: none;
-    font-size: 0.82rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--gold-light); }
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(13,27,42,0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(201,168,76,0.3);
+      padding: 0 2rem;
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--gold);
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
 
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    background: linear-gradient(160deg, #0D1B2A 0%, #1a2e45 40%, #0f2035 70%, #0D1B2A 100%);
-    display: flex; align-items: center; justify-content: center;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    padding-top: 64px;
-  }
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #0D1B2A 0%, #1a2e45 40%, #0f2035 70%, #0D1B2A 100%);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 64px;
+    }
 
-  /* cross watermark */
-  .hero::before {
-    position: absolute;
-    font-size: 55vw;
-    color: rgba(201,168,76,0.04);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    line-height: 1;
-  }
+    /* cross watermark */
+    .hero::before {
+      position: absolute;
+      font-size: 55vw;
+      color: rgba(201,168,76,0.04);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      line-height: 1;
+    }
 
-  /* radial glow */
-  .hero::after {
-    content: '';
-    position: absolute;
-    width: 700px; height: 700px;
-    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
+    /* radial glow */
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
 
-  .hero-content { position: relative; z-index: 2; padding: 2rem; }
+    .hero-content { position: relative; z-index: 2; padding: 2rem; }
 
-  .hero-badge {
-    display: inline-block;
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 0.4rem 1.4rem;
-    border-radius: 50px;
-    margin-bottom: 1.5rem;
-    animation: fadeUp 0.8s ease both;
-  }
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.4rem;
+      border-radius: 50px;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s ease both;
+    }
 
-  .hero h1 {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: clamp(2.2rem, 6vw, 4.5rem);
-    color: var(--white);
-    line-height: 1.15;
-    margin-bottom: 0.4rem;
-    animation: fadeUp 0.9s 0.1s ease both;
-  }
+    .hero h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2.2rem, 6vw, 4.5rem);
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 0.4rem;
+      animation: fadeUp 0.9s 0.1s ease both;
+    }
 
-  .hero h1 span { color: var(--gold); }
+    .hero h1 span { color: var(--gold); }
 
-  .hero-location {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-    color: var(--gold-pale);
-    font-style: italic;
-    letter-spacing: 0.05em;
-    margin-bottom: 1.8rem;
-    animation: fadeUp 1s 0.2s ease both;
-  }
+    .hero-location {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      color: var(--gold-pale);
+      font-style: italic;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.8rem;
+      animation: fadeUp 1s 0.2s ease both;
+    }
 
-  .hero-verse {
-    max-width: 500px; margin: 0 auto 2.5rem;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.15rem;
-    color: rgba(255,255,255,0.65);
-    font-style: italic;
-    line-height: 1.7;
-    animation: fadeUp 1s 0.3s ease both;
-  }
+    .hero-verse {
+      max-width: 500px; margin: 0 auto 2.5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.65);
+      font-style: italic;
+      line-height: 1.7;
+      animation: fadeUp 1s 0.3s ease both;
+    }
 
-  .hero-cta {
-    display: inline-flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
-    animation: fadeUp 1s 0.4s ease both;
-  }
+    .hero-cta {
+      display: inline-flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 1s 0.4s ease both;
+    }
 
-  .btn {
-    padding: 0.85rem 2.2rem;
-    border-radius: 4px;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    font-size: 0.82rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.25s;
-    display: inline-block;
-  }
-  .btn-gold {
-    background: var(--gold);
-    color: var(--deep);
-    border: 2px solid var(--gold);
-  }
-  .btn-gold:hover { background: var(--gold-light); border-color: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,168,76,0.35); }
-  .btn-outline {
-    background: transparent;
-    color: var(--white);
-    border: 2px solid rgba(255,255,255,0.4);
-  }
-  .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+    .btn {
+      padding: 0.85rem 2.2rem;
+      border-radius: 4px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+      display: inline-block;
+    }
+    .btn-gold {
+      background: var(--gold);
+      color: var(--deep);
+      border: 2px solid var(--gold);
+    }
+    .btn-gold:hover { background: var(--gold-light); border-color: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,168,76,0.35); }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.4);
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(28px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-  /* ── SECTION SHARED ── */
-  section { padding: 5rem 2rem; }
-  .container { max-width: 1100px; margin: 0 auto; }
-  .section-label {
-    font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--gold); font-weight: 700; margin-bottom: 0.6rem;
-  }
-  .section-title {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-    color: var(--deep);
-    line-height: 1.2;
-    margin-bottom: 1rem;
-  }
-  .section-title.light { color: var(--white); }
-  .divider {
-    width: 60px; height: 3px;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light));
-    margin: 1rem 0 2rem;
-    border-radius: 2px;
-  }
+    /* ── SECTION SHARED ── */
+    section { padding: 5rem 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); font-weight: 700; margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      color: var(--deep);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .section-title.light { color: var(--white); }
+    .divider {
+      width: 60px; height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      margin: 1rem 0 2rem;
+      border-radius: 2px;
+    }
 
-  /* ── WELCOME ── */
-  .welcome { background: var(--cream); }
-  .welcome-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
-  }
-  .welcome-text p {
-    font-size: 1.05rem; line-height: 1.85;
-    color: #4a3a2a; margin-bottom: 1rem;
-  }
-  .welcome-symbol {
-    text-align: center;
-    font-size: 10rem;
-    line-height: 1;
-    color: var(--gold);
-    opacity: 0.2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .welcome-symbol span { font-size: 8rem; }
+    /* ── WELCOME ── */
+    .welcome { background: var(--cream); }
+    .welcome-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    .welcome-text p {
+      font-size: 1.05rem; line-height: 1.85;
+      color: #4a3a2a; margin-bottom: 1rem;
+    }
+    .welcome-symbol {
+      text-align: center;
+      font-size: 10rem;
+      line-height: 1;
+      color: var(--gold);
+      opacity: 0.2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .welcome-symbol span { font-size: 8rem; }
 
-  /* ── SERVICES ── */
-  .services { background: var(--deep); }
-  .services .section-label { color: var(--gold-light); }
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1rem;
-  }
-  .service-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(201,168,76,0.2);
-    border-radius: 8px;
-    padding: 2rem 1.5rem;
-    text-align: center;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-  }
-  .service-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    opacity: 0; transition: opacity 0.3s;
-  }
-  .service-card:hover { background: rgba(201,168,76,0.07); transform: translateY(-4px); border-color: rgba(201,168,76,0.5); }
-  .service-card:hover::before { opacity: 1; }
-  .service-icon { font-size: 2rem; margin-bottom: 1rem; }
-  .service-day {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 0.85rem; color: var(--gold);
-    letter-spacing: 0.05em; margin-bottom: 0.4rem;
-  }
-  .service-name {
-    font-size: 1rem; font-weight: 700;
-    color: var(--white); margin-bottom: 0.5rem;
-  }
-  .service-time {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem; color: var(--gold-light);
-    font-style: italic;
-  }
+    /* ── SERVICES ── */
+    .services { background: var(--deep); }
+    .services .section-label { color: var(--gold-light); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .service-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 8px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .service-card:hover { background: rgba(201,168,76,0.07); transform: translateY(-4px); border-color: rgba(201,168,76,0.5); }
+    .service-card:hover::before { opacity: 1; }
+    .service-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .service-day {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.85rem; color: var(--gold);
+      letter-spacing: 0.05em; margin-bottom: 0.4rem;
+    }
+    .service-name {
+      font-size: 1rem; font-weight: 700;
+      color: var(--white); margin-bottom: 0.5rem;
+    }
+    .service-time {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; color: var(--gold-light);
+      font-style: italic;
+    }
 
-  /* ── EVENTS ── */
-  .events { background: #F7F2E8; }
-  .events-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.8rem; margin-top: 1rem;
-  }
-  .event-card {
-    background: var(--white);
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
-    transition: all 0.3s;
-    cursor: pointer;
-    text-decoration: none;
-    display: block;
-    color: inherit;
-  }
-  .event-card:hover { transform: translateY(-6px); box-shadow: 0 12px 35px rgba(0,0,0,0.13); }
-  .event-header {
-    background: linear-gradient(135deg, var(--deep) 0%, #1e3a5a 100%);
-    padding: 1.5rem 1.8rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .event-header::after {
-    content: '';
-    position: absolute; bottom: -20px; right: -20px;
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    background: rgba(201,168,76,0.15);
-  }
-  .event-date-badge {
-    display: inline-block;
-    background: var(--gold);
-    color: var(--deep);
-    font-weight: 800;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.3rem 0.9rem;
-    border-radius: 3px;
-    margin-bottom: 0.7rem;
-  }
-  .event-card-title {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 1.1rem; color: var(--white);
-    line-height: 1.3;
-  }
-  .event-body { padding: 1.4rem 1.8rem; }
-  .event-desc {
-    font-size: 0.9rem; color: var(--muted);
-    line-height: 1.7; margin-bottom: 1rem;
-  }
-  .event-tag {
-    display: inline-block;
-    font-size: 0.7rem; font-weight: 700;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 0.25rem 0.7rem;
-    border-radius: 3px;
-    background: var(--gold-pale);
-    color: var(--accent);
-  }
-  .event-link-hint {
-    font-size: 0.78rem; color: var(--gold);
-    font-weight: 700; letter-spacing: 0.05em;
-    display: flex; align-items: center; gap: 0.3rem;
-    margin-top: 0.5rem;
-  }
+    /* ── EVENTS ── */
+    .events { background: #F7F2E8; }
+    .events-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.8rem; margin-top: 1rem;
+    }
+    .event-card {
+      background: var(--white);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      transition: all 0.3s;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      color: inherit;
+    }
+    .event-card:hover { transform: translateY(-6px); box-shadow: 0 12px 35px rgba(0,0,0,0.13); }
+    .event-header {
+      background: linear-gradient(135deg, var(--deep) 0%, #1e3a5a 100%);
+      padding: 1.5rem 1.8rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .event-header::after {
+      content: '';
+      position: absolute; bottom: -20px; right: -20px;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.15);
+    }
+    .event-date-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--deep);
+      font-weight: 800;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 3px;
+      margin-bottom: 0.7rem;
+    }
+    .event-card-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.1rem; color: var(--white);
+      line-height: 1.3;
+    }
+    .event-body { padding: 1.4rem 1.8rem; }
+    .event-desc {
+      font-size: 0.9rem; color: var(--muted);
+      line-height: 1.7; margin-bottom: 1rem;
+    }
+    .event-tag {
+      display: inline-block;
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.25rem 0.7rem;
+      border-radius: 3px;
+      background: var(--gold-pale);
+      color: var(--accent);
+    }
+    .event-link-hint {
+      font-size: 0.78rem; color: var(--gold);
+      font-weight: 700; letter-spacing: 0.05em;
+      display: flex; align-items: center; gap: 0.3rem;
+      margin-top: 0.5rem;
+    }
 
-  /* ── LOCATION ── */
-  .location { background: var(--deep2); }
-  .location .section-label { color: var(--gold-light); }
-  .location-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;
-  }
-  .location-info { color: rgba(255,255,255,0.75); }
-  .location-info p { line-height: 1.8; font-size: 1rem; margin-bottom: 1rem; }
-  .location-info strong { color: var(--gold-light); }
-  .contact-item {
-    display: flex; align-items: center; gap: 0.8rem;
-    padding: 0.9rem 1.2rem;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(201,168,76,0.15);
-    border-radius: 6px;
-    margin-bottom: 0.8rem;
-    color: var(--white);
-    font-size: 1rem;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-  .contact-item:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); }
-  .contact-icon { font-size: 1.3rem; }
-  .map-embed {
-    border-radius: 10px; overflow: hidden;
-    border: 2px solid rgba(201,168,76,0.2);
-    height: 350px;
-  }
-  .map-embed iframe { width: 100%; height: 100%; border: none; }
+    /* ── LOCATION ── */
+    .location { background: var(--deep2); }
+    .location .section-label { color: var(--gold-light); }
+    .location-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;
+    }
+    .location-info { color: rgba(255,255,255,0.75); }
+    .location-info p { line-height: 1.8; font-size: 1rem; margin-bottom: 1rem; }
+    .location-info strong { color: var(--gold-light); }
+    .contact-item {
+      display: flex; align-items: center; gap: 0.8rem;
+      padding: 0.9rem 1.2rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 6px;
+      margin-bottom: 0.8rem;
+      color: var(--white);
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .contact-item:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); }
+    .contact-icon { font-size: 1.3rem; }
+    .map-embed {
+      border-radius: 10px; overflow: hidden;
+      border: 2px solid rgba(201,168,76,0.2);
+      height: 350px;
+    }
+    .map-embed iframe { width: 100%; height: 100%; border: none; }
 
-  /* ── SUGGEST SECTION ── */
-  .suggestions { background: var(--cream); }
-  .suggest-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.2rem; margin-top: 1rem;
-  }
-  .suggest-card {
-    background: var(--white);
-    border: 1px solid #e8dfc8;
-    border-radius: 8px;
-    padding: 1.5rem 1.2rem;
-    text-align: center;
-    transition: all 0.25s;
-  }
-  .suggest-card:hover { border-color: var(--gold); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
-  .suggest-icon { font-size: 1.8rem; margin-bottom: 0.6rem; }
-  .suggest-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--deep); }
-  .suggest-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+    /* ── SUGGEST SECTION ── */
+    .suggestions { background: var(--cream); }
+    .suggest-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.2rem; margin-top: 1rem;
+    }
+    .suggest-card {
+      background: var(--white);
+      border: 1px solid #e8dfc8;
+      border-radius: 8px;
+      padding: 1.5rem 1.2rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .suggest-card:hover { border-color: var(--gold); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+    .suggest-icon { font-size: 1.8rem; margin-bottom: 0.6rem; }
+    .suggest-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--deep); }
+    .suggest-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
 
-  /* ── FOOTER ── */
-  footer {
-    background: var(--deep);
-    border-top: 1px solid rgba(201,168,76,0.2);
-    padding: 2.5rem 2rem;
-    text-align: center;
-  }
-  .footer-cross {
-    font-size: 2rem; color: var(--gold); margin-bottom: 0.8rem;
-  }
-  .footer-name {
-    font-family: 'Cinzel Decorative', serif;
-    color: var(--white); font-size: 0.95rem;
-    margin-bottom: 0.4rem;
-  }
-  .footer-sub { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+    /* ── PRAYER REQUEST ── */
+    .prayer { background: var(--white); }
+    .prayer-form-container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--cream);
+      padding: 2.5rem;
+      border-radius: 12px;
+      border: 1px solid rgba(201,168,76,0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+    .prayer-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .form-group { display: flex; flex-direction: column; text-align: left; }
+    .form-group label {
+      font-weight: 700; font-size: 0.85rem; color: var(--deep); margin-bottom: 0.4rem;
+    }
+    .form-group input, .form-group textarea {
+      padding: 0.8rem 1rem; border: 1px solid #ddd; border-radius: 6px;
+      font-family: 'Nunito', sans-serif; font-size: 0.95rem; transition: border-color 0.3s;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+    }
+    @media (max-width: 600px) {
+      .prayer-form { grid-template-columns: 1fr; }
+    }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    .welcome-grid, .location-grid { grid-template-columns: 1fr; gap: 2rem; }
-    .welcome-symbol { display: none; }
-    .nav-links { display: none; }
-  }
-</style>
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep);
+      border-top: 1px solid rgba(201,168,76,0.2);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    .footer-cross {
+      font-size: 2rem; color: var(--gold); margin-bottom: 0.8rem;
+    }
+    .footer-name {
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--white); font-size: 0.95rem;
+      margin-bottom: 0.4rem;
+    }
+    .footer-sub { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .welcome-grid, .location-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .welcome-symbol { display: none; }
+      .nav-links { display: none; }
+    }
+  </style>
 </head>
 <body>
 
@@ -417,6 +448,7 @@
       <li><a href="#welcome">About</a></li>
       <li><a href="#services">Services</a></li>
       <li><a href="#events">Events</a></li>
+      <li><a href="#prayer">Prayer</a></li>
       <li><a href="#location">Location</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -534,6 +566,35 @@
   </div>
 </section>
 
+<!-- PRAYER REQUESTS -->
+<section class="prayer" id="prayer">
+  <div class="container">
+    <div class="section-label">We Care For You</div>
+    <h2 class="section-title">Submit a Prayer Request</h2>
+    <div class="divider"></div>
+    <div class="prayer-form-container">
+      <form id="prayerForm" class="prayer-form">
+        <div class="form-group">
+          <label for="prName">Your Name *</label>
+          <input type="text" id="prName" required placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+          <label for="prPhone">Mobile Number</label>
+          <input type="tel" id="prPhone" placeholder="Enter your mobile number">
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label for="prMessage">Prayer Request *</label>
+          <textarea id="prMessage" required rows="4" placeholder="How can we pray for you?"></textarea>
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1; text-align: center;">
+          <button type="submit" class="btn btn-gold" id="prSubmitBtn">Submit Request</button>
+          <div id="prStatus" style="margin-top: 15px; font-weight: 700; display: none;"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
 <!-- LOCATION + CONTACT -->
 <section class="location" id="location">
   <div class="container">
@@ -562,10 +623,10 @@
       </div>
       <div class="map-embed">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15327!2d79.7!3d15.4!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTXCsDI0JzAwLjAiTiA3OcKwNDInMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890"
-          allowfullscreen="" loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          title="LEF Church Magatapalli Location">
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15327!2d79.7!3d15.4!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTXCsDI0JzAwLjAiTiA3OcKwNDInMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890"
+                allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="LEF Church Magatapalli Location">
         </iframe>
       </div>
     </div>
@@ -637,5 +698,50 @@
   <div class="footer-sub" style="margin-top:1rem;">© 2025 LEF Church Magatapalli · All Rights Reserved</div>
 </footer>
 
+<!-- FIREBASE SCRIPT -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // ⚠️ IMPORTANT: Replace this with the EXACT SAME config block from your vbs2026.html file!
+  const firebaseConfig = {
+    apiKey: "AIzaSyDChKseRGUolPq1wYMLsgI7nG0fiw2jfUU",
+    authDomain: "lef-church-magatapalli.firebaseapp.com",
+    projectId: "lef-church-magatapalli",
+    storageBucket: "lef-church-magatapalli.firebasestorage.app",
+    messagingSenderId: "381152009664",
+    appId: "1:381152009664:web:3cf33c5a4c35ff36a8bc25",
+    measurementId: "G-JE724TVWBQ"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  document.getElementById('prayerForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('prSubmitBtn');
+    const status = document.getElementById('prStatus');
+
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+    status.style.display = 'none';
+
+    try {
+      await addDoc(collection(db, 'prayer_requests'), {
+        name: document.getElementById('prName').value.trim(),
+        phone: document.getElementById('prPhone').value.trim(),
+        request: document.getElementById('prMessage').value.trim(),
+        createdAt: serverTimestamp()
+      });
+      e.target.reset();
+      status.style.color = '#16A34A'; status.textContent = '🙏 Prayer request submitted successfully. We will pray for you.';
+    } catch(err) {
+      console.error(err);
+      status.style.color = '#DC2626'; status.textContent = '❌ Failed to submit. Please try again.';
+    }
+    status.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Submit Request';
+  });
+</script>
 </body>
 </html>

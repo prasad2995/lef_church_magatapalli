@@ -875,6 +875,7 @@
       <button class="dash-tab" data-tab="teachers" id="teachersTab"><span class="tab-icon">👩‍🏫</span><span class="tab-label">Teachers</span></button>
       <button class="dash-tab" data-tab="manage-roles" id="manageRolesTab"><span class="tab-icon">🛠</span><span class="tab-label">Manage Roles</span></button>
       <button class="dash-tab" data-tab="archive" id="archiveTab"><span class="tab-icon">🗂</span><span class="tab-label">Archive</span></button>
+      <button class="dash-tab" data-tab="prayer-requests" id="navPrayerBtn"><span class="tab-icon">🙏</span><span class="tab-label">Prayer Reqs</span></button>
     </div>
       </div>
       <div class="dash-main">
@@ -1114,6 +1115,41 @@
       </div>
     </div>
   </div><!-- /view-archive -->
+
+        <!-- PRAYER REQUESTS TAB -->
+        <div class="dash-view" id="view-prayer-requests">
+          <div class="table-card">
+            <div class="table-header">
+              <div>
+                <h3 style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--navy);line-height:1.2;">🙏 Prayer Requests</h3>
+                <p style="color:#64748B; font-size:0.9rem; margin-top: 4px;">View requests submitted from the main website.</p>
+              </div>
+              <button id="refreshPrayerBtn" class="refresh-btn">🔄 Refresh</button>
+            </div>
+            <div class="bulk-bar" id="prayerBulkBar">
+              <span class="bulk-count" id="prayerBulkCount">0 selected</span>
+              <button class="bulk-del-btn" id="prayerBulkDelBtn">🗑️ Delete Selected</button>
+              <button style="background:#6B7280;color:white;border:none;padding:8px 14px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.82rem;cursor:pointer;" id="prayerBulkCancelBtn">✕ Cancel</button>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                <tr>
+                  <th><input type="checkbox" id="prayerSelectAllCheck" class="row-check" title="Select all"></th>
+                  <th>Date</th>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Prayer Request</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="prayerTableBody">
+                <tr><td colspan="6" style="text-align:center;padding:20px;">Click Refresh to load data...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
 
     </div><!-- /dash-main -->
     </div><!-- /dash-layout -->
@@ -1366,6 +1402,18 @@
   const auth = getAuth(app);
   const db   = getFirestore(app);
 
+  // Secondary Firebase App for Main Church Website (Prayer Requests)
+  const churchConfig = {
+    apiKey: "AIzaSyDChKseRGUolPq1wYMLsgI7nG0fiw2jfUU",
+    authDomain: "lef-church-magatapalli.firebaseapp.com",
+    projectId: "lef-church-magatapalli",
+    storageBucket: "lef-church-magatapalli.firebasestorage.app",
+    messagingSenderId: "381152009664",
+    appId: "1:381152009664:web:3cf33c5a4c35ff36a8bc25"
+  };
+  const churchApp = initializeApp(churchConfig, "ChurchApp");
+  const churchDb  = getFirestore(churchApp);
+
   let allData = [], currentRole = null, teacherClass = null;
   const TEACHER_NAME_LIMIT = 20;
   const TEACHER_TAB_OPTIONS = [
@@ -1384,6 +1432,13 @@
     {key:'26', label:'Day 2 (D2)'},
     {key:'27', label:'Day 3 (D3)'},
   ];
+
+  // HTML Sanitization to prevent XSS attacks in Dashboard
+  function escapeHTML(str) {
+    return String(str || '').replace(/[&<>'"]/g, match => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    })[match]);
+  }
 
   // ── Wire up buttons via addEventListener (no onclick= needed) ──
   document.getElementById('adminBtn').addEventListener('click', openModal);
@@ -1434,6 +1489,7 @@
       if(tab.dataset.tab === 'attendance') renderAttendanceView();
       if(tab.dataset.tab === 'documents') renderDocumentsView();
       if(tab.dataset.tab === 'archive') loadArchive();
+      if(tab.dataset.tab === 'prayer-requests') loadPrayerRequests();
       closeSidebarMenu();
     });
   });
@@ -1595,6 +1651,7 @@
     if(tabName === 'teachers') buildTeacherMgmt();
     if(tabName === 'manage-roles') buildRoleMgmt();
     if(tabName === 'archive') loadArchive();
+    if(tabName === 'prayer-requests') loadPrayerRequests();
     closeSidebarMenu();
   }
 
@@ -1675,6 +1732,8 @@
     // Analytics tab — admin only
     const analyticsTab = document.querySelector('[data-tab="analytics"]');
     if(analyticsTab) analyticsTab.style.display = isAdmin ? '' : 'none';
+    // Prayer Requests tab — admin only
+    if(document.getElementById('navPrayerBtn')) document.getElementById('navPrayerBtn').style.display = isAdmin ? '' : 'none';
     if(isAdmin) buildTeacherMgmt();
     document.querySelector('[data-tab="registrations"]').classList.add('active');
     document.getElementById('view-registrations').classList.add('active');
@@ -4965,6 +5024,128 @@ Open the certificate from the admin panel to download or share the HD version.`;
       });
     });
   }
+
+  // ══════ LOAD PRAYER REQUESTS ══════
+  let prayerRequestsData = [];
+
+  async function loadPrayerRequests() {
+    const tbody = document.getElementById('prayerTableBody');
+    if(!tbody) return;
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">⏳ Loading requests...</td></tr>';
+    try {
+      // Import query and orderBy at the top of your file if they aren't already imported
+      const q = query(collection(churchDb, 'prayer_requests'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      prayerRequestsData = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      if(snap.empty) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">No prayer requests found.</td></tr>';
+        return;
+      }
+      let html = '';
+      prayerRequestsData.forEach(d => {
+        const dateStr = d.createdAt ? d.createdAt.toDate().toLocaleString() : 'Just now';
+        html += `<tr>
+           <td><input type="checkbox" class="row-check prayer-rec-check" data-id="${d.id}"></td>
+            <td style="white-space:nowrap;font-size:0.85rem;color:#64748B;">${dateStr}</td>
+            <td><strong>${escapeHTML(d.name)}</strong></td>
+            <td>${escapeHTML(d.phone || '—')}</td>
+            <td style="white-space:pre-wrap;line-height:1.5;">${escapeHTML(d.request)}</td>
+            <td><button class="del-btn prayer-del-btn" data-id="${d.id}" title="Delete">🗑️</button></td>
+        </tr>`;
+      });
+      tbody.innerHTML = html;
+      wirePrayerRequestButtons();
+    } catch(err) {
+      console.error('Error loading prayer requests:', err);
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#DC2626;">❌ Error loading data. Please check permissions.</td></tr>';
+    }
+  }
+
+  document.getElementById('refreshPrayerBtn')?.addEventListener('click', loadPrayerRequests);
+
+  function wirePrayerRequestButtons() {
+    // Individual delete buttons
+    document.querySelectorAll('.prayer-del-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const ok = await showConfirm('Delete Prayer Request?', 'This action is permanent and cannot be undone.', '🗑️ Delete Forever');
+        if (!ok) return;
+
+        try {
+          const { doc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+          await deleteDoc(doc(churchDb, 'prayer_requests', id));
+          loadPrayerRequests(); // Re-render
+          showToast('Prayer request deleted.', 2500);
+        } catch (e) {
+          showToast('❌ Delete failed: ' + e.message, 3000);
+        }
+      });
+    });
+
+    // Checkboxes
+    document.querySelectorAll('.prayer-rec-check').forEach(cb => {
+      cb.addEventListener('change', updatePrayerBulkBar);
+    });
+  }
+
+  function updatePrayerBulkBar() {
+    const checked = document.querySelectorAll('.prayer-rec-check:checked');
+    const bar = document.getElementById('prayerBulkBar');
+    if(!bar) return;
+    if (checked.length > 0) {
+      bar.classList.add('show');
+      document.getElementById('prayerBulkCount').textContent = checked.length + ' selected';
+    } else {
+      bar.classList.remove('show');
+    }
+  }
+
+  // Select all checkbox
+  document.getElementById('prayerSelectAllCheck')?.addEventListener('change', function() {
+    document.querySelectorAll('.prayer-rec-check').forEach(cb => { cb.checked = this.checked; });
+    updatePrayerBulkBar();
+  });
+
+  // Cancel bulk selection
+  document.getElementById('prayerBulkCancelBtn')?.addEventListener('click', () => {
+    document.querySelectorAll('.prayer-rec-check').forEach(cb => { cb.checked = false; });
+    document.getElementById('prayerSelectAllCheck').checked = false;
+    document.getElementById('prayerBulkBar').classList.remove('show');
+  });
+
+  // Bulk delete
+  document.getElementById('prayerBulkDelBtn')?.addEventListener('click', async () => {
+    const checked = [...document.querySelectorAll('.prayer-rec-check:checked')];
+    if (!checked.length) return;
+
+    const ok = await showConfirm(`Delete ${checked.length} Prayer Request(s)?`, 'This action is permanent and cannot be undone.', `🗑️ Delete ${checked.length}`);
+    if (!ok) return;
+
+    const btn = document.getElementById('prayerBulkDelBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Deleting…';
+
+    try {
+      const { writeBatch, doc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      const batch = writeBatch(churchDb);
+      const ids = checked.map(cb => cb.dataset.id);
+      ids.forEach(id => {
+        batch.delete(doc(churchDb, 'prayer_requests', id));
+      });
+      await batch.commit();
+
+      document.getElementById('prayerSelectAllCheck').checked = false;
+      document.getElementById('prayerBulkBar').classList.remove('show');
+      loadPrayerRequests(); // Re-render
+      showToast(`🗑️ ${ids.length} request(s) deleted.`, 3000);
+    } catch (err) {
+      showToast('❌ Bulk delete failed: ' + err.message, 4000);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '🗑️ Delete Selected';
+    }
+  });
 
 </script>
 <div class="toast" id="toastMsg"></div>
