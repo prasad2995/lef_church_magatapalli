@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Christ Gospel Meetings 2026 - LEF Magatapalli</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anek+Telugu:wght@400;600;700;800&family=Noto+Sans+Telugu:wght@400;600;700&family=Cinzel+Decorative:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0f172a;
+      --navy-light: #1e293b;
+      --gold: #fbbf24;
+      --bg-gray: #f1f5f9;
+      --text-main: #334155;
+      --text-muted: #64748b;
+      --white: #FFFFFF;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans Telugu', 'Nunito', sans-serif;
+      background-color: var(--bg-gray);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .poster {
+      background: var(--white);
+      max-width: 800px;
+      width: 100%;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    /* --- HEADER --- */
+    .poster-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      color: var(--white);
+      text-align: center;
+      padding: 0 20px 40px;
+      position: relative;
+    }
+
+    /* Language Toggle */
+    .lang-toggle-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      padding: 20px 0;
+    }
+    .lang-toggle {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 30px;
+      cursor: pointer;
+      padding: 4px;
+      outline: none;
+    }
+    .lang-opt {
+      position: relative;
+      z-index: 2;
+      padding: 6px 16px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.6);
+      transition: color 0.3s;
+    }
+    .lang-opt.active { color: var(--navy); }
+    .indicator {
+      position: absolute;
+      top: 4px; bottom: 4px; left: 4px;
+      width: calc(50% - 4px);
+      background: var(--gold);
+      border-radius: 20px;
+      transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    body.te-mode .indicator { transform: translateX(100%); }
+    body.te-mode .opt-en { color: rgba(255,255,255,0.6); }
+    body.te-mode .opt-te { color: var(--navy); }
+
+    /* Language Display Logic */
+    body:not(.te-mode) .lang-te { display: none !important; }
+    body.te-mode .lang-en { display: none !important; }
+    
+    .lang-te {
+      font-family: 'Anek Telugu', sans-serif;
+    }
+
+    .org-name {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+    }
+
+    .sub-title {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      font-family: 'Cinzel Decorative', serif;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .main-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      font-family: 'Cinzel Decorative', serif;
+    }
+
+    /* --- BODY SECTION --- */
+    .poster-body { padding: 30px; }
+    
+    .bible-verse {
+      text-align: center;
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-bottom: 25px;
+      padding-bottom: 25px;
+      border-bottom: 1px dashed #cbd5e1;
+    }
+    .verse-ref {
+      display: block;
+      font-weight: 700;
+      margin-top: 8px;
+      color: var(--navy);
+      font-style: normal;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      padding-bottom: 20px;
+    }
+
+    .detail-card {
+      background: var(--bg-gray);
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .detail-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      border-color: #cbd5e1;
+    }
+    .detail-icon {
+      font-size: 1.8rem;
+      background: var(--white);
+      width: 45px; height: 45px;
+      display: flex; justify-content: center; align-items: center;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    .detail-title {
+      font-weight: 800;
+      color: var(--navy);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .detail-val {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    
+    .detail-val.lang-te {
+      font-size: 1.15rem;
+      letter-spacing: 0.2px;
+    }
+    .detail-val .muted {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* --- SPEAKERS --- */
+    .speakers-section {
+      margin-top: 10px;
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .speakers-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+    .speaker-chip {
+      background: var(--white);
+      border: 1px solid #cbd5e1;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    /* --- FOOTER SECTION --- */
+    .poster-footer {
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      padding: 25px 30px;
+      text-align: center;
+    }
+    .footer-card {
+      margin-bottom: 15px;
+    }
+    .footer-card:last-child { margin-bottom: 0; }
+    .footer-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .footer-card.invite p {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    /* --- RESPONSIVE DESIGN --- */
+    @media (max-width: 768px) {
+      .main-title { font-size: 2rem; }
+      .details-grid { grid-template-columns: 1fr; gap: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="poster">
+    <!-- HEADER -->
+    <div class="poster-header">
+      <div class="lang-toggle-wrapper">
+        <button id="toggleBtn" class="lang-toggle">
+          <span class="indicator"></span>
+          <span class="lang-opt opt-en active">English</span>
+          <span class="lang-opt opt-te">తెలుగు</span>
+        </button>
+      </div>
+      <div class="sub-title">
+        <span class="lang-en">Good News to All</span>
+        <span class="lang-te">అందరికీ శుభవార్త</span>
+      </div>
+
+      <div class="org-name">
+        <span class="lang-en">Laymen's Evangelical Fellowship</span>
+        <span class="lang-te">లేమెన్స్ ఇవాంజెలికల్ ఫెలోషిప్ - వారు నిర్వహించు</span>
+      </div>
+
+      <h1 class="main-title">
+        <span class="lang-en">Christ Gospel Meetings</span>
+        <span class="lang-te">క్రీస్తు సువార్త కూటములు</span>
+      </h1>
+    </div>
+
+    <!-- BODY -->
+    <div class="poster-body">
+      <div class="bible-verse">
+        <span class="lang-en">"For I will pour water upon him that is thirsty, and floods upon the dry ground."</span>
+        <span class="lang-te">"నేను దప్పిగలవానిమీద నీళ్ళను ఎండిన భూమిమీద ప్రవాహజలములను కుమ్మరించెదను."</span>
+        <span class="verse-ref lang-en">- Isaiah 44:3</span>
+        <span class="verse-ref lang-te">- యెషయా 44:3</span>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-card">
+          <div class="detail-icon">🗓️</div>
+          <div class="detail-content">
+            <div class="detail-title lang-en">Dates</div>
+            <div class="detail-title lang-te">తేదీలు</div>
+            <div class="detail-val lang-en">April 23 & 24, 2026<br><span class="muted">Thursday & Friday</span></div>
+            <div class="detail-val lang-te">ఏప్రిల్ 23, 24, 2026 <br><span class="muted">గురు, శుక్ర వారములు</span></div>
+          </div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-icon">⏰</div>
+          <div class="detail-content">
+            <div class="detail-title lang-en">Timings</div>
+            <div class="detail-title lang-te">సమయం</div>
+            <div class="detail-val lang-en">10:00 AM & 6:15 PM<br><span class="muted">Thursday & Friday</span></div>
+            <div class="detail-val lang-te">ఉ॥ 10:00 గం. & సా॥ 6:15 ని<br><span class="muted">గురు, శుక్ర వారములు</span></div>
+          </div>
+        </div>
+        <a href="https://www.google.com/maps/place/16.457404, 81.945069" target="_blank" class="detail-card" style="text-decoration:none; color:inherit;">
+          <div class="detail-icon">📍</div>
+          <div class="detail-content">
+            <div class="detail-title lang-en">Location</div>
+            <div class="detail-title lang-te">స్థలం</div>
+            <div class="detail-val lang-en">LEF Church<br><span class="muted">Magatapalli</span></div>
+            <div class="detail-val lang-te">LEF చర్చి<br><span class="muted">మగటపల్లి</span></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="speakers-section">
+        <div class="section-title">
+          <span class="lang-en">🎤 Speakers</span>
+          <span class="lang-te">🎤 వాక్యోపదేశకులు</span>
+        </div>
+        <div class="speakers-list">
+          <div class="speaker-chip">
+            <span class="lang-en">Bro. Stephen Satyam, Kakinada</span>
+            <span class="lang-te">బ్రదర్ స్టీఫెన్ సత్యం గారు, కాకినాడ</span>
+          </div>
+          <div class="speaker-chip">
+            <span class="lang-en">Bro. Peterson, Gokavaram</span>
+            <span class="lang-te">బ్రదర్ పీటర్సన్ గారు, గోకవరం</span>
+          </div>
+          <div class="speaker-chip">
+            <span class="lang-en">Bro. Philip Sydney, Kakinada</span>
+            <span class="lang-te">బ్రదర్ ఫిలిప్ సిడ్నీ గారు, కాకినాడ</span>
+          </div>
+          <div class="speaker-chip">
+            <span class="lang-en">Bro. Sudhakar, Nakkapalli</span>
+            <span class="lang-te">బ్రదర్ సుధాకర్ గారు, నక్కపల్లి</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="poster-footer">
+      <div class="footer-card invite">
+        <p class="lang-en">✨ A loving invitation to all ✨</p>
+        <p class="lang-te">✨ అందరికీ ప్రేమ పూర్వక ఆహ్వానము ✨</p>
+      </div>
+      <div class="footer-card">
+        <p class="lang-en">Visit our Beautiful Bookstore. Bibles, biographies of saints, and more are available.</p>
+        <p class="lang-te">మా బ్యూటిఫుల్ పుస్తకశాలను దర్శించండి. అనేక ప్రతులలో బైబిల్ గ్రంథములు, భక్తుల జీవిత చరిత్రలు, మరెన్నో కలవు.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const toggleBtn = document.getElementById('toggleBtn');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('te-mode');
+      const isTe = document.body.classList.contains('te-mode');
+      if(isTe) {
+        document.querySelector('.opt-en').classList.remove('active');
+        document.querySelector('.opt-te').classList.add('active');
+      } else {
+        document.querySelector('.opt-en').classList.add('active');
+        document.querySelector('.opt-te').classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>
