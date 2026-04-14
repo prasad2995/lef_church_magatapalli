@@ -367,6 +367,18 @@
     .save-teacher-btn{background:var(--coral);color:white;border:none;padding:7px 14px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.8rem;cursor:pointer;}
     .save-teacher-btn:hover{background:var(--orange);}
     .teacher-saved-badge{font-size:0.75rem;color:#16A34A;font-weight:700;display:none;}
+    .teacher-card{background:white;border:1px solid #E2E8F0;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);}
+    .teacher-config-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(160px,1fr) 110px;gap:12px;align-items:center;margin-bottom:14px;}
+    .teacher-field{display:flex;flex-direction:column;gap:6px;min-width:0;}
+    .teacher-field label{font-size:0.78rem;font-weight:800;color:#64748B;letter-spacing:0.02em;text-transform:uppercase;}
+    .teacher-input,.teacher-select{width:100%;padding:12px 14px;border:2px solid #E2E8F0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.95rem;outline:none;background:#F8FAFC;color:#1E3A5F;}
+    .teacher-select{background:white;font-weight:700;cursor:pointer;}
+    .teacher-input:focus,.teacher-select:focus{border-color:var(--coral);}
+    .teacher-card-actions{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:14px;border-top:2px dashed #F1F5F9;}
+    .teacher-primary-pill{display:flex;align-items:center;gap:8px;font-size:0.88rem;font-weight:800;color:#475569;cursor:pointer;background:#F8FAFC;padding:10px 14px;border-radius:10px;border:1px solid #E2E8F0;}
+    .teacher-primary-pill input{accent-color:var(--coral);width:18px;height:18px;cursor:pointer;}
+    .teacher-sign-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+    .teacher-inline-note{font-size:0.76rem;color:#64748B;font-weight:700;}
     .roles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;}
     .role-card{background:#F8FAFC;border:2px solid #E2E8F0;border-radius:16px;padding:18px;}
     .role-card h4{font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--navy);margin-bottom:6px;}
@@ -402,6 +414,29 @@
     .dash-main{flex:1;padding:24px;overflow-x:auto;min-width:0;}
     .dash-view{display:none;}
     .dash-view.active{display:block;}
+    .chat-layout{display:grid;grid-template-columns:320px 1fr;gap:16px;min-height:560px;}
+    .chat-sidebar-card,.chat-thread-card{background:white;border:2px solid #E2E8F0;border-radius:18px;box-shadow:0 2px 12px rgba(15,23,42,.06);}
+    .chat-sidebar-card{display:flex;flex-direction:column;overflow:hidden;}
+    .chat-list{overflow-y:auto;max-height:620px;}
+    .chat-item{width:100%;background:none;border:none;border-bottom:1px solid #EEF2F7;padding:14px 16px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:4px;}
+    .chat-item:hover{background:#F8FAFC;}
+    .chat-item.active{background:#EFF6FF;border-left:4px solid #2563EB;padding-left:12px;}
+    .chat-item-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+    .chat-name{font-weight:800;color:var(--navy);font-size:0.95rem;}
+    .chat-phone{font-size:0.78rem;color:#64748B;font-weight:700;}
+    .chat-preview{font-size:0.82rem;color:#475569;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .chat-count{font-size:0.72rem;font-weight:800;color:#2563EB;background:#DBEAFE;padding:2px 8px;border-radius:999px;}
+    .chat-thread-card{display:flex;flex-direction:column;overflow:hidden;}
+    .chat-thread-head{padding:18px 20px;border-bottom:1px solid #E2E8F0;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+    .chat-thread-title{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--navy);}
+    .chat-thread-sub{font-size:0.82rem;color:#64748B;font-weight:700;}
+    .chat-thread-body{padding:20px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;min-height:420px;max-height:620px;background:linear-gradient(180deg,#F8FAFC 0%,#FFFFFF 100%);}
+    .chat-bubble{max-width:78%;padding:12px 14px;border-radius:16px;line-height:1.55;font-size:0.9rem;box-shadow:0 2px 8px rgba(15,23,42,.06);}
+    .chat-bubble.inbound{align-self:flex-start;background:white;border:1px solid #E2E8F0;color:#0F172A;}
+    .chat-bubble.outbound{align-self:flex-end;background:#DCFCE7;border:1px solid #86EFAC;color:#166534;}
+    .chat-bubble.status{align-self:center;background:#E2E8F0;color:#475569;font-size:0.8rem;border-radius:999px;padding:8px 12px;}
+    .chat-meta{display:block;margin-top:6px;font-size:0.74rem;color:#64748B;font-weight:700;}
+    .chat-empty{padding:36px 24px;text-align:center;color:#64748B;font-weight:700;}
     .admin-panel.teacher-mode #regClassHead,
     .admin-panel.teacher-mode #regTypeHead,
     .admin-panel.teacher-mode #actionsHead,
@@ -433,6 +468,14 @@
       .dash-tab .tab-icon{width:24px;min-width:24px;}
       .dash-tab span.tab-label{display:inline;}
       .dash-main{padding:16px;}
+      .teacher-config-grid{grid-template-columns:1fr;}
+      .teacher-card-actions{align-items:flex-start;}
+      .teacher-sign-actions{width:100%;}
+      .teacher-sign-actions > *{flex:0 0 auto;}
+      .chat-layout{grid-template-columns:1fr;}
+      .chat-list{max-height:260px;}
+      .chat-thread-body{min-height:300px;max-height:none;}
+      .chat-bubble{max-width:92%;}
       #statsGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:16px;}
       #statsGrid .stat-card{padding:12px 8px;border-radius:14px;}
       #statsGrid .s-num{font-size:1.45rem;}
@@ -493,13 +536,13 @@
       .mobile-record-line em{font-style:normal;color:#64748B;font-size:0.74rem;display:inline-block;width:14px;flex:0 0 14px;text-align:center;}
       .mobile-record-line span{text-align:left;min-width:0;overflow-wrap:anywhere;flex:1;}
       .mobile-record-actions{display:flex;flex-wrap:wrap;gap:8px;}
-    .mobile-doc-photo-btn{border:none;background:transparent;padding:0;cursor:pointer;flex-shrink:0;}
-    .mobile-doc-photo{width:52px;height:52px;border-radius:14px;object-fit:cover;border:2px solid #E2E8F0;background:#F8FAFC;display:flex;align-items:center;justify-content:center;}
-    .mobile-doc-photo.placeholder{font-size:1.2rem;color:#64748B;}
-    .doc-photo-thumb{width:56px;height:56px;max-width:56px;max-height:56px;border-radius:12px;object-fit:cover;border:2px solid #E2E8F0;background:#F8FAFC;display:block;box-shadow:0 1px 4px rgba(15,23,42,.08);}
-    .doc-photo-thumb.placeholder{display:flex;align-items:center;justify-content:center;font-size:1rem;color:#64748B;}
-    #documentsTableBody .doc-photo-thumb{width:56px !important;height:56px !important;max-width:56px !important;max-height:56px !important;}
-    #documentsTableBody td:nth-child(2){width:84px;min-width:84px;}
+      .mobile-doc-photo-btn{border:none;background:transparent;padding:0;cursor:pointer;flex-shrink:0;}
+      .mobile-doc-photo{width:52px;height:52px;border-radius:14px;object-fit:cover;border:2px solid #E2E8F0;background:#F8FAFC;display:flex;align-items:center;justify-content:center;}
+      .mobile-doc-photo.placeholder{font-size:1.2rem;color:#64748B;}
+      .doc-photo-thumb{width:56px;height:56px;max-width:56px;max-height:56px;border-radius:12px;object-fit:cover;border:2px solid #E2E8F0;background:#F8FAFC;display:block;box-shadow:0 1px 4px rgba(15,23,42,.08);}
+      .doc-photo-thumb.placeholder{display:flex;align-items:center;justify-content:center;font-size:1rem;color:#64748B;}
+      #documentsTableBody .doc-photo-thumb{width:56px !important;height:56px !important;max-width:56px !important;max-height:56px !important;}
+      #documentsTableBody td:nth-child(2){width:84px;min-width:84px;}
       .mobile-head-icon-btn{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:none;border-radius:10px;cursor:pointer;font-size:0.9rem;font-weight:800;}
       .mobile-head-check{margin-left:2px;}
       .mobile-record-actions .edit-btn,
@@ -856,261 +899,273 @@
     </div>
   </div>
   <div class="admin-content">
-    <div class="viewer-notice" id="viewerNotice">👁️ You are logged in as a <strong>Viewer</strong>. You can view registrations but cannot delete or export data.</div>
+    <div class="viewer-notice" id="viewerNotice">👁️ You are logged in as a <strong>Coordinator</strong>. You can export registrations and update class or section assignments, but only admins can access archive, analytics, prayer requests, and WhatsApp inbox.</div>
 
     <!-- TABS -->
     <div class="dash-layout">
       <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
       <!-- LEFT SIDEBAR -->
       <div class="dash-sidebar">
-    <div class="dash-tabs">
-      <button class="dash-tab active" data-tab="registrations"><span class="tab-icon">📋</span><span class="tab-label">Registrations</span></button>
-      <button class="dash-tab" data-tab="documents" id="documentsTab"><span class="tab-icon">📄</span><span class="tab-label">Documents</span></button>
-      <button class="dash-tab" data-tab="attendance" id="attendanceTab"><span class="tab-icon">📝</span><span class="tab-label">Attendance</span></button>
-      <button class="dash-tab" data-tab="analytics"><span class="tab-icon">📊</span><span class="tab-label">Analytics</span></button>
-      <button class="dash-tab" data-tab="teachers" id="teachersTab"><span class="tab-icon">👩‍🏫</span><span class="tab-label">Teachers</span></button>
-      <button class="dash-tab" data-tab="manage-roles" id="manageRolesTab"><span class="tab-icon">🛠</span><span class="tab-label">Manage Roles</span></button>
-      <button class="dash-tab" data-tab="archive" id="archiveTab"><span class="tab-icon">🗂</span><span class="tab-label">Archive</span></button>
-      <button class="dash-tab" data-tab="prayer-requests" id="navPrayerBtn"><span class="tab-icon">🙏</span><span class="tab-label">Prayer Reqs</span></button>
-    </div>
+        <div class="dash-tabs">
+          <button class="dash-tab active" data-tab="registrations"><span class="tab-icon">📋</span><span class="tab-label">Registrations</span></button>
+          <button class="dash-tab" data-tab="documents" id="documentsTab"><span class="tab-icon">📄</span><span class="tab-label">Documents</span></button>
+          <button class="dash-tab" data-tab="attendance" id="attendanceTab"><span class="tab-icon">📝</span><span class="tab-label">Attendance</span></button>
+          <button class="dash-tab" data-tab="analytics"><span class="tab-icon">📊</span><span class="tab-label">Analytics</span></button>
+          <button class="dash-tab" data-tab="teachers" id="teachersTab"><span class="tab-icon">👩‍🏫</span><span class="tab-label">Teachers</span></button>
+          <button class="dash-tab" data-tab="manage-roles" id="manageRolesTab"><span class="tab-icon">🛠</span><span class="tab-label">Manage Roles</span></button>
+          <button class="dash-tab" data-tab="archive" id="archiveTab"><span class="tab-icon">🗂</span><span class="tab-label">Archive</span></button>
+          <button class="dash-tab" data-tab="prayer-requests" id="navPrayerBtn"><span class="tab-icon">🙏</span><span class="tab-label">Prayer Reqs</span></button>
+          <button class="dash-tab" data-tab="whatsapp-chat" id="navWhatsappBtn"><span class="tab-icon">💬</span><span class="tab-label">WhatsApp Inbox</span></button>
+        </div>
       </div>
       <div class="dash-main">
-    <!-- REGISTRATIONS VIEW -->
-    <div class="dash-view active" id="view-registrations">
-      <div class="stats-grid" id="statsGrid">
-        <div class="stat-card c-total"><div class="s-num" id="stat-total">—</div><div class="s-label" id="stat-total-label">Total Registrations</div></div>
-        <div class="stat-card c-boys"><div class="s-num" id="stat-boys">—</div><div class="s-label">Male</div></div>
-        <div class="stat-card c-girls"><div class="s-num" id="stat-girls">—</div><div class="s-label">Female</div></div>
-        <div class="stat-card c-today" id="stat-today-card"><div class="s-num" id="stat-today">—</div><div class="s-label">Registered Today</div></div>
-      </div>
-      <div class="table-card">
-        <div class="table-header">
-          <h3 class="registrations-title">📋 All Registrations</h3>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-            <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search name, phone…">
-            <button class="export-btn" id="exportBtn" style="display:none">⬇ Export CSV</button>
-            <button class="import-btn" id="importBtn" style="display:none">⬆ Import CSV</button>
-            <button class="send-certs-btn" id="sendCertsBtn" style="display:none;background:#25D366;color:white;border:none;padding:10px 16px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;">📱 Send Certificates</button>
-            <input type="file" id="importFileInput" accept=".csv" style="display:none">
+        <!-- REGISTRATIONS VIEW -->
+        <div class="dash-view active" id="view-registrations">
+          <div class="stats-grid" id="statsGrid">
+            <div class="stat-card c-total"><div class="s-num" id="stat-total">—</div><div class="s-label" id="stat-total-label">Total Registrations</div></div>
+            <div class="stat-card c-boys"><div class="s-num" id="stat-boys">—</div><div class="s-label">Male</div></div>
+            <div class="stat-card c-girls"><div class="s-num" id="stat-girls">—</div><div class="s-label">Female</div></div>
+            <div class="stat-card c-today" id="stat-today-card"><div class="s-num" id="stat-today">—</div><div class="s-label">Registered Today</div></div>
           </div>
-        </div>
-        <!-- Bulk action bar -->
-        <div class="bulk-bar" id="bulkBar">
-          <span class="bulk-count" id="bulkCount">0 selected</span>
-          <button class="bulk-del-btn" id="bulkDelBtn">🗂 Archive Selected</button>
-          <button style="background:#6B7280;color:white;border:none;padding:8px 14px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.82rem;cursor:pointer;" id="bulkCancelBtn">✕ Cancel</button>
-        </div>
-        <div class="filter-row">
-          <select id="genderFilter" class="filter-select">
-            <option value="all">Gender: All</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-          <select id="daysFilter" class="filter-select">
-            <option value="all">Days: All</option>
-            <option value="25">Day 1 (Apr 25)</option>
-            <option value="26">Day 2 (Apr 26)</option>
-            <option value="27">Day 3 (Apr 27)</option>
-          </select>
-          <select id="classFilter" class="filter-select">
-            <option value="all">Class: All</option>
-          </select>
-          <select id="villageFilter" class="filter-select">
-            <option value="all">Village: All</option>
-          </select>
-          <select id="churchFilter" class="filter-select">
-            <option value="all">Church: All</option>
-          </select>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-            <tr><th><input type="checkbox" id="selectAllCheck" class="row-check" title="Select all"></th><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th id="regClassHead">Class</th><th>Parent</th><th>Phone</th><th>Village</th><th>Church</th><th>Days</th><th id="regTypeHead">Registration Type</th><th id="actionsHead"></th></tr>
-            </thead>
-            <tbody id="tableBody">
-            <tr><td colspan="13" class="loading-row">⏳ Loading…</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div><!-- /view-registrations -->
+          <div class="table-card">
+            <div class="table-header">
+              <h3 class="registrations-title">📋 All Registrations</h3>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search name, phone…">
+                <button class="export-btn" id="exportBtn" style="display:none">⬇ Export CSV</button>
+                <button class="import-btn" id="importBtn" style="display:none">⬆ Import CSV</button>
+                <button class="send-certs-btn" id="sendCertsBtn" style="display:none;background:#25D366;color:white;border:none;padding:10px 16px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;">📱 Send Certificates</button>
+                <input type="file" id="importFileInput" accept=".csv" style="display:none">
+              </div>
+            </div>
+            <!-- Bulk action bar -->
+            <div class="bulk-bar" id="bulkBar">
+              <span class="bulk-count" id="bulkCount">0 selected</span>
+              <button class="bulk-del-btn" id="bulkDelBtn">🗂 Archive Selected</button>
+              <button style="background:#6B7280;color:white;border:none;padding:8px 14px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.82rem;cursor:pointer;" id="bulkCancelBtn">✕ Cancel</button>
+            </div>
+            <div class="filter-row">
+              <select id="genderFilter" class="filter-select">
+                <option value="all">Gender: All</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+              <select id="daysFilter" class="filter-select">
+                <option value="all">Days: All</option>
+                <option value="25">Day 1 (Apr 25)</option>
+                <option value="26">Day 2 (Apr 26)</option>
+                <option value="27">Day 3 (Apr 27)</option>
+              </select>
+              <select id="classFilter" class="filter-select">
+                <option value="all">Class: All</option>
+              </select>
+              <select id="villageFilter" class="filter-select">
+                <option value="all">Village: All</option>
+              </select>
+              <select id="churchFilter" class="filter-select">
+                <option value="all">Church: All</option>
+              </select>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th><input type="checkbox" id="selectAllCheck" class="row-check" title="Select all"></th><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th id="regClassHead">Class & Sec</th><th>Parent</th><th>Phone</th><th>Village</th><th>Church</th><th>Days</th><th id="regTypeHead">Registration Type</th><th id="actionsHead"></th></tr>
+                </thead>
+                <tbody id="tableBody">
+                <tr><td colspan="13" class="loading-row">⏳ Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div><!-- /view-registrations -->
 
-    <!-- DOCUMENTS VIEW -->
-    <div class="dash-view" id="view-documents">
-      <div class="view-header" style="margin-bottom:14px;">
-        <h2 class="view-title">📄 Student Documents</h2>
-        <div class="header-right">
-          <select class="day-dropdown" id="docsClassFilter" style="margin-right:10px;margin-bottom:6px;">
-            <option value="all">All Classes</option>
-            <option value="Beginner">Beginner</option>
-            <option value="Primary">Primary</option>
-            <option value="Junior">Junior</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Senior">Senior</option>
-            <option value="Young Adult">Young Adult</option>
-            <option value="unassigned">Unassigned</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="table-card">
-        <div class="table-wrap">
-          <table class="data-table">
-            <thead>
-            <tr>
-              <th>#</th>
-              <th>Photo</th>
-              <th>Name</th>
-              <th>Age</th>
-              <th>Gender</th>
-              <th>Class</th>
-              <th>Village</th>
-              <th>Documents</th>
-            </tr>
-            </thead>
-            <tbody id="documentsTableBody">
-            <tr><td colspan="8" class="loading-row">⏳ Loading...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div><!-- /view-documents -->
-
-    <!-- ATTENDANCE VIEW -->
-    <div class="dash-view" id="view-attendance">
-      <div class="stats-grid" id="attendanceStatsGrid" style="margin-bottom:20px;">
-        <div class="stat-card c-present"><div class="s-num" id="att-stat-present">—</div><div class="s-label">✅ Present</div></div>
-        <div class="stat-card c-absent"><div class="s-num" id="att-stat-absent">—</div><div class="s-label">❌ Absent</div></div>
-      </div>
-
-      <div class="attendance-header">
-        <div class="day-selector">
-          <div id="attendanceDaySelector">
-            <label>📅 Select Day:</label>
-            <select class="day-dropdown" id="dayDropdown">
-              <option value="25">Day 1 (Apr 25)</option>
-              <option value="26">Day 2 (Apr 26)</option>
-              <option value="27">Day 3 (Apr 27)</option>
-            </select>
+        <!-- DOCUMENTS VIEW -->
+        <div class="dash-view" id="view-documents">
+          <div class="view-header" style="margin-bottom:14px;">
+            <h2 class="view-title">📄 Student Documents</h2>
+            <div class="header-right">
+              <select class="day-dropdown" id="docsClassFilter" style="margin-right:10px;margin-bottom:6px;">
+                <option value="all">All Classes</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Primary">Primary</option>
+                <option value="Junior">Junior</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Senior">Senior</option>
+                <option value="Young Adult">Young Adult</option>
+                <option value="unassigned">Unassigned</option>
+              </select>
+            </div>
           </div>
 
-          <!-- Class Filter (Admin & Viewer) -->
-          <div id="classFilterContainer" style="display:none;">
-            <label>🏫 Class Filter:</label>
-            <select class="day-dropdown" id="classFilterDropdown">
-              <option value="all">All Classes</option>
-              <option value="Beginner">Beginner</option>
-              <option value="Primary">Primary</option>
-              <option value="Junior">Junior</option>
-              <option value="Intermediate">Intermediate</option>
-              <option value="Senior">Senior</option>
-              <option value="Young Adult">Young Adult</option>
-              <option value="unassigned">Unassigned</option>
-            </select>
+          <div class="table-card">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Photo</th>
+                  <th>Name</th>
+                  <th>Age</th>
+                  <th>Gender</th>
+                  <th>Class</th>
+                  <th>Village</th>
+                  <th>Documents</th>
+                </tr>
+                </thead>
+                <tbody id="documentsTableBody">
+                <tr><td colspan="8" class="loading-row">⏳ Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      </div>
+        </div><!-- /view-documents -->
 
-      <div class="attendance-table-card">
-        <div class="table-header">
-          <h3 class="attendance-table-title">📝 Attendance - Day 1 (Apr 25)</h3>
-        </div>
-        <div class="table-wrap">
-          <table class="att-table-simple">
-            <thead>
-            <tr>
-              <th>#</th>
-              <th>Student Name</th>
-              <th id="attAgeHeader">Age</th>
-              <th id="attGenderHeader">Gender</th>
-              <th id="attClassHeader">Class</th>
-              <th id="attActionHeader">Attendance</th>
-            </tr>
-            </thead>
-            <tbody id="attendanceTableBody">
-            <tr><td colspan="6" class="loading-row">⏳ Loading attendance...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div><!-- /view-attendance -->
+        <!-- ATTENDANCE VIEW -->
+        <div class="dash-view" id="view-attendance">
+          <div class="stats-grid" id="attendanceStatsGrid" style="margin-bottom:20px;">
+            <div class="stat-card c-present"><div class="s-num" id="att-stat-present">—</div><div class="s-label">✅ Present</div></div>
+            <div class="stat-card c-absent"><div class="s-num" id="att-stat-absent">—</div><div class="s-label">❌ Absent</div></div>
+          </div>
 
-    <!-- TEACHERS VIEW -->
-    <div class="dash-view" id="view-teachers">
-      <div class="teacher-mgmt-card">
-        <h3 style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--navy);margin-bottom:6px;">👩‍🏫 Manage Teachers</h3>
-        <p style="font-size:0.85rem;color:#64748B;margin-bottom:18px;">Set teacher names and assign classes. Changes are saved locally on this device.</p>
-        <div id="teacherMgmtList"></div>
-        <button id="saveAllTeachersBtn" style="margin-top:14px;background:var(--coral);color:white;border:2px solid var(--navy);border-radius:12px;padding:12px 28px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;box-shadow:3px 3px 0 var(--navy);">💾 Save All Teachers</button>
-        <div id="teacherSaveMsg" style="display:none;margin-top:10px;padding:10px;border-radius:10px;font-weight:700;font-size:0.85rem;"></div>
-      </div>
-    </div><!-- /view-teachers -->
+          <div class="attendance-header">
+            <div class="day-selector">
+              <div id="attendanceDaySelector">
+                <label>📅 Select Day:</label>
+                <select class="day-dropdown" id="dayDropdown">
+                  <option value="25">Day 1 (Apr 25)</option>
+                  <option value="26">Day 2 (Apr 26)</option>
+                  <option value="27">Day 3 (Apr 27)</option>
+                </select>
+              </div>
 
-    <!-- MANAGE ROLES VIEW -->
-    <div class="dash-view" id="view-manage-roles">
-      <div class="teacher-mgmt-card">
-        <h3 style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--navy);margin-bottom:6px;">🛠 Manage Roles</h3>
-        <p style="font-size:0.85rem;color:#64748B;margin-bottom:18px;">Choose which tabs teachers can access after login. Disabled tabs will be hidden from every teacher account.</p>
-        <div id="roleMgmtList" class="roles-grid"></div>
-        <button id="saveRoleConfigBtn" class="role-save-btn">💾 Save Role Settings</button>
-        <div id="roleSaveMsg" class="role-save-msg"></div>
-      </div>
-    </div><!-- /view-manage-roles -->
+              <!-- Class Filter (Admin & Coordinator) -->
+              <div id="classFilterContainer" style="display:none;">
+                <label>🏫 Class Filter:</label>
+                <select class="day-dropdown" id="classFilterDropdown">
+                  <option value="all">All Classes</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Primary">Primary</option>
+                  <option value="Junior">Junior</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Senior">Senior</option>
+                  <option value="Young Adult">Young Adult</option>
+                  <option value="unassigned">Unassigned</option>
+                </select>
+              </div>
+            </div>
+          </div>
 
-    <!-- ANALYTICS VIEW -->
-    <div class="dash-view" id="view-analytics">
-      <div class="analytics-grid">
-        <div class="chart-card">
-          <h4>📅 Registrations by Day</h4>
-          <div id="chart-days"><div class="empty-analytics">No data yet</div></div>
-        </div>
-        <div class="chart-card">
-          <h4>📍 Registrations by Village</h4>
-          <div id="chart-village"><div class="empty-analytics">No data yet</div></div>
-        </div>
-        <div class="chart-card">
-          <h4>👥 Gender Breakdown</h4>
-          <div id="chart-gender" class="donut-wrap"><div class="empty-analytics">No data yet</div></div>
-        </div>
-        <div class="chart-card">
-          <h4>📈 Registrations Over Time</h4>
-          <div id="chart-timeline"><div class="empty-analytics">No data yet</div></div>
-        </div>
-        <div class="chart-card">
-          <h4>🔀 Registration Source</h4>
-          <div id="chart-source" class="donut-wrap"><div class="empty-analytics">No data yet</div></div>
-        </div>
-        <div class="chart-card">
-          <h4>✅ Attendance by Class</h4>
-          <div id="chart-attendance"><div class="empty-analytics">No data yet</div></div>
-        </div>
-        <div class="chart-card">
-          <h4>📊 Overall Attendance</h4>
-          <div id="chart-att-overall" class="donut-wrap"><div class="empty-analytics">No data yet</div></div>
-        </div>
-      </div>
+          <div class="attendance-table-card">
+            <div class="table-header">
+              <h3 class="attendance-table-title">📝 Attendance - Day 1 (Apr 25)</h3>
+            </div>
+            <div class="table-wrap">
+              <table class="att-table-simple">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Student Name</th>
+                  <th id="attAgeHeader">Age</th>
+                  <th id="attGenderHeader">Gender</th>
+                  <th id="attClassHeader">Class</th>
+                  <th id="attActionHeader">Attendance</th>
+                </tr>
+                </thead>
+                <tbody id="attendanceTableBody">
+                <tr><td colspan="6" class="loading-row">⏳ Loading attendance...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div><!-- /view-attendance -->
 
-    </div><!-- /view-analytics -->
+        <!-- TEACHERS VIEW -->
+        <div class="dash-view" id="view-teachers">
+          <div class="teacher-mgmt-card">
+            <h3 style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--navy);margin-bottom:6px;">👩‍🏫 Manage Teachers</h3>
+            <p style="font-size:0.85rem;color:#64748B;margin-bottom:18px;">Set teacher names and assign classes. Changes are saved locally on this device.</p>
+            <div id="teacherMgmtList"></div>
+            <button id="saveAllTeachersBtn" style="margin-top:14px;background:var(--coral);color:white;border:2px solid var(--navy);border-radius:12px;padding:12px 28px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;box-shadow:3px 3px 0 var(--navy);">💾 Save All Teachers</button>
+            <div id="teacherSaveMsg" style="display:none;margin-top:10px;padding:10px;border-radius:10px;font-weight:700;font-size:0.85rem;"></div>
+          </div>
+        </div><!-- /view-teachers -->
 
-  <!-- ARCHIVE VIEW -->
-  <div class="dash-view" id="view-archive">
-    <div class="table-card">
-      <div class="table-header">
-        <h3>🗂 Archived Records</h3>
-        <span id="archiveCount" style="font-size:0.85rem;color:#64748B;font-weight:700;"></span>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-          <tr><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th>Parent</th><th>Phone</th><th>Village</th><th>Days</th><th>Source</th><th>Archived On</th><th>Action</th></tr>
-          </thead>
-          <tbody id="archiveBody">
-          <tr><td colspan="11" class="loading-row">⏳ Loading…</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div><!-- /view-archive -->
+        <!-- MANAGE ROLES VIEW -->
+        <div class="dash-view" id="view-manage-roles">
+          <div class="teacher-mgmt-card">
+            <h3 style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--navy);margin-bottom:6px;">🛠 Manage Roles</h3>
+            <p style="font-size:0.85rem;color:#64748B;margin-bottom:18px;">Choose which tabs teachers can access after login. Disabled tabs will be hidden from every teacher account.</p>
+            <div id="roleMgmtList" class="roles-grid"></div>
+            <button id="saveRoleConfigBtn" class="role-save-btn">💾 Save Role Settings</button>
+            <div id="roleSaveMsg" class="role-save-msg"></div>
+          </div>
+        </div><!-- /view-manage-roles -->
+
+        <!-- ANALYTICS VIEW -->
+        <div class="dash-view" id="view-analytics">
+          <div class="analytics-grid">
+            <div class="chart-card">
+              <h4>📅 Registrations by Day</h4>
+              <div id="chart-days"><div class="empty-analytics">No data yet</div></div>
+            </div>
+            <div class="chart-card">
+              <h4>📍 Registrations by Village</h4>
+              <div id="chart-village"><div class="empty-analytics">No data yet</div></div>
+            </div>
+            <div class="chart-card">
+              <h4>👥 Gender Breakdown</h4>
+              <div id="chart-gender" class="donut-wrap"><div class="empty-analytics">No data yet</div></div>
+            </div>
+            <div class="chart-card">
+              <h4>📈 Registrations Over Time</h4>
+              <div id="chart-timeline"><div class="empty-analytics">No data yet</div></div>
+            </div>
+            <div class="chart-card">
+              <h4>🔀 Registration Source</h4>
+              <div id="chart-source" class="donut-wrap"><div class="empty-analytics">No data yet</div></div>
+            </div>
+            <div class="chart-card">
+              <h4>📆 Attendance by Day</h4>
+              <div id="chart-att-by-day"><div class="empty-analytics">No data yet</div></div>
+            </div>
+            <div class="chart-card">
+              <h4>✅ Attendance by Class</h4>
+              <div id="chart-attendance"><div class="empty-analytics">No data yet</div></div>
+            </div>
+
+            <div class="chart-card">
+              <h4>📊 Overall Attendance</h4>
+              <div id="chart-att-overall" class="donut-wrap"><div class="empty-analytics">No data yet</div></div>
+            </div>
+          </div>
+
+        </div><!-- /view-analytics -->
+
+        <!-- ARCHIVE VIEW -->
+        <div class="dash-view" id="view-archive">
+          <div class="table-card">
+            <div class="table-header">
+              <h3>🗂 Archived Records</h3>
+              <span id="archiveCount" style="font-size:0.85rem;color:#64748B;font-weight:700;"></span>
+            </div>
+            <div class="bulk-bar" id="archiveBulkBar">
+              <span class="bulk-count" id="archiveBulkCount">0 selected</span>
+              <button class="bulk-del-btn" id="archiveBulkRestoreBtn" style="background:#16A34A;margin-right:8px;">↩ Restore Selected</button>
+              <button class="bulk-del-btn" id="archiveBulkDelBtn">🗑️ Delete Selected</button>
+              <button style="background:#6B7280;color:white;border:none;padding:8px 14px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.82rem;cursor:pointer;" id="archiveBulkCancelBtn">✕ Cancel</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                <tr><th><input type="checkbox" id="archiveSelectAllCheck" class="row-check" title="Select all"></th><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th>Parent</th><th>Phone</th><th>Village</th><th>Days</th><th>Source</th><th>Archived On</th><th>Action</th></tr>
+                </thead>
+                <tbody id="archiveBody">
+                <tr><td colspan="11" class="loading-row">⏳ Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div><!-- /view-archive -->
 
         <!-- PRAYER REQUESTS TAB -->
         <div class="dash-view" id="view-prayer-requests">
@@ -1147,7 +1202,42 @@
           </div>
         </div>
 
-    </div><!-- /dash-main -->
+        <div class="dash-view" id="view-whatsapp-chat">
+          <div class="table-card" style="padding:18px;">
+            <div class="table-header" style="margin-bottom:16px;">
+              <div>
+                <h3 style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--navy);line-height:1.2;">💬 WhatsApp Inbox</h3>
+                <p style="color:#64748B; font-size:0.9rem; margin-top: 4px;">Parent replies from certificate messages appear here after the webhook reaches the backend service.</p>
+              </div>
+              <button id="refreshWhatsappBtn" class="refresh-btn">🔄 Refresh</button>
+            </div>
+            <div id="whatsappApiBanner" style="display:none;background:#FEF3C7;border:2px solid #F59E0B;border-radius:12px;padding:12px 14px;margin-bottom:16px;color:#92400E;font-weight:700;font-size:0.86rem;"></div>
+            <div class="chat-layout">
+              <div class="chat-sidebar-card">
+                <div style="padding:14px 16px;border-bottom:1px solid #E2E8F0;">
+                  <div style="font-weight:800;color:var(--navy);font-size:0.95rem;">Conversations</div>
+                  <div style="font-size:0.78rem;color:#64748B;font-weight:700;margin-top:4px;">Grouped by parent phone number</div>
+                </div>
+                <div class="chat-list" id="whatsappChatList">
+                  <div class="chat-empty">Loading conversations...</div>
+                </div>
+              </div>
+              <div class="chat-thread-card">
+                <div class="chat-thread-head">
+                  <div>
+                    <div class="chat-thread-title" id="whatsappThreadTitle">Select a conversation</div>
+                    <div class="chat-thread-sub" id="whatsappThreadSub">Incoming replies and delivery updates will appear here.</div>
+                  </div>
+                </div>
+                <div class="chat-thread-body" id="whatsappThreadBody">
+                  <div class="chat-empty">No conversation selected.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /dash-main -->
     </div><!-- /dash-layout -->
   </div><!-- /admin-content -->
 </div><!-- /admin-panel -->
@@ -1333,7 +1423,7 @@
     }
     // Admin button
     const adminBtn = document.getElementById('adminBtn');
-    if(adminBtn) adminBtn.textContent = lang==='en' ? '🔐 Admin / Viewer' : '🔐 నిర్వాహకుడు';
+    if(adminBtn) adminBtn.textContent = lang==='en' ? '🔐 Admin / Coordinator' : '🔐 నిర్వాహకుడు';
   }
 
   // Single click listener on wrapper — prevents double-fire from child clicks
@@ -1372,6 +1462,155 @@
   document.getElementById('regModal').addEventListener('click',e=>{
     if(e.target===document.getElementById('regModal')) document.getElementById('regModal').classList.remove('active');
   });
+  let whatsappInboxData = [];
+  let selectedWhatsappPhone = '';
+
+  async function loadWhatsAppInbox() {
+    const listEl = document.getElementById('whatsappChatList');
+    const bannerEl = document.getElementById('whatsappApiBanner');
+    if(!listEl || !bannerEl) return;
+
+    listEl.innerHTML = '<div class="chat-empty">Loading conversations...</div>';
+    bannerEl.style.display = 'none';
+
+    try {
+      const [healthResp, messageResp] = await Promise.all([
+        fetch(`${WHATSAPP_API_BASE_URL}/api/health`),
+        fetch(`${WHATSAPP_API_BASE_URL}/api/whatsapp/messages`),
+      ]);
+
+      const healthJson = await healthResp.json();
+      const messageJson = await messageResp.json();
+
+      if(!healthResp.ok || !messageResp.ok) {
+        throw new Error(messageJson.error || healthJson.error || 'WhatsApp inbox could not be loaded.');
+      }
+
+      if(!healthJson.configured) {
+        bannerEl.textContent = 'WhatsApp backend is running, but the Cloud API token or phone number ID is missing. Update server/.env.local before sending messages.';
+        bannerEl.style.display = 'block';
+      }
+
+      whatsappInboxData = Array.isArray(messageJson.messages) ? messageJson.messages : [];
+      renderWhatsAppConversationList();
+    } catch (error) {
+      bannerEl.textContent = `WhatsApp inbox is unavailable. Start the backend and verify the API base URL (${WHATSAPP_API_BASE_URL}).`;
+      bannerEl.style.display = 'block';
+      listEl.innerHTML = '<div class="chat-empty">No conversations available.</div>';
+      renderWhatsAppThread(null);
+      console.error('WhatsApp inbox load failed:', error);
+    }
+  }
+
+  function groupWhatsAppConversations(messages) {
+    const map = new Map();
+    messages.forEach(message => {
+      const phone = (message.phone || '').trim() || 'unknown';
+      if(!map.has(phone)) {
+        map.set(phone, { phone, messages: [] });
+      }
+      map.get(phone).messages.push(message);
+    });
+
+    return [...map.values()]
+      .map(group => {
+        group.messages.sort((a, b) => Date.parse(a.createdAt || 0) - Date.parse(b.createdAt || 0));
+        const latest = group.messages[group.messages.length - 1] || null;
+        return {
+          phone: group.phone,
+          name: latest?.name || group.messages.find(item => item.name)?.name || 'Unknown Parent',
+          latest,
+          messages: group.messages,
+          preview: buildConversationPreview(latest),
+        };
+      })
+      .sort((a, b) => Date.parse(b.latest?.createdAt || 0) - Date.parse(a.latest?.createdAt || 0));
+  }
+
+  function buildConversationPreview(message) {
+    if(!message) return 'No messages yet.';
+    if(message.direction === 'status') return `Status: ${message.status || 'updated'}`;
+    return message.text || '[empty message]';
+  }
+
+  function renderWhatsAppConversationList() {
+    const listEl = document.getElementById('whatsappChatList');
+    if(!listEl) return;
+
+    const groups = groupWhatsAppConversations(whatsappInboxData);
+    if(!groups.length) {
+      listEl.innerHTML = '<div class="chat-empty">No WhatsApp conversations yet.</div>';
+      renderWhatsAppThread(null);
+      return;
+    }
+
+    if(!selectedWhatsappPhone || !groups.some(group => group.phone === selectedWhatsappPhone)) {
+      selectedWhatsappPhone = groups[0].phone;
+    }
+
+    listEl.innerHTML = groups.map(group => `
+      <button class="chat-item ${group.phone === selectedWhatsappPhone ? 'active' : ''}" data-phone="${escapeHTML(group.phone)}">
+        <div class="chat-item-head">
+          <span class="chat-name">${escapeHTML(group.name || 'Unknown Parent')}</span>
+          <span class="chat-count">${group.messages.length}</span>
+        </div>
+        <div class="chat-phone">${escapeHTML(group.phone || 'Unknown number')}</div>
+        <div class="chat-preview">${escapeHTML(group.preview)}</div>
+      </button>
+    `).join('');
+
+    listEl.querySelectorAll('.chat-item').forEach(button => {
+      button.addEventListener('click', () => {
+        selectedWhatsappPhone = button.dataset.phone || '';
+        renderWhatsAppConversationList();
+      });
+    });
+
+    const activeGroup = groups.find(group => group.phone === selectedWhatsappPhone) || null;
+    renderWhatsAppThread(activeGroup);
+  }
+
+  function renderWhatsAppThread(group) {
+    const titleEl = document.getElementById('whatsappThreadTitle');
+    const subEl = document.getElementById('whatsappThreadSub');
+    const bodyEl = document.getElementById('whatsappThreadBody');
+    if(!titleEl || !subEl || !bodyEl) return;
+
+    if(!group) {
+      titleEl.textContent = 'Select a conversation';
+      subEl.textContent = 'Incoming replies and delivery updates will appear here.';
+      bodyEl.innerHTML = '<div class="chat-empty">No conversation selected.</div>';
+      return;
+    }
+
+    titleEl.textContent = group.name || 'Unknown Parent';
+    subEl.textContent = group.phone || 'Unknown number';
+    bodyEl.innerHTML = group.messages.map(message => {
+      const bubbleClass = message.direction === 'outbound'
+        ? 'outbound'
+        : message.direction === 'status'
+          ? 'status'
+          : 'inbound';
+      const body = message.direction === 'status'
+        ? `Message ${escapeHTML(message.status || 'updated')}`
+        : escapeHTML(message.text || '[empty message]');
+
+      return `
+        <div class="chat-bubble ${bubbleClass}">
+          <div>${body}</div>
+          <span class="chat-meta">${escapeHTML(formatWhatsAppTimestamp(message.createdAt))}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function formatWhatsAppTimestamp(value) {
+    const date = value ? new Date(value) : null;
+    if(!date || Number.isNaN(date.getTime())) return 'Unknown time';
+    return date.toLocaleString();
+  }
+
+  document.getElementById('refreshWhatsappBtn')?.addEventListener('click', loadWhatsAppInbox);
 </script>
 
 <!-- ✅ MODULE: Firebase logic only -->
@@ -1409,8 +1648,10 @@
   };
   const churchApp = initializeApp(churchConfig, "ChurchApp");
   const churchDb  = getFirestore(churchApp);
+  const WHATSAPP_API_BASE_URL = window.VBS_API_BASE_URL || 'http://localhost:8787';
 
-  let allData = [], currentRole = null, teacherClass = null;
+  let allData = [], currentRole = null, teacherClass = null, teacherSection = null;
+  const SECTION_OPTIONS = ['—', 'A', 'B', 'C', 'D', 'E'];
   const TEACHER_NAME_LIMIT = 20;
   const TEACHER_TAB_OPTIONS = [
     {key:'registrations', label:'Registrations', desc:'Allow teachers to view the registrations table for their class.'},
@@ -1486,6 +1727,7 @@
       if(tab.dataset.tab === 'documents') renderDocumentsView();
       if(tab.dataset.tab === 'archive') loadArchive();
       if(tab.dataset.tab === 'prayer-requests') loadPrayerRequests();
+      if(tab.dataset.tab === 'whatsapp-chat') loadWhatsAppInbox();
       closeSidebarMenu();
     });
   });
@@ -1498,6 +1740,14 @@
     const activeTab = getActiveDashboardTab();
     if(activeTab === 'archive'){
       await loadArchive();
+      return;
+    }
+    if(activeTab === 'prayer-requests'){
+      await loadPrayerRequests();
+      return;
+    }
+    if(activeTab === 'whatsapp-chat'){
+      await loadWhatsAppInbox();
       return;
     }
     await loadData();
@@ -1614,12 +1864,13 @@
         const p = cachedTeacherProfiles[actualRoleKey] || {};
         openTeacherDashboard({
           class: p.class || '',
+          section: p.section || '',
           label: p.name || actualRoleKey.replace('teacher', 'Teacher ')
         });
       } else if(TEACHER_MAP[email]){
         openTeacherDashboard(TEACHER_MAP[email]);
       }
-      
+
       // Close modal and reset state AFTER dashboard is opened
       closeModal();
     } catch(e){
@@ -1648,6 +1899,7 @@
     if(tabName === 'manage-roles') buildRoleMgmt();
     if(tabName === 'archive') loadArchive();
     if(tabName === 'prayer-requests') loadPrayerRequests();
+    if(tabName === 'whatsapp-chat') loadWhatsAppInbox();
     closeSidebarMenu();
   }
 
@@ -1655,13 +1907,14 @@
     if(currentRole !== 'teacher') return;
     const viewerNotice = document.getElementById('viewerNotice');
     if(!viewerNotice) return;
+    const secStr = teacherSection ? ` (Sec ${teacherSection})` : '';
     const dayNames = {'25': 'Day 1 (Apr 25)', '26': 'Day 2 (Apr 26)', '27': 'Day 3 (Apr 27)'};
     const teacherName = document.getElementById('loggedInEmail')?.textContent?.trim() || '';
     const mainText = (tabName === 'attendance' && teacherClass)
-      ? `${teacherClass} Class Attendance - ${dayNames[day] || dayNames['25']}`
-      : teacherClass
-        ? `${teacherClass} Class Students`
-        : 'Teacher Dashboard';
+            ? `${teacherClass}${secStr} Attendance - ${dayNames[day] || dayNames['25']}`
+            : teacherClass
+                    ? `${teacherClass}${secStr} Students`
+                    : 'Teacher Dashboard';
     viewerNotice.innerHTML = `<div>${mainText}</div>${teacherName ? `<div class="viewer-notice-sub">Teacher : ${teacherName}</div>` : ''}`;
     viewerNotice.classList.add('show');
   }
@@ -1669,6 +1922,7 @@
   function openTeacherDashboard(tc){
     currentRole  = 'teacher';
     teacherClass = tc.class;
+    teacherSection = tc.section || '';
     document.getElementById('adminPanel').classList.add('teacher-mode');
 
     const badge = document.getElementById('roleBadge');
@@ -1707,16 +1961,16 @@
   function openDashboard(){
     const isAdmin = currentRole==='admin';
     document.getElementById('adminPanel').classList.remove('teacher-mode');
-    document.getElementById('roleBadge').textContent = isAdmin?'🔴 Admin':'🟡 Viewer';
+    document.getElementById('roleBadge').textContent = isAdmin?'🔴 Admin':'🟡 Coordinator';
     document.getElementById('roleBadge').className   = 'role-badge '+(isAdmin?'role-admin':'role-viewer');
     document.getElementById('loggedInEmail').textContent = auth.currentUser?.email||'';
-    document.getElementById('viewerNotice').classList.remove('show'); // viewer has full access
+    document.getElementById('viewerNotice').classList.remove('show'); // coordinator has registration access
     document.getElementById('exportBtn').style.display   = (isAdmin||currentRole==='viewer')?'block':'none';
     document.getElementById('importBtn').style.display   = isAdmin?'block':'none';
     document.getElementById('sendCertsBtn').style.display = isAdmin?'block':'none';
     document.getElementById('actionsHead').textContent = 'Actions';
 
-    // Admin + Viewer: show tabs, but Analytics only for admin
+    // Admin + Coordinator: show registration tools, but keep admin-only tabs hidden
     document.querySelectorAll('.dash-tab').forEach(t=>{ t.style.display=''; t.classList.remove('active'); });
     document.querySelectorAll('.dash-view').forEach(v=>v.classList.remove('active'));
     // Teachers tab — admin only
@@ -1730,6 +1984,7 @@
     if(analyticsTab) analyticsTab.style.display = isAdmin ? '' : 'none';
     // Prayer Requests tab — admin only
     if(document.getElementById('navPrayerBtn')) document.getElementById('navPrayerBtn').style.display = isAdmin ? '' : 'none';
+    if(document.getElementById('navWhatsappBtn')) document.getElementById('navWhatsappBtn').style.display = isAdmin ? '' : 'none';
     if(isAdmin) buildTeacherMgmt();
     document.querySelector('[data-tab="registrations"]').classList.add('active');
     document.getElementById('view-registrations').classList.add('active');
@@ -1771,6 +2026,7 @@
       // Teacher: further filter by class only
       if(currentRole==='teacher' && teacherClass){
         allData = allData.filter(r=>r.class===teacherClass);
+        if(teacherSection) allData = allData.filter(r=>r.section===teacherSection);
       }
       populateRegistrationFilters();
       if(currentRole==='teacher'){
@@ -1907,12 +2163,19 @@
     tb.innerHTML=data.map((r,i)=>{
       const days=(r.days||'—').replace('All 3 Days (Apr 25, 26 & 27)','All 3 Days');
       const cls = r.class||'';
+      const sec = r.section||'';
       const canManage = isAdmin || isViewer;
       const clsSelect = canManage
               ? `<select class="class-sel" data-id="${r.id}" style="border:2px solid #E2E8F0;border-radius:8px;padding:4px 8px;font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;outline:none;background:#F8FAFC;">
             ${CLASS_OPTIONS.map(c=>`<option value="${c==='—'?'':c}" ${(cls===c || (c==='—' && !cls))?'selected':''}>${c==='—'?'Unassigned':c}</option>`).join('')}
            </select>`
               : `<span class="badge b-days">${cls?'Class '+cls:'—'}</span>`;
+      const secSelect = canManage
+              ? `<select class="sec-sel" data-id="${r.id}" style="border:2px solid #E2E8F0;border-radius:8px;padding:4px;font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;outline:none;background:#F8FAFC;margin-left:4px;">
+             ${SECTION_OPTIONS.map(s=>`<option value="${s==='—'?'':s}" ${(sec===s || (s==='—' && !sec))?'selected':''}>${s==='—'?'Sec':s}</option>`).join('')}
+            </select>`
+              : (sec ? `<span class="badge b-days" style="margin-left:4px;">Sec ${sec}</span>` : '');
+      const clsDisplay = r.class ? `${r.class} ${r.section ? '(Sec '+r.section+')' : ''}` : 'Unassigned';
       const childName = r.childName||((r.childFirst||'')+(r.childLast?' '+r.childLast:''));
       const shortChildName = isTeacher ? truncateTeacherName(childName) : childName;
       const sourceType = r.source === 'imported'
@@ -1940,7 +2203,7 @@
                 <span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span>
                 <span class="badge b-days">${days}</span>
                 <span class="reg-type-meta">${sourceType}</span>
-                ${canManage ? clsSelect : `<span class="badge b-days">${cls?'Class '+cls:'—'}</span>`}
+                ${canManage ? `<div style="display:flex;align-items:center;">${clsSelect}${secSelect}</div>` : `<span class="badge b-days">${clsDisplay}</span>`}
               </div>
               <div class="mobile-record-lines">
                 <div class="mobile-record-line"><strong>Age</strong><em>:</em><span>${r.age||'—'}</span></div>
@@ -1959,7 +2222,7 @@
         <td><strong>${childName}</strong></td>
         <td>${r.age||'—'}</td>
         <td><span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span></td>
-        <td>${clsSelect}</td>
+        <td><div style="display:flex;align-items:center;">${clsSelect}${secSelect}</div></td>
         <td>${r.parentName||'—'}</td>
         <td><a href="tel:${r.phone}" style="color:var(--navy);font-weight:700;text-decoration:none">${r.phone||'—'}</a></td>
         <td>${r.address||'—'}</td>
@@ -1980,6 +2243,18 @@
             allData=allData.map(r=>r.id===sel.dataset.id?{...r,class:sel.value}:r);
           });
         }catch(e){ alert('Could not save class. Try again.'); }
+      });
+    });
+
+    document.querySelectorAll('.sec-sel').forEach(sel=>{
+      sel.addEventListener('change', async()=>{
+        try{
+          await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js").then(async({getFirestore,doc,updateDoc})=>{
+            const db2=getFirestore();
+            await updateDoc(doc(db2,'registrations',sel.dataset.id),{section:sel.value});
+            allData=allData.map(r=>r.id===sel.dataset.id?{...r,section:sel.value}:r);
+          });
+        }catch(e){ alert('Could not save section. Try again.'); }
       });
     });
 
@@ -2069,8 +2344,8 @@
     const attendanceTitle = document.querySelector('.attendance-table-title');
     if(attendanceTitle){
       attendanceTitle.textContent = (isTeacher && teacherClass)
-        ? `${teacherClass} Class Attendance - ${dayNames[day]}`
-        : 'Attendance Overview';
+              ? `${teacherClass} Class Attendance - ${dayNames[day]}`
+              : 'Attendance Overview';
       attendanceTitle.style.display = isTeacher ? 'none' : '';
     }
     if(isTeacher) updateTeacherNotice('attendance', day);
@@ -2078,6 +2353,7 @@
     let data = [...allData];
     if(isTeacher && teacherClass){
       data = data.filter(r => r.class === teacherClass);
+      if(teacherSection) data = data.filter(r => r.section === teacherSection);
     }
     if((isAdmin || isViewer) && selectedAttClass !== 'all'){
       if(selectedAttClass === 'unassigned'){
@@ -2259,6 +2535,7 @@
     let data = [...allData];
     if(isTeacher && teacherClass){
       data = data.filter(r => r.class === teacherClass);
+      if(teacherSection) data = data.filter(r => r.section === teacherSection);
     }
 
     if(selectedDocsClass !== 'all'){
@@ -2277,6 +2554,7 @@
     tb.innerHTML = data.map((r, i) => {
       const childName = r.childName || ((r.childFirst||'') + (r.childLast?' '+r.childLast:''));
       const shortChildName = childName.length > 20 ? `${childName.slice(0,20)}...` : childName;
+      const clsDisplay = r.class ? `${r.class} ${r.section ? '(Sec '+r.section+')' : ''}` : 'Unassigned';
 
       // Photo preview
       const photoPreview = r.photo
@@ -2317,7 +2595,7 @@
               <div class="mobile-record-meta">
                 <span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span>
                 <span class="badge b-online">Age ${r.age||'—'}</span>
-                <span class="badge b-days">${r.class||'Unassigned'}</span>
+                <span class="badge b-days">${clsDisplay}</span>
               </div>
             </div>
           </td>
@@ -2331,6 +2609,7 @@
         <td>${r.age||'—'}</td>
         <td><span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span></td>
         <td><span class="badge b-days">${r.class||'Unassigned'}</span></td>
+        <td><span class="badge b-days">${clsDisplay}</span></td>
         <td>${r.address||'—'}</td>
         <td style="white-space:nowrap">${docBtns}</td>
       </tr>`;
@@ -2434,6 +2713,20 @@
     return '';
   }
 
+  function buildTeacherPrimaryGroupKey(className, sectionName) {
+    const safeClass = String(className || 'unassigned').trim().replace(/\s+/g, '_');
+    const safeSection = String(sectionName || 'none').trim() || 'none';
+    return `primary_${safeClass}_${safeSection}`;
+  }
+
+  function getAutoSectionForClass(className, records = allData, extraOffset = 0) {
+    if (!className) return '';
+    const sectionLetters = ['A', 'B', 'C', 'D', 'E'];
+    const classCount = records.filter(record => record.class === className).length + extraOffset;
+    const sectionIndex = Math.min(Math.floor(classCount / 20), sectionLetters.length - 1);
+    return sectionLetters[sectionIndex];
+  }
+
   async function submitReg(){
     const cn  = document.getElementById('childName').value.trim();
     const age = document.getElementById('childAge').value;
@@ -2471,6 +2764,8 @@
       const daysEl2    = document.getElementById('days');
       const genderVal  = genderEl.options[genderEl.selectedIndex]?.value || genderEl.value;
       const daysVal    = daysEl2.options[daysEl2.selectedIndex]?.value  || daysEl2.value;
+      const assignedClass = getClassForAge(age);
+      const assignedSection = getAutoSectionForClass(assignedClass);
 
       await addDoc(collection(db,'registrations'),{
         childName:  cn,
@@ -2481,7 +2776,8 @@
         address:    address,
         church:     document.getElementById('church').value.trim(),
         days:       daysVal,      // always English: Day 1 Only – April 25 etc.
-        class:      getClassForAge(age),
+        class:      assignedClass,
+        section:    assignedSection,
         source:     'online',
         createdAt:  serverTimestamp()
       });
@@ -2740,7 +3036,7 @@
 
     // Stars scattered
     [[x(200),y(60),x(22),'#FFD700'],[x(880),y(50),x(18),'#FFD700'],[x(950),y(130),x(14),'#FFC107'],
-     [x(150),y(130),x(16),'#FFB300'],[x(840),y(160),x(20),'#FFD700']].forEach(([sx2,sy2,sr,sc])=>star(sx2,sy2,sr,sc));
+      [x(150),y(130),x(16),'#FFB300'],[x(840),y(160),x(20),'#FFD700']].forEach(([sx2,sy2,sr,sc])=>star(sx2,sy2,sr,sc));
 
     // Kite top right
     drawKite(W-x(80),y(70),x(40));
@@ -2761,11 +3057,11 @@
 
     // Scattered middle stars/flowers to fill white space
     [[x(150), y(420), x(14), '#FFD700'],
-     [W-x(150), y(450), x(16), '#FF80AB'],
-     [x(120), y(580), x(18), '#38BDF8'],
-     [W-x(120), y(600), x(14), '#4ADE80']
+      [W-x(150), y(450), x(16), '#FF80AB'],
+      [x(120), y(580), x(18), '#38BDF8'],
+      [W-x(120), y(600), x(14), '#4ADE80']
     ].forEach(([fx,fy,fr,fc]) => star(fx,fy,fr,fc));
-    
+
     drawHeart(W-x(180), y(520), x(10), 'rgba(255,150,170,0.5)');
 
     // ────────────────────────────────────────
@@ -2930,11 +3226,11 @@
       ctx.fillStyle='#444';
       ctx.font=`${fs(25)} Georgia`;
       ctx.fillText('held from April 25 to 27, 2026, ' + clsPre, startX3, bodyTop+y(110));
-      
+
       ctx.font=`bold ${fs(25)} Georgia`;
       ctx.fillStyle='#E91E63';
       ctx.fillText(clsVal, startX3 + wp1, bodyTop+y(110));
-      
+
       ctx.font=`${fs(25)} Georgia`;
       ctx.fillStyle='#444';
       ctx.fillText(clsPost, startX3 + wp1 + wp2, bodyTop+y(110));
@@ -2979,11 +3275,11 @@
     if (typeof cachedTeacherProfiles !== 'undefined') {
       const classTeachers = [];
       for (const key in cachedTeacherProfiles) {
-        if (key.startsWith('teacher') && cachedTeacherProfiles[key].class === certClass && cachedTeacherProfiles[key].name) {
+        if (key.startsWith('teacher') && cachedTeacherProfiles[key].class === certClass && cachedTeacherProfiles[key].section === (student.section || '') && cachedTeacherProfiles[key].name) {
           classTeachers.push(cachedTeacherProfiles[key]);
         }
       }
-      
+
       if (classTeachers.length > 0) {
         // Pick primary teacher, otherwise default to first available for that class
         const primary = classTeachers.find(t => t.isPrimary) || classTeachers[0];
@@ -3041,10 +3337,10 @@
 
     // Small colorful flowers along grass
     [[x(80),grassTop+y(20),x(14),'#FF80AB'],
-     [x(200),grassTop+y(15),x(12),'#FFD54F'],
-     [W-x(80),grassTop+y(22),x(14),'#80CBC4'],
-     [W-x(200),grassTop+y(14),x(12),'#CE93D8'],
-     [x(500),grassTop+y(10),x(11),'#FFCC02'],
+      [x(200),grassTop+y(15),x(12),'#FFD54F'],
+      [W-x(80),grassTop+y(22),x(14),'#80CBC4'],
+      [W-x(200),grassTop+y(14),x(12),'#CE93D8'],
+      [x(500),grassTop+y(10),x(11),'#FFCC02'],
     ].forEach(([fx,fy,fr,fc])=>drawFlower(fx,fy,fr,fc));
 
     // Colorful pencils / crayons at bottom corners
@@ -3801,10 +4097,12 @@
           files: [file]
         });
       } else {
+        const name = currentViewCertStudent.childName || 'Student';
+        const message = `🙏 Congratulations to *${name}* for completing VBS 2026 at LEF Church Magatapalli! ✝️\n\nTheme: Signet Ring — Haggai 2:23\n\n"Let the little children come to me." — Matthew 19:14`;
         const phone = currentViewCertStudent.phone ? currentViewCertStudent.phone.replace(/\D/g, '') : '';
         const waUrl = phone.length === 10
-                ? `https://wa.me/91${phone}?text=${encodeURIComponent('Certificate ready to share')}`
-                : `https://wa.me/?text=${encodeURIComponent('Certificate ready to share')}`;
+                ? `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`
+                : `https://wa.me/?text=${encodeURIComponent(message)}`;
         window.open(waUrl, '_blank');
       }
     }catch(err){
@@ -3812,21 +4110,6 @@
         console.error('Error sharing certificate:', err);
         showToast('Could not share certificate', 3000);
       }
-    }
-  });
-
-  // Share from view modal
-  document.getElementById('viewCertShareBtn').addEventListener('click', () => {
-    if(!currentViewCertStudent) return;
-
-    const name = currentViewCertStudent.childName;
-    const phone = currentViewCertStudent.phone;
-    const message = `🙏 Congratulations to *${name}* for completing VBS 2026 at LEF Church Magatapalli! ✝️\n\nTheme: Signet Ring — Haggai 2:23\n\n"Let the little children come to me." — Matthew 19:14`;
-
-    if(phone && phone.length === 10){
-      window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(message)}`, '_blank');
-    } else {
-      window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
     }
   });
 
@@ -3850,6 +4133,7 @@
     document.getElementById('editChurch').value     = r.church||'';
     document.getElementById('editDays').value       = r.days||'All 3 Days (Apr 25, 26 & 27)';
     document.getElementById('editClass').value      = r.class||'';
+    document.getElementById('editSection').value    = r.section||'';
     document.getElementById('editErrMsg').style.display='none';
     document.getElementById('editModal').classList.add('active');
   }
@@ -3875,6 +4159,7 @@
       church:     document.getElementById('editChurch').value.trim(),
       days:       document.getElementById('editDays').value,
       class:      document.getElementById('editClass').value,
+      section:    document.getElementById('editSection').value,
     };
     const hasChanges = orig && Object.keys(newVals).some(k=>(newVals[k]||'')!==(orig[k]||''));
     if(!hasChanges){
@@ -3896,6 +4181,7 @@
         church:     document.getElementById('editChurch').value.trim(),
         days:       document.getElementById('editDays').value,
         class:      document.getElementById('editClass').value,
+        section:    document.getElementById('editSection').value,
       };
       const {getFirestore,doc,updateDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
       await updateDoc(doc(getFirestore(), 'registrations', id), updates);
@@ -4072,6 +4358,8 @@
           continue;
         }
 
+        const derivedClass = row['class']||getClassForAge(row['age']||'');
+        const derivedSection = (row['section'] || '').trim() || getAutoSectionForClass(derivedClass, allData, imported);
         const rec = {
           childName:  childName,
           age:        row['age']||'',
@@ -4081,7 +4369,8 @@
           address:    row['address']||row['village']||'',
           church:     row['church']||'',
           days:       row['days']||row['days attending']||'All 3 Days (Apr 25, 26 & 27)',
-          class:      row['class']||getClassForAge(row['age']||''),
+          class:      derivedClass,
+          section:    derivedSection,
           source:     'imported',
           createdAt:  serverTimestamp(),
         };
@@ -4181,7 +4470,7 @@
 
     let sent = 0;
     let failed = 0;
-    const failedNumbers = [];
+    const failedEntries = [];
 
     for(let i = 0; i < filtered.length; i++){
       const student = filtered[i];
@@ -4196,7 +4485,10 @@
         sent++;
       } catch(err){
         failed++;
-        failedNumbers.push(student.phone);
+        failedEntries.push({
+          phone: student.phone,
+          error: err?.message || 'Unknown error',
+        });
         console.error('Failed to send to', student.phone, err);
       }
 
@@ -4212,33 +4504,51 @@
         ${sent > 0 ? 'Done' : 'Failed'}
       </div>
       <div style="font-size:0.9rem;">
-        <strong>${sent}</strong> sent successfully<br>
+        <strong>${sent}</strong> accepted by Cloud API<br>
         <strong>${failed}</strong> failed
-        ${failedNumbers.length > 0 ? '<br><br>Failed numbers: ' + failedNumbers.join(', ') : ''}
+        ${failedEntries.length > 0
+          ? '<br><br>Failed recipients:<br>' + failedEntries.map(entry => `${escapeHTML(entry.phone)}: ${escapeHTML(entry.error)}`).join('<br>')
+          : ''}
       </div>
     `;
 
     showToast(`Sent ${sent} certificate message(s)${failed > 0 ? ', ' + failed + ' failed' : ''}`, 4000);
+    if(sent > 0) loadWhatsAppInbox();
 
     btn.disabled = false;
     btn.textContent = 'Send Certificates';
   });
 
   async function sendCertificateToWhatsApp(student){
-    const phone = student.phone;
-    const name = student.childName;
+    const phone = String(student.phone || '').replace(/\D/g, '');
+    const name = student.childName || 'Student';
     const message = `Congratulations to *${name}* for completing VBS 2026 at LEF Church Magatapalli!
 
 Theme: Signet Ring - Haggai 2:23
 
 "Let the little children come to me." - Matthew 19:14
 
-Open the certificate from the admin panel to download or share the HD version.`;
-    const whatsappUrl = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-    return new Promise((resolve) => {
-      setTimeout(resolve, 500);
+Reply to this message if you need help with the certificate or student details.`;
+
+    const response = await fetch(`${WHATSAPP_API_BASE_URL}/api/whatsapp/send-certificate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        phone,
+        name,
+        registrationId: student.id,
+        message,
+      }),
     });
+
+    const payload = await response.json().catch(() => ({}));
+    if(!response.ok || !payload.ok) {
+      throw new Error(payload.error || 'WhatsApp send failed.');
+    }
+
+    return payload;
   }
 
 
@@ -4344,8 +4654,9 @@ Open the certificate from the admin panel to download or share the HD version.`;
     Object.keys(profiles).forEach(k => {
       if(k.startsWith('teacher')){
         const tClass = profiles[k].class || '';
+        const tSection = profiles[k].section || '';
         const email = CLASS_EMAIL_MAP[tClass] || `${k}@lefmagatapalli.com`;
-        TEACHER_MAP[email] = { class: tClass, label: profiles[k].name || k.replace('teacher', 'Teacher ') };
+        TEACHER_MAP[email] = { class: tClass, section: tSection, label: profiles[k].name || k.replace('teacher', 'Teacher ') };
         ROLE_EMAIL_MAP[k] = email;
       }
     });
@@ -4365,7 +4676,7 @@ Open the certificate from the admin panel to download or share the HD version.`;
       const opt = document.createElement('option');
       opt.value = k;
       const tName = p.name || k.replace('teacher','Teacher ');
-      opt.textContent = `${tName} (${p.class || 'No Class'})`;
+      opt.textContent = `${tName} (${p.class || 'No Class'}${p.section ? ' - Sec ' + p.section : ''})`;
       sel.appendChild(opt);
     });
   }
@@ -4462,29 +4773,39 @@ Open the certificate from the admin panel to download or share the HD version.`;
       `;
 
       function getTeacherRowHtml(key, p) {
-        const num = key.replace('teacher','');
         const clsOpts = classNames.map(c=>
                 `<option value="${c}" ${(p.class||'')=== c?'selected':''}>${c?c:'No class assigned'}</option>`
         ).join('');
+        const secOpts = SECTION_OPTIONS.map(s=>
+                `<option value="${s==='—'?'':s}" ${(p.section||'')=== (s==='—'?'':s)?'selected':''}>${s==='—'?'No Sec':s}</option>`
+        ).join('');
         const isPrimary = p.isPrimary ? 'checked' : '';
-        const safeClass = p.class ? p.class.replace(/\s+/g,'_') : 'unassigned';
-        
-        return `<div class="teacher-row" style="background:white;border:1px solid #E2E8F0;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
-          <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:16px;">
-            <span class="teacher-num" style="background:#EFF6FF;color:#1D4ED8;padding:8px 12px;border-radius:8px;font-size:0.95rem;font-weight:900;">T${num}</span>
-            <div style="flex:1; min-width:200px;">
-              <input class="teacher-name-input" data-key="${key}" placeholder="Teacher ${num} name" value="${p.name||''}" style="width:100%; padding:12px 16px; border:2px solid #E2E8F0; border-radius:10px; font-family:'Nunito',sans-serif; font-size:0.95rem; outline:none; background:#F8FAFC; transition:border-color 0.2s;">
+        const primaryGroup = buildTeacherPrimaryGroupKey(p.class, p.section);
+
+        return `<div class="teacher-card teacher-row">
+          <div class="teacher-config-grid">
+            <div class="teacher-field">
+              <label>Teacher Name</label>
+              <input class="teacher-name-input teacher-input" data-key="${key}" placeholder="Teacher name" value="${p.name||''}">
             </div>
-            <div style="flex:1; min-width:180px;">
-              <select class="teacher-class-sel" data-key="${key}" style="width:100%; padding:12px 16px; border:2px solid #E2E8F0; border-radius:10px; font-family:'Nunito',sans-serif; font-size:0.95rem; outline:none; cursor:pointer; background:white; font-weight:700; color:#1E3A5F;">${clsOpts}</select>
+            <div class="teacher-field">
+              <label>Class</label>
+              <select class="teacher-class-sel teacher-select" data-key="${key}">${clsOpts}</select>
             </div>
+            <div class="teacher-field">
+              <label>Section</label>
+               <select class="teacher-sec-sel teacher-select" data-key="${key}">${secOpts}</select>
+             </div>
           </div>
-          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; padding-top:16px; border-top:2px dashed #F1F5F9;">
-            <label style="display:flex;align-items:center;gap:8px;font-size:0.9rem;font-weight:800;color:#475569;cursor:pointer;background:#F8FAFC;padding:8px 14px;border-radius:10px;border:1px solid #E2E8F0;">
-              <input type="radio" name="primary_${safeClass}" class="primary-teacher-radio" data-key="${key}" value="true" ${isPrimary} style="accent-color:var(--coral);width:18px;height:18px;cursor:pointer;">
-              Primary Teacher
+          <div class="teacher-card-actions">
+            <div>
+              <label class="teacher-primary-pill">
+              <input type="radio" name="${primaryGroup}" class="primary-teacher-radio" data-key="${key}" value="true" ${isPrimary}>
+              <span class="teacher-primary-label">Primary teacher for ${(p.class || 'this class')}${p.section ? ' - Sec ' + p.section : ''}</span>
             </label>
-            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="teacher-inline-note">Only one primary teacher can be selected for each class and section.</div>
+            </div>
+            <div class="teacher-sign-actions">
               <input type="file" class="sig-upload-input" data-key="${key}" accept="image/*" style="display:none" id="sig_${key}">
               <button type="button" onclick="document.getElementById('sig_${key}').click()" style="background:white;border:2px solid #CBD5E1;padding:8px 14px;border-radius:10px;font-size:0.85rem;font-weight:800;cursor:pointer;color:#475569;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--coral)';this.style.color='var(--coral)'" onmouseout="this.style.borderColor='#CBD5E1';this.style.color='#475569'">
                 ✍️ Upload Signature
@@ -4504,14 +4825,20 @@ Open the certificate from the admin panel to download or share the HD version.`;
       html += sortedKeys.map(k => getTeacherRowHtml(k, profiles[k])).join('');
       list.innerHTML = html;
 
-      // Wire dynamic update for the primary teacher radio group
-      list.querySelectorAll('.teacher-class-sel').forEach(sel => {
-        sel.addEventListener('change', (e) => {
-          const row = e.target.closest('.teacher-row');
+      function refreshPrimaryTeacherGroups(container = list) {
+        container.querySelectorAll('.teacher-row').forEach(row => {
+          const classSel = row.querySelector('.teacher-class-sel');
+          const secSel = row.querySelector('.teacher-sec-sel');
           const radio = row.querySelector('.primary-teacher-radio');
-          const newClass = e.target.value ? e.target.value.replace(/\s+/g,'_') : 'unassigned';
-          radio.name = 'primary_' + newClass;
+          const label = row.querySelector('.teacher-primary-label');
+          if(!classSel || !secSel || !radio || !label) return;
+          radio.name = buildTeacherPrimaryGroupKey(classSel.value, secSel.value);
+          label.textContent = `Primary teacher for ${classSel.value || 'this class'}${secSel.value ? ' - Sec ' + secSel.value : ''}`;
         });
+      }
+
+      list.querySelectorAll('.teacher-class-sel, .teacher-sec-sel').forEach(control => {
+        control.addEventListener('change', () => refreshPrimaryTeacherGroups());
       });
 
       function attachSigListeners(container) {
@@ -4556,6 +4883,7 @@ Open the certificate from the admin panel to download or share the HD version.`;
       }
 
       attachSigListeners(list);
+      refreshPrimaryTeacherGroups();
 
       if(!document.getElementById('addTeacherBtn')){
         const addBtn = document.createElement('button');
@@ -4570,18 +4898,17 @@ Open the certificate from the admin panel to download or share the HD version.`;
         addBtn.addEventListener('click', () => {
           maxTeacherIdx++;
           const newKey = `teacher${maxTeacherIdx}`;
-          profiles[newKey] = { name: '', class: '' };
+          profiles[newKey] = { name: '', class: '', section: '', isPrimary: false };
           const div = document.createElement('div');
           div.innerHTML = getTeacherRowHtml(newKey, profiles[newKey]);
           const newRow = div.firstElementChild;
           list.appendChild(newRow);
           attachSigListeners(newRow);
 
-          newRow.querySelector('.teacher-class-sel').addEventListener('change', (e) => {
-            const radio = newRow.querySelector('.primary-teacher-radio');
-            const newClass = e.target.value ? e.target.value.replace(/\s+/g,'_') : 'unassigned';
-            radio.name = 'primary_' + newClass;
+          newRow.querySelectorAll('.teacher-class-sel, .teacher-sec-sel').forEach(control => {
+            control.addEventListener('change', () => refreshPrimaryTeacherGroups());
           });
+          refreshPrimaryTeacherGroups();
         });
       }
     });
@@ -4600,11 +4927,13 @@ Open the certificate from the admin panel to download or share the HD version.`;
       const key = inp.dataset.key;
       if(key === '_director') return;
       const sel = document.querySelector(`.teacher-class-sel[data-key="${key}"]`);
+      const secSel = document.querySelector(`.teacher-sec-sel[data-key="${key}"]`);
       const sig = document.querySelector(`.sig-preview[data-key="${key}"]`)?.getAttribute('src') || '';
       const isPrimary = document.querySelector(`.primary-teacher-radio[data-key="${key}"]`)?.checked || false;
       if(!profiles[key]) profiles[key]={};
       profiles[key].name  = inp.value.trim();
       profiles[key].class = sel ? sel.value : '';
+      profiles[key].section = secSel ? secSel.value : '';
       profiles[key].signature = sig;
       profiles[key].isPrimary = isPrimary;
     });
@@ -4671,8 +5000,9 @@ Open the certificate from the admin panel to download or share the HD version.`;
   // ── ANALYTICS ──
   function renderAnalytics(){
     if(!allData.length){
-      ['chart-days','chart-village','chart-gender','chart-timeline'].forEach(id=>{
-        document.getElementById(id).innerHTML='<div class="empty-analytics">📋 No registrations yet</div>';
+      ['chart-days','chart-village','chart-gender','chart-timeline','chart-source','chart-att-by-day'].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el) el.innerHTML='<div class="empty-analytics">📋 No registrations yet</div>';
       });
       return;
     }
@@ -4775,6 +5105,83 @@ Open the certificate from the admin panel to download or share the HD version.`;
           <div class="tl-label">${date}</div>
         </div>`).join('');
       document.getElementById('chart-timeline').innerHTML=`<div class="timeline-row">${bars}</div>`;
+    }
+
+    // ── Registration Source ──
+    const onlineCount = allData.filter(r => r.source !== 'imported').length;
+    const importedCount = allData.filter(r => r.source === 'imported').length;
+    const sourceData = [
+      {label:'Online', count:onlineCount, color:'#0EA5E9'},
+      {label:'Imported', count:importedCount, color:'#A855F7'}
+    ].filter(s=>s.count>0);
+    
+    if(sourceData.length > 0) {
+      let srcAngle = -90;
+      let srcSlices = '';
+      sourceData.forEach(s => {
+        const ang = (s.count/total)*360;
+        const st = srcAngle*(Math.PI/180);
+        const en = (srcAngle+ang)*(Math.PI/180);
+        const x1 = 70+50*Math.cos(st), y1 = 70+50*Math.sin(st);
+        const x2 = 70+50*Math.cos(en), y2 = 70+50*Math.sin(en);
+        const ix1 = 70+30*Math.cos(st), iy1 = 70+30*Math.sin(st);
+        const ix2 = 70+30*Math.cos(en), iy2 = 70+30*Math.sin(en);
+        const lg = ang>180?1:0;
+        srcSlices += `<path d="M${x1},${y1} A50,50 0 ${lg},1 ${x2},${y2} L${ix2},${iy2} A30,30 0 ${lg},0 ${ix1},${iy1} Z" fill="${s.color}" opacity="0.9"/>`;
+        srcAngle += ang;
+      });
+      const sLegend = sourceData.map(s => `<div class="legend-item"><div class="legend-dot" style="background:${s.color}"></div>${s.label}: <strong>${s.count}</strong> (${Math.round((s.count/total)*100)}%)</div>`).join('');
+      document.getElementById('chart-source').innerHTML = `
+        <svg width="140" height="140" viewBox="0 0 140 140">${srcSlices}
+          <circle cx="70" cy="70" r="28" fill="white"/>
+          <text x="70" y="65" text-anchor="middle" font-family="Fredoka One" font-size="18" fill="#1E3A5F">${total}</text>
+          <text x="70" y="80" text-anchor="middle" font-family="Nunito" font-size="9" fill="#64748B" font-weight="700">TOTAL</text>
+        </svg>
+        <div class="donut-legend">${sLegend}</div>`;
+    }
+
+    // ── Attendance by Day ──
+    let day1P = 0, day1A = 0, day2P = 0, day2A = 0, day3P = 0, day3A = 0;
+    allData.forEach(r => {
+      if(typeof r.attendance === 'object' && r.attendance){
+        if(r.attendance['25'] === 'present') day1P++;
+        if(r.attendance['25'] === 'absent') day1A++;
+        if(r.attendance['26'] === 'present') day2P++;
+        if(r.attendance['26'] === 'absent') day2A++;
+        if(r.attendance['27'] === 'present') day3P++;
+        if(r.attendance['27'] === 'absent') day3A++;
+      }
+    });
+
+    if(day1P+day1A+day2P+day2A+day3P+day3A > 0){
+      document.getElementById('chart-att-by-day').innerHTML = `
+        <div style="margin-bottom:16px;">
+          <div style="font-weight:800;font-size:0.9rem;color:var(--navy);margin-bottom:6px;">Day 1 (Apr 25)</div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <div style="flex:${day1P||0};background:#16A34A;height:24px;border-radius:6px 0 0 6px;min-width:${day1P?4:0}px;"></div>
+            <div style="flex:${day1A||0};background:#DC2626;height:24px;border-radius:0 6px 6px 0;min-width:${day1A?4:0}px;"></div>
+            <span style="font-size:0.85rem;font-weight:800;color:#555;white-space:nowrap;margin-left:4px;">✅${day1P} &nbsp; ❌${day1A}</span>
+          </div>
+        </div>
+        <div style="margin-bottom:16px;">
+          <div style="font-weight:800;font-size:0.9rem;color:var(--navy);margin-bottom:6px;">Day 2 (Apr 26)</div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <div style="flex:${day2P||0};background:#16A34A;height:24px;border-radius:6px 0 0 6px;min-width:${day2P?4:0}px;"></div>
+            <div style="flex:${day2A||0};background:#DC2626;height:24px;border-radius:0 6px 6px 0;min-width:${day2A?4:0}px;"></div>
+            <span style="font-size:0.85rem;font-weight:800;color:#555;white-space:nowrap;margin-left:4px;">✅${day2P} &nbsp; ❌${day2A}</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:0.9rem;color:var(--navy);margin-bottom:6px;">Day 3 (Apr 27)</div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <div style="flex:${day3P||0};background:#16A34A;height:24px;border-radius:6px 0 0 6px;min-width:${day3P?4:0}px;"></div>
+            <div style="flex:${day3A||0};background:#DC2626;height:24px;border-radius:0 6px 6px 0;min-width:${day3A?4:0}px;"></div>
+            <span style="font-size:0.85rem;font-weight:800;color:#555;white-space:nowrap;margin-left:4px;">✅${day3P} &nbsp; ❌${day3A}</span>
+          </div>
+        </div>
+      `;
+    } else {
+      document.getElementById('chart-att-by-day').innerHTML = '<div class="empty-analytics">No attendance recorded yet</div>';
     }
 
     // ── Attendance by Class (Day-wise) ──
@@ -4904,7 +5311,7 @@ Open the certificate from the admin panel to download or share the HD version.`;
 
   async function loadArchive(){
     const tb = document.getElementById('archiveBody');
-    tb.innerHTML = '<tr><td colspan="11" class="loading-row">⏳ Loading archived records…</td></tr>';
+    tb.innerHTML = '<tr><td colspan="12" class="loading-row">⏳ Loading archived records…</td></tr>';
     try{
       const {getFirestore,collection,getDocs,orderBy,query} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
       const db2 = getFirestore();
@@ -4913,7 +5320,7 @@ Open the certificate from the admin panel to download or share the HD version.`;
       updateArchiveCount();
       renderArchiveRows();
     }catch(err){
-      tb.innerHTML=`<tr><td colspan="11" class="no-data">❌ Failed to load: ${err.message}</td></tr>`;
+      tb.innerHTML=`<tr><td colspan="12" class="no-data">❌ Failed to load: ${err.message}</td></tr>`;
     }
   }
 
@@ -4932,9 +5339,10 @@ Open the certificate from the admin panel to download or share the HD version.`;
       const src = r.source==='imported'
               ? `<span class="badge b-imported">⬆ Imported</span>`
               : `<span class="badge b-online">✅ Registered</span>`;
+      const chk = `<input type="checkbox" class="row-check arch-rec-check mobile-head-check" data-id="${r.id}">`;
       if(isMobile){
         return `<tr>
-          <td colspan="11" class="mobile-record-cell">
+          <td colspan="12" class="mobile-record-cell">
             <div class="mobile-record-card">
               <div class="mobile-record-head">
                 <div class="mobile-record-head-main">
@@ -4943,7 +5351,7 @@ Open the certificate from the admin panel to download or share the HD version.`;
                   <div class="mobile-record-sub">${archivedOn}</div>
                   </div>
                 </div>
-                <div class="mobile-record-head-tools">${src}</div>
+               <div class="mobile-record-head-tools">${src}${chk}</div>
               </div>
               <div class="mobile-record-meta">
                 <span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span>
@@ -4964,6 +5372,7 @@ Open the certificate from the admin panel to download or share the HD version.`;
         </tr>`;
       }
       return `<tr>
+        <td>${chk}</td>
         <td><strong style="color:#94A3B8">${i+1}</strong></td>
         <td><strong>${childName}</strong></td>
         <td>${r.age||'—'}</td>
@@ -5019,7 +5428,106 @@ Open the certificate from the admin panel to download or share the HD version.`;
         }catch(e){ showToast('❌ Delete failed: '+e.message,3000); }
       });
     });
+
+    // Wire row checkboxes
+    document.querySelectorAll('.arch-rec-check').forEach(cb=>{
+      cb.addEventListener('change', updateArchiveBulkBar);
+    });
   }
+
+  function updateArchiveBulkBar(){
+    const checked = document.querySelectorAll('.arch-rec-check:checked');
+    const bar = document.getElementById('archiveBulkBar');
+    if(checked.length > 0){
+      bar.classList.add('show');
+      document.getElementById('archiveBulkCount').textContent = checked.length + ' selected';
+    } else {
+      bar.classList.remove('show');
+    }
+  }
+
+  // Select all checkbox
+  document.getElementById('archiveSelectAllCheck')?.addEventListener('change', function(){
+    document.querySelectorAll('.arch-rec-check').forEach(cb=>{ cb.checked=this.checked; });
+    updateArchiveBulkBar();
+  });
+
+  // Cancel bulk selection
+  document.getElementById('archiveBulkCancelBtn')?.addEventListener('click', ()=>{
+    document.querySelectorAll('.arch-rec-check').forEach(cb=>{ cb.checked=false; });
+    document.getElementById('archiveSelectAllCheck').checked=false;
+    document.getElementById('archiveBulkBar').classList.remove('show');
+  });
+
+  // Bulk Restore
+  document.getElementById('archiveBulkRestoreBtn')?.addEventListener('click', async()=>{
+    const checked = [...document.querySelectorAll('.arch-rec-check:checked')];
+    if(!checked.length) return;
+    const ok = await showConfirm(`Restore ${checked.length} Record(s)?`, `These records will be moved back to the Registrations tab.`, `↩ Restore ${checked.length}`, '↩️');
+    if(!ok) return;
+    const btn = document.getElementById('archiveBulkRestoreBtn');
+    btn.disabled=true; btn.textContent='⏳ Restoring…';
+    try{
+      const {getFirestore,doc,getDoc,writeBatch} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      const db2=getFirestore();
+      const batch=writeBatch(db2);
+      const ids = checked.map(cb=>cb.dataset.id);
+      for(const id of ids){
+        const snap = await getDoc(doc(db2,'archived',id));
+        if(snap.exists()){
+          const data = snap.data();
+          delete data.archivedAt;
+          batch.set(doc(db2,'registrations',id), data);
+          batch.delete(doc(db2,'archived',id));
+        }
+      }
+      await batch.commit();
+      ids.forEach(id => removeArchivedRecord(id));
+      renderArchiveRows();
+      await loadData();
+      document.getElementById('archiveSelectAllCheck').checked=false;
+      document.getElementById('archiveBulkBar').classList.remove('show');
+      showToast(`↩ ${ids.length} record(s) restored.`, 3000);
+    }catch(err){
+      showToast('❌ Bulk restore failed: '+err.message, 4000);
+    }finally{
+      btn.disabled=false; btn.textContent='↩ Restore Selected';
+    }
+  });
+
+
+  // Bulk Permanent Delete
+  document.getElementById('archiveBulkDelBtn')?.addEventListener('click', async()=> {
+    const checked = [...document.querySelectorAll('.arch-rec-check:checked')];
+    if (!checked.length) return;
+    const ok = await showConfirm(`Permanently Delete ${checked.length} Record(s)?`, `This action is permanent and cannot be undone.`, `🗑 Delete ${checked.length}`, '🗑️');
+    if (!ok) return;
+    const btn = document.getElementById('archiveBulkDelBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Deleting…';
+    try {
+      const {
+        getFirestore,
+        doc,
+        writeBatch
+      } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      const db2 = getFirestore();
+      const batch = writeBatch(db2);
+      const ids = checked.map(cb => cb.dataset.id);
+      ids.forEach(id => batch.delete(doc(db2, 'archived', id)));
+      await batch.commit();
+      ids.forEach(id => removeArchivedRecord(id));
+      renderArchiveRows();
+      document.getElementById('archiveSelectAllCheck').checked = false;
+      document.getElementById('archiveBulkBar').classList.remove('show');
+      showToast(`🗑 ${ids.length} record(s) permanently deleted.`, 3000);
+    } catch (err) {
+      showToast('❌ Bulk delete failed: ' + err.message, 4000);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '🗑️ Delete Selected';
+    }
+  })
 
   // ══════ LOAD PRAYER REQUESTS ══════
   let prayerRequestsData = [];
@@ -5233,14 +5741,21 @@ Open the certificate from the admin panel to download or share the HD version.`;
             <option value="Day 2 &amp; 3 – April 26 &amp; 27">Day 2 &amp; 3 – April 26 &amp; 27</option>
           </select>
         </div>
-        <div class="edit-form-group" style="grid-column:1/-1"><label>Class</label>
-          <select id="editClass">
-            <option value="">Unassigned</option>
-            <option value="1">Class 1</option><option value="2">Class 2</option>
-            <option value="3">Class 3</option><option value="4">Class 4</option>
-            <option value="5">Class 5</option><option value="6">Class 6</option>
-            <option value="7">Class 7</option>
-          </select>
+        <div class="edit-form-group" style="grid-column:1/-1"><label>Class & Section</label>
+          <div style="display:flex;gap:10px;">
+            <select id="editClass">
+              <option value="">Unassigned</option>
+              <option value="Beginner">Beginner</option><option value="Primary">Primary</option>
+              <option value="Junior">Junior</option><option value="Intermediate">Intermediate</option>
+              <option value="Senior">Senior</option><option value="Young Adult">Young Adult</option>
+            </select>
+            <select id="editSection">
+              <option value="">No Section</option>
+              <option value="A">A</option><option value="B">B</option>
+              <option value="C">C</option><option value="D">D</option><option value="E">E</option>
+            </select>
+          </div>
+        </div>
         </div>
       </div>
       <div id="editErrMsg" style="display:none;background:#FEE2E2;color:#DC2626;padding:10px;border-radius:10px;margin-top:10px;font-weight:700;font-size:0.85rem;"></div>
@@ -5364,7 +5879,7 @@ Open the certificate from the admin panel to download or share the HD version.`;
 
 <!-- ID CARD MODAL -->
 <div class="modal-overlay" id="idCardModal">
-  <div class="modal-box" style="max-width:600px;">
+  <div class="modal-box" style="max-width:600px;max-height:90vh;overflow-y:auto;">
     <div style="background:linear-gradient(135deg,#3B82F6,#2563EB);padding:20px 24px;border-radius:21px 21px 0 0;display:flex;align-items:center;justify-content:space-between;">
       <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:white;">🪪 VBS ID Card</div>
       <button id="idCardModalClose" style="background:rgba(255,255,255,.2);border:none;color:white;font-size:1.3rem;cursor:pointer;border-radius:50%;width:34px;height:34px;">✕</button>
@@ -5452,8 +5967,8 @@ Open the certificate from the admin panel to download or share the HD version.`;
         <ul style="margin:0;padding-left:20px;color:#92400E;font-size:0.85rem;line-height:1.6;">
           <li>This will send WhatsApp messages for students who have an uploaded photo</li>
           <li>Only students with valid 10-digit phone numbers will receive messages</li>
-          <li>Messages will be sent via WhatsApp Business API</li>
-          <li>Make sure you have configured WhatsApp API credentials</li>
+          <li>Messages are sent through the WhatsApp Cloud API backend, not by opening browser tabs</li>
+          <li>Parent replies appear in the WhatsApp Inbox tab after the webhook is configured in Meta</li>
         </ul>
       </div>
 
