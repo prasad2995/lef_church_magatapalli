@@ -1615,39 +1615,16 @@
 
 <!-- ✅ MODULE: Firebase logic only -->
 <script type="module">
-  import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, signOut }
+  import { signInWithEmailAndPassword, signOut }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp }
+  import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDOfENBl1a8mkAEZomt_D05okuEcPsgcPo",
-    authDomain: "vbs-magatapalli-46600.firebaseapp.com",
-    projectId: "vbs-magatapalli-46600",
-    storageBucket: "vbs-magatapalli-46600.firebasestorage.app",
-    messagingSenderId: "91676318303",
-    appId: "1:91676318303:web:2130ad4da02e69fe8299ea"
-  };
+  import { auth, db, churchDb } from "../firebase-config.js";
 
   const ADMIN_EMAIL  = "admin@lefmagatapalli.com";
   const VIEWER_EMAIL = "coordinator@lefmagatapalli.com";
 
-  const app  = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db   = getFirestore(app);
-
-  // Secondary Firebase App for Main Church Website (Prayer Requests)
-  const churchConfig = {
-    apiKey: "AIzaSyDChKseRGUolPq1wYMLsgI7nG0fiw2jfUU",
-    authDomain: "lef-church-magatapalli.firebaseapp.com",
-    projectId: "lef-church-magatapalli",
-    storageBucket: "lef-church-magatapalli.firebasestorage.app",
-    messagingSenderId: "381152009664",
-    appId: "1:381152009664:web:3cf33c5a4c35ff36a8bc25"
-  };
-  const churchApp = initializeApp(churchConfig, "ChurchApp");
-  const churchDb  = getFirestore(churchApp);
   const WHATSAPP_API_BASE_URL = window.VBS_API_BASE_URL || 'http://localhost:8787';
 
   let allData = [], currentRole = null, teacherClass = null, teacherSection = null;

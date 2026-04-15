@@ -649,7 +649,7 @@
       <div class="suggest-card">
         <div class="suggest-icon">🎶</div>
         <div class="suggest-title">Worship Music</div>
-        <div class="suggest-desc">A playlist or audio player with worship songs used in services.</div>
+        <div class="suggest-desc">A playlist or audio player with worship setups used in services.</div>
       </div>
       <div class="suggest-card">
         <div class="suggest-icon">📸</div>
@@ -700,22 +700,9 @@
 
 <!-- FIREBASE SCRIPT -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { churchDb as db } from "./firebase-config.js";
+  import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // ⚠️ IMPORTANT: Replace this with the EXACT SAME config block from your vbs2026.html file!
-  const firebaseConfig = {
-    apiKey: "AIzaSyDChKseRGUolPq1wYMLsgI7nG0fiw2jfUU",
-    authDomain: "lef-church-magatapalli.firebaseapp.com",
-    projectId: "lef-church-magatapalli",
-    storageBucket: "lef-church-magatapalli.firebasestorage.app",
-    messagingSenderId: "381152009664",
-    appId: "1:381152009664:web:3cf33c5a4c35ff36a8bc25",
-    measurementId: "G-JE724TVWBQ"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
 
   document.getElementById('prayerForm').addEventListener('submit', async (e) => {
     e.preventDefault();
