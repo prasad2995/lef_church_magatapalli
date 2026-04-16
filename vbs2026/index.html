@@ -279,7 +279,8 @@
     .table-header h3{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--navy);line-height:1.2;}
     .search-box{padding:10px 14px;border:2px solid #E2E8F0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.88rem;outline:none;width:200px;}
     .search-box:focus{border-color:var(--coral);}
-    .export-btn{background:#4ADE80;color:var(--navy);border:none;padding:10px 18px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;}
+    .export-btn{background:#4ADE80;color:var(--navy);border:none;padding:10px 18px;border-radius:25px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;}
+    .action-btn{background:#fff;color:var(--navy);border:none;padding:10px 18px;border-radius:25px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;}
     .filter-row{display:flex;gap:10px;padding:12px 22px;border-bottom:2px solid #F1F5F9;flex-wrap:wrap;}
     .filter-select{min-width:140px;padding:8px 12px;border:2px solid #E2E8F0;border-radius:10px;background:#F8FAFC;color:#334155;font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;outline:none;cursor:pointer;}
     .filter-select:focus{border-color:var(--coral);background:white;}
@@ -333,7 +334,7 @@
     .bulk-del-btn{background:#DC2626;color:white;border:none;padding:8px 16px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;}
     .bulk-del-btn:hover{background:#B91C1C;}
     .bulk-count{font-weight:800;font-size:0.88rem;color:#92400E;}
-    .import-btn{background:#0EA5E9;color:white;border:none;padding:10px 16px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;}
+    .import-btn{background:#0EA5E9;color:white;border:none;padding:10px 16px;border-radius:25px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;}
     .import-btn:hover{background:#0284C7;}
     /* Edit modal form */
     .edit-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
@@ -490,7 +491,7 @@
       .day-selector label{font-size:0.86rem;}
       .day-dropdown{width:auto;min-width:120px;max-width:160px;padding:8px 10px;font-size:0.8rem;}
       .search-box{width:100%;min-width:0;padding:9px 12px;font-size:0.82rem;}
-      .export-btn,.import-btn,.send-certs-btn{display:none !important;}
+      .export-btn,.import-btn,.send-certs-btn{display:none !important}
       .filter-row{padding:10px 14px;gap:8px;}
       .filter-select{min-width:0;flex:1 1 calc(50% - 4px);padding:7px 10px;font-size:0.78rem;}
       .attendance-table-card .table-header{padding:14px 16px;}
@@ -794,8 +795,8 @@
         <div class="form-group"><label>Parent/Guardian Name</label><input type="text" id="parentName" placeholder="Full name"></div>
         <div class="form-group"><label>Phone Number *</label><input type="tel" id="parentPhone" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" pattern="[0-9]*"><div class="field-err" id="phoneErr">⚠️ Please enter a valid 10-digit mobile number</div></div>
       </div>
-      <div class="form-group"><label>Address / Village *</label><input type="text" id="address" placeholder="Village / Town name"></div>
-      <div class="form-group"><label>Church / Denomination</label><input type="text" id="church" placeholder="e.g. LEF Church, Magatapalli"></div>
+      <div class="form-group"><label>Address *</label><input type="text" id="address" placeholder="Village / Town name"></div>
+      <div class="form-group"><label>Church</label><input type="text" id="church" placeholder="e.g. LEF Church, Magatapalli"></div>
       <div class="form-group">
         <label>Days Attending</label>
         <select id="days">
@@ -807,7 +808,24 @@
           <option value="Day 2 & 3 – April 26 & 27" data-en="Day 2 & 3 – April 26 & 27" data-te="రోజు 2 & 3 – ఏప్రిల్ 26 & 27">Day 2 & 3 – April 26 & 27</option>
         </select>
       </div>
-      <button class="submit-btn" id="submitBtn" data-en="🙏 Complete Registration" data-te="🙏 రిజిస్ట్రేషన్ పూర్తి చేయండి">🙏 Complete Registration</button>
+
+      <!-- Photo section for internal registration -->
+      <div id="internalRegPhotoSection" style="display:none; margin-top: 24px; padding-top: 20px; border-top: 2px dashed #FEE2E2;">
+        <p style="font-weight:700;color:var(--navy);margin-bottom:12px;">📸 Add Student Photo (Optional)</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+          <button onclick="document.getElementById('photoCameraInput').click()" style="background:#8B5CF6;color:white;border:none;padding:14px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
+            📷 Take Photo
+          </button>
+          <button onclick="document.getElementById('photoGalleryInput').click()" style="background:#7C3AED;color:white;border:none;padding:14px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
+            🖼️ Upload Photo
+          </button>
+        </div>
+        <div id="photoTempPreview" style="display:none;text-align:center;margin-top:16px;">
+          <img id="photoTempImg" src="" alt="Preview" style="max-width:100%;max-height:200px;border-radius:12px;border:2px solid #E2E8F0;margin-bottom:12px;">
+        </div>
+      </div>
+
+      <button class="submit-btn" id="submitBtn" data-en="Complete Registration" data-te="రిజిస్ట్రేషన్ పూర్తి చేయండి">Complete Registration</button>
       <div class="error-msg" id="errorMsg">⚠️ Something went wrong. Please try again.</div>
     </div>
   </div>
@@ -908,6 +926,7 @@
       <div class="dash-sidebar">
         <div class="dash-tabs">
           <button class="dash-tab active" data-tab="registrations"><span class="tab-icon">📋</span><span class="tab-label">Registrations</span></button>
+          <button class="dash-tab" data-tab="approvals" id="approvalsTab"><span class="tab-icon">👍</span><span class="tab-label">Approvals</span></button>
           <button class="dash-tab" data-tab="documents" id="documentsTab"><span class="tab-icon">📄</span><span class="tab-label">Documents</span></button>
           <button class="dash-tab" data-tab="attendance" id="attendanceTab"><span class="tab-icon">📝</span><span class="tab-label">Attendance</span></button>
           <button class="dash-tab" data-tab="analytics"><span class="tab-icon">📊</span><span class="tab-label">Analytics</span></button>
@@ -932,9 +951,10 @@
               <h3 class="registrations-title">📋 All Registrations</h3>
               <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
                 <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search name, phone…">
+                <button class="action-btn" id="regWithPhotoBtn" style="background:var(--coral);color:white;display:none;">Register with Photo</button>
                 <button class="export-btn" id="exportBtn" style="display:none">⬇ Export CSV</button>
                 <button class="import-btn" id="importBtn" style="display:none">⬆ Import CSV</button>
-                <button class="send-certs-btn" id="sendCertsBtn" style="display:none;background:#25D366;color:white;border:none;padding:10px 16px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;">📱 Send Certificates</button>
+                <button class="send-certs-btn" id="sendCertsBtn" style="display:none;background:#25D366;color:white;border:none;padding:10px 16px;border-radius:25px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;">📱 Send Certificates</button>
                 <input type="file" id="importFileInput" accept=".csv" style="display:none">
               </div>
             </div>
@@ -960,7 +980,7 @@
                 <option value="all">Class: All</option>
               </select>
               <select id="villageFilter" class="filter-select">
-                <option value="all">Village: All</option>
+                <option value="all">Address: All</option>
               </select>
               <select id="churchFilter" class="filter-select">
                 <option value="all">Church: All</option>
@@ -969,7 +989,7 @@
             <div class="table-wrap">
               <table>
                 <thead>
-                  <tr><th><input type="checkbox" id="selectAllCheck" class="row-check" title="Select all"></th><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th id="regClassHead">Class & Sec</th><th>Parent</th><th>Phone</th><th>Village</th><th>Church</th><th>Days</th><th id="regTypeHead">Registration Type</th><th id="actionsHead"></th></tr>
+                  <tr><th><input type="checkbox" id="selectAllCheck" class="row-check" title="Select all"></th><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th id="regClassHead">Class & Sec</th><th>Parent</th><th>Phone</th><th>Address</th><th>Church</th><th>Days</th><th id="regTypeHead">Registration Type</th><th id="actionsHead"></th></tr>
                 </thead>
                 <tbody id="tableBody">
                 <tr><td colspan="13" class="loading-row">⏳ Loading…</td></tr>
@@ -978,6 +998,32 @@
             </div>
           </div>
         </div><!-- /view-registrations -->
+
+
+        <!-- APPROVALS VIEW -->
+        <div class="dash-view" id="view-approvals">
+          <div class="table-card">
+            <div class="table-header">
+              <div>
+                <h3 style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--navy);line-height:1.2;">👍 Pending Approvals</h3>
+                <p style="color:#64748B; font-size:0.9rem; margin-top: 4px;">Registrations from the public website appear here. Approve them to add to the main list.</p>
+              </div>
+              <button id="refreshApprovalsBtn" class="refresh-btn">🔄 Refresh</button>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                <tr>
+                  <th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th>Parent</th><th>Phone</th><th>Address</th><th>Days</th><th>Registered On</th><th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="approvalsBody">
+                <tr><td colspan="10" class="loading-row">⏳ Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div><!-- /view-approvals -->
 
         <!-- DOCUMENTS VIEW -->
         <div class="dash-view" id="view-documents">
@@ -1008,7 +1054,7 @@
                   <th>Age</th>
                   <th>Gender</th>
                   <th>Class</th>
-                  <th>Village</th>
+                  <th>Address</th>
                   <th>Documents</th>
                 </tr>
                 </thead>
@@ -1109,7 +1155,7 @@
               <div id="chart-days"><div class="empty-analytics">No data yet</div></div>
             </div>
             <div class="chart-card">
-              <h4>📍 Registrations by Village</h4>
+              <h4>📍 Registrations by Address</h4>
               <div id="chart-village"><div class="empty-analytics">No data yet</div></div>
             </div>
             <div class="chart-card">
@@ -1157,7 +1203,7 @@
             <div class="table-wrap">
               <table>
                 <thead>
-                <tr><th><input type="checkbox" id="archiveSelectAllCheck" class="row-check" title="Select all"></th><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th>Parent</th><th>Phone</th><th>Village</th><th>Days</th><th>Source</th><th>Archived On</th><th>Action</th></tr>
+                <tr><th><input type="checkbox" id="archiveSelectAllCheck" class="row-check" title="Select all"></th><th>#</th><th>Child Name</th><th>Age</th><th>Gender</th><th>Parent</th><th>Phone</th><th>Address</th><th>Days</th><th>Source</th><th>Archived On</th><th>Action</th></tr>
                 </thead>
                 <tbody id="archiveBody">
                 <tr><td colspan="11" class="loading-row">⏳ Loading…</td></tr>
@@ -1305,9 +1351,9 @@
       en: {
         childName:"Child's Name *", // en age:"Age *", gender:"Gender",
         parentName:"Parent/Guardian Name *", phone:"Phone Number *",
-        address:"Address / Village",
-        church:"Church / Denomination", days:"Days Attending",
-        submit:"🙏 Complete Registration",
+        address:"Address",
+        church:"Church", days:"Days Attending",
+        submit:"Complete Registration",
         regHeader:"📋 Register Now!", regSub:"April 25, 26 & 27, 2026",
         allDays:"All 3 Days (Apr 25, 26 & 27)",
         day1only:"Day 1 Only – April 25", day2only:"Day 2 Only – April 26",
@@ -1450,20 +1496,6 @@
   document.getElementById('scheduleModal').addEventListener('click',e=>{
     if(e.target===document.getElementById('scheduleModal')) document.getElementById('scheduleModal').classList.remove('active');
   });
-
-  // Registration modal — all open buttons
-  function openRegModal(){ document.getElementById('regModal').classList.add('active'); }
-  document.getElementById('openRegBtn').addEventListener('click', openRegModal);
-  if(document.getElementById('navRegBtn')) document.getElementById('navRegBtn').addEventListener('click', openRegModal);
-  if(document.getElementById('heroRegBtn')) document.getElementById('heroRegBtn').addEventListener('click', openRegModal);
-  document.getElementById('closeRegBtn').addEventListener('click',()=>{
-    document.getElementById('regModal').classList.remove('active');
-  });
-  document.getElementById('regModal').addEventListener('click',e=>{
-    if(e.target===document.getElementById('regModal')) document.getElementById('regModal').classList.remove('active');
-  });
-  let whatsappInboxData = [];
-  let selectedWhatsappPhone = '';
 
   async function loadWhatsAppInbox() {
     const listEl = document.getElementById('whatsappChatList');
@@ -1653,6 +1685,9 @@
       '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
     })[match]);
   }
+  // ══════ WHATSAPP INBOX LOGIC ══════
+  let whatsappInboxData = [];
+  let selectedWhatsappPhone = '';
 
   // ── Wire up buttons via addEventListener (no onclick= needed) ──
   document.getElementById('adminBtn').addEventListener('click', openModal);
@@ -1660,6 +1695,27 @@
   document.getElementById('loginBtn').addEventListener('click', doLogin);
   document.getElementById('loginPass').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
   document.getElementById('logoutBtn').addEventListener('click', doLogout);
+
+  // Registration modal — all open buttons
+  function openRegModal(options = {}){
+    tempPhotoData = null; //Reset photo data
+    document.getElementById('regModal').classList.add('active');
+    const isInternal = !!options.withPhoto;
+    const photoSection = document.getElementById('internalRegPhotoSection');
+    if (photoSection) photoSection.style.display = isInternal ? 'block' : 'none';
+    document.getElementById('submitBtn').onclick = () => submitReg({ isInternal });
+  }
+  document.getElementById('openRegBtn').addEventListener('click', () => openRegModal({ withPhoto: false }));
+  if(document.getElementById('navRegBtn')) document.getElementById('navRegBtn').addEventListener('click', () => openRegModal({ withPhoto: false }));
+  if(document.getElementById('heroRegBtn')) document.getElementById('heroRegBtn').addEventListener('click', () => openRegModal({ withPhoto: false }));
+  document.getElementById('regWithPhotoBtn').addEventListener('click', () => openRegModal({ withPhoto: true }));
+  document.getElementById('closeRegBtn').addEventListener('click',()=>{
+    document.getElementById('regModal').classList.remove('active');
+  });
+  document.getElementById('regModal').addEventListener('click',e=>{
+    if(e.target===document.getElementById('regModal')) document.getElementById('regModal').classList.remove('active');
+  });
+
   document.getElementById('refreshBtn').addEventListener('click', refreshActiveTab);
   document.getElementById('sidebarToggle').addEventListener('click', toggleSidebarMenu);
   document.getElementById('sidebarBackdrop').addEventListener('click', closeSidebarMenu);
@@ -1697,6 +1753,7 @@
       document.querySelectorAll('.dash-view').forEach(v => v.classList.remove('active'));
       tab.classList.add('active');
       document.getElementById('view-' + tab.dataset.tab).classList.add('active');
+      if(tab.dataset.tab === 'approvals') loadPendingApprovals();
       if(tab.dataset.tab === 'analytics') renderAnalytics();
       if(tab.dataset.tab === 'teachers') buildTeacherMgmt();
       if(tab.dataset.tab === 'manage-roles') buildRoleMgmt();
@@ -1719,6 +1776,10 @@
       await loadArchive();
       return;
     }
+    if(activeTab === 'approvals'){
+      await loadPendingApprovals();
+      return;
+    }
     if(activeTab === 'prayer-requests'){
       await loadPrayerRequests();
       return;
@@ -1734,7 +1795,6 @@
     if(activeTab === 'manage-roles' && currentRole === 'admin') buildRoleMgmt();
     if(activeTab === 'analytics') renderAnalytics();
   }
-  document.getElementById('submitBtn').addEventListener('click', submitReg);
   document.getElementById('exportBtn').addEventListener('click', exportCSV);
   document.getElementById('searchBox').addEventListener('input', applyFilters);
   ['genderFilter','daysFilter','classFilter','villageFilter','churchFilter'].forEach(id=>{
@@ -1912,6 +1972,7 @@
     document.getElementById('exportBtn').style.display   = 'none';
     document.getElementById('importBtn').style.display   = 'none';
     document.getElementById('sendCertsBtn').style.display = 'none';
+    document.getElementById('regWithPhotoBtn').style.display = 'none';
     document.getElementById('actionsHead').textContent   = 'Actions';
 
     document.getElementById('classFilter').value = tc.class || 'all';
@@ -1943,6 +2004,7 @@
     document.getElementById('loggedInEmail').textContent = auth.currentUser?.email||'';
     document.getElementById('viewerNotice').classList.remove('show'); // coordinator has registration access
     document.getElementById('exportBtn').style.display   = (isAdmin||currentRole==='viewer')?'block':'none';
+    document.getElementById('regWithPhotoBtn').style.display = (isAdmin||currentRole==='viewer')?'block':'none';
     document.getElementById('importBtn').style.display   = isAdmin?'block':'none';
     document.getElementById('sendCertsBtn').style.display = isAdmin?'block':'none';
     document.getElementById('actionsHead').textContent = 'Actions';
@@ -1956,6 +2018,8 @@
     document.getElementById('manageRolesTab').style.display = isAdmin ? '' : 'none';
     // Archive tab — admin only
     document.getElementById('archiveTab').style.display = isAdmin ? '' : 'none';
+    // Approvals tab - admin and coordinator
+    document.getElementById('approvalsTab').style.display = (isAdmin || currentRole === 'viewer') ? '' : 'none';
     // Analytics tab — admin only
     const analyticsTab = document.querySelector('[data-tab="analytics"]');
     if(analyticsTab) analyticsTab.style.display = isAdmin ? '' : 'none';
@@ -1981,6 +2045,7 @@
     selectedRole='admin';
     allData=[];
     // Reset tabs & class filter buttons
+    document.getElementById('regWithPhotoBtn').style.display = 'none';
     document.querySelectorAll('.dash-tab').forEach(t=>{ t.style.display=''; t.classList.remove('active'); });
     document.querySelector('[data-tab="registrations"]').classList.add('active');
     ['genderFilter','daysFilter','classFilter','villageFilter','churchFilter'].forEach(id=>{
@@ -2081,7 +2146,7 @@
     const churches = [...new Set(allData.map(r=>(r.church||'').trim() || 'Not specified'))].sort((a,b)=>a.localeCompare(b));
 
     classFilter.innerHTML = '<option value="all">Class: All</option>' + classes.map(v=>`<option value="${v}">${v==='unassigned'?'Unassigned':v}</option>`).join('');
-    villageFilter.innerHTML = '<option value="all">Village: All</option>' + villages.map(v=>`<option value="${v}">${v}</option>`).join('');
+    villageFilter.innerHTML = '<option value="all">Address: All</option>' + villages.map(v=>`<option value="${v}">${v}</option>`).join('');
     churchFilter.innerHTML = '<option value="all">Church: All</option>' + churches.map(v=>`<option value="${v}">${v}</option>`).join('');
 
     classFilter.value = [...classFilter.options].some(o=>o.value===currentValues.class) ? currentValues.class : 'all';
@@ -2185,7 +2250,7 @@
               <div class="mobile-record-lines">
                 <div class="mobile-record-line"><strong>Age</strong><em>:</em><span>${r.age||'—'}</span></div>
                 <div class="mobile-record-line"><strong>Phone</strong><em>:</em><span>${r.phone||'—'}</span></div>
-                <div class="mobile-record-line"><strong>Village</strong><em>:</em><span>${r.address||'—'}</span></div>
+                <div class="mobile-record-line"><strong>Address</strong><em>:</em><span>${r.address||'—'}</span></div>
                 <div class="mobile-record-line"><strong>Church</strong><em>:</em><span>${r.church||'—'}</span></div>
               </div>
             </div>
@@ -2658,8 +2723,8 @@
 
   function exportCSV(){
     if(!allData.length){ alert('No registrations to export yet.'); return; }
-    const hdr=['#','Child Name','Age','Gender','Parent','Phone','Address','Church','Days','Special','Registered On'];
-    const rows=allData.map((r,i)=>{ let d=''; try{ d=r.createdAt.toDate().toLocaleString(); }catch{} return [i+1,`${r.childName||r.childFirst||''} ${r.childName?'':(r.childLast||'')}`,r.age,r.gender,r.parentName,r.phone,r.address,r.church,r.days,r.special,d].map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(','); });
+    const hdr=['#','Child Name','Age','Gender','Class','Section','Parent','Phone','Address','Church','Days','Registration Type','Registered On'];
+    const rows=allData.map((r,i)=>{ let d=''; try{ d=r.createdAt.toDate().toLocaleString(); }catch{} return [i+1,`${r.childName||r.childFirst||''} ${r.childName?'':(r.childLast||'')}`,r.age,r.gender,r.class,r.section,r.parentName,r.phone,r.address,r.church,r.days,r.source,d].map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(','); });
 
     const blob=new Blob([[hdr.join(','),...rows].join('\n')],{type:'text/csv'});
     Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:`VBS_Registrations_${new Date().toISOString().slice(0,10)}.csv`}).click();
@@ -2704,7 +2769,7 @@
     return sectionLetters[sectionIndex];
   }
 
-  async function submitReg(){
+  async function submitReg(options = {}){
     const cn  = document.getElementById('childName').value.trim();
     const age = document.getElementById('childAge').value;
     const gender = document.getElementById('childGender').value;
@@ -2744,7 +2809,9 @@
       const assignedClass = getClassForAge(age);
       const assignedSection = getAutoSectionForClass(assignedClass);
 
-      await addDoc(collection(db,'registrations'),{
+      const isInternal = !!options.isInternal;
+
+      const payload = {
         childName:  cn,
         age,
         gender:     genderVal,    // always English: Male / Female
@@ -2756,8 +2823,23 @@
         class:      assignedClass,
         section:    assignedSection,
         source:     'online',
-        createdAt:  serverTimestamp()
-      });
+        createdAt:  serverTimestamp(),
+        status:     isInternal ? 'approved' : 'pending'
+      };
+
+      if (isInternal && tempPhotoData) {
+        payload.photo = tempPhotoData;
+        payload.photoUploadedAt = new Date().toISOString();
+      }
+
+      const collectionName = isInternal ? 'registrations' : 'pending_registrations';
+      const docRef = await addDoc(collection(db, collectionName), payload);
+
+      if (isInternal) {
+        await autoGenerateDocumentsForStudent({ id: docRef.id, ...payload });
+        loadData(); // Refresh the table so the new student appears immediately
+      }
+
 
       // Show success popup — bilingual
       document.getElementById('regChildName').textContent = cn;
@@ -5091,7 +5173,7 @@ Reply to this message if you need help with the certificate or student details.`
       {label:'Online', count:onlineCount, color:'#0EA5E9'},
       {label:'Imported', count:importedCount, color:'#A855F7'}
     ].filter(s=>s.count>0);
-    
+
     if(sourceData.length > 0) {
       let srcAngle = -90;
       let srcSlices = '';
@@ -5338,7 +5420,7 @@ Reply to this message if you need help with the certificate or student details.`
               <div class="mobile-record-lines">
                 <div class="mobile-record-line"><strong>Parent</strong><em>:</em><span>${r.parentName||'—'}</span></div>
                 <div class="mobile-record-line"><strong>Phone</strong><em>:</em><span>${r.phone||'—'}</span></div>
-                <div class="mobile-record-line"><strong>Village</strong><em>:</em><span>${r.address||'—'}</span></div>
+                <div class="mobile-record-line"><strong>Address</strong><em>:</em><span>${r.address||'—'}</span></div>
               </div>
               <div class="mobile-record-actions">
                 <button class="arch-restore-btn" style="background:#DCFCE7;color:#166534;border:none;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:700;" data-id="${r.id}" title="Restore to registrations">↩ Restore</button>
@@ -5628,6 +5710,88 @@ Reply to this message if you need help with the certificate or student details.`
     }
   });
 
+  // ══════ APPROVALS TAB ══════
+  let pendingApprovalsData = [];
+
+  async function loadPendingApprovals() {
+    const tbody = document.getElementById('approvalsBody');
+    if (!tbody) return;
+    tbody.innerHTML = '<tr><td colspan="10" class="loading-row">⏳ Loading pending approvals...</td></tr>';
+
+    try {
+      const snap = await getDocs(query(collection(db, 'pending_registrations'), orderBy('createdAt', 'desc')));
+      pendingApprovalsData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      if (pendingApprovalsData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="no-data"><span class="ni">👍</span>No pending approvals.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = pendingApprovalsData.map((r, i) => {
+        const registeredOn = r.createdAt ? new Date(r.createdAt.toDate()).toLocaleString('en-IN', {dateStyle: 'short', timeStyle: 'short'}) : '—';
+        return `<tr>
+          <td><strong style="color:#94A3B8">${i + 1}</strong></td>
+          <td><strong>${escapeHTML(r.childName)}</strong></td>
+          <td>${r.age || '—'}</td>
+          <td><span class="badge ${r.gender === 'Male' ? 'b-boy' : 'b-girl'}">${r.gender || '—'}</span></td>
+          <td>${escapeHTML(r.parentName || '—')}</td>
+          <td>${escapeHTML(r.phone || '—')}</td>
+          <td>${escapeHTML(r.address || '—')}</td>
+          <td>${(r.days || '—').replace('All 3 Days (Apr 25, 26 & 27)', 'All 3 Days')}</td>
+          <td style="font-size:0.78rem;color:#64748B;">${registeredOn}</td>
+          <td style="white-space:nowrap;">
+            <button class="action-btn approval-action-btn" data-id="${r.id}" data-action="approve" style="background:#16A34A;color:white;">Approve</button>
+            <button class="action-btn approval-action-btn" data-id="${r.id}" data-action="reject" style="background:#DC2626;color:white;margin-left:6px;">Reject</button>
+          </td>
+        </tr>`;
+      }).join('');
+
+      wireApprovalButtons();
+
+    } catch (err) {
+      tbody.innerHTML = `<tr><td colspan="10" class="no-data">❌ Failed to load: ${err.message}</td></tr>`;
+    }
+  }
+
+  function wireApprovalButtons() {
+    document.querySelectorAll('.approval-action-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const action = btn.dataset.action;
+        const record = pendingApprovalsData.find(r => r.id === id);
+        if (!record) return;
+
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = '⏳';
+
+        try {
+          const { doc, setDoc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+
+          if (action === 'approve') {
+            const approvedRecord = { ...record, status: 'approved', approvedAt: serverTimestamp() };
+            await setDoc(doc(db, 'registrations', id), approvedRecord);
+            await deleteDoc(doc(db, 'pending_registrations', id));
+            showToast(`✅ ${record.childName} has been approved and added to registrations.`, 3000);
+          } else { // Reject
+            await deleteDoc(doc(db, 'pending_registrations', id));
+            showToast(`🗑️ ${record.childName} has been rejected.`, 3000);
+          }
+
+          loadPendingApprovals(); // Refresh the list
+          loadData(); // Refresh the main registration list
+
+        } catch (err) {
+          showToast(`❌ Failed to ${action}: ${err.message}`, 4000);
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+      });
+    });
+  }
+
+  document.getElementById('refreshApprovalsBtn')?.addEventListener('click', loadPendingApprovals);
+
 </script>
 <div class="toast" id="toastMsg"></div>
 
@@ -5706,8 +5870,8 @@ Reply to this message if you need help with the certificate or student details.`
         </div>
         <div class="edit-form-group"><label>Parent/Guardian Name *</label><input type="text" id="editParentName" placeholder="Full name"></div>
         <div class="edit-form-group"><label>Phone Number</label><input type="tel" id="editPhone" placeholder="10-digit number" maxlength="10" inputmode="numeric"></div>
-        <div class="edit-form-group"><label>Address / Village</label><input type="text" id="editAddress" placeholder="Village / Town"></div>
-        <div class="edit-form-group"><label>Church / Denomination</label><input type="text" id="editChurch" placeholder="Church name"></div>
+        <div class="edit-form-group"><label>Address</label><input type="text" id="editAddress" placeholder="Village / Town"></div>
+        <div class="edit-form-group"><label>Church</label><input type="text" id="editChurch" placeholder="Church name"></div>
         <div class="edit-form-group" style="grid-column:1/-1"><label>Days Attending</label>
           <select id="editDays">
             <option value="All 3 Days (Apr 25, 26 &amp; 27)">All 3 Days (Apr 25, 26 &amp; 27)</option>
