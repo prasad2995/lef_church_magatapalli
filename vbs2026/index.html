@@ -2951,6 +2951,7 @@
     const x = v=>v*sx, y = v=>v*sy, fs = v=>`${Math.round(v*s)}px`;
 
     const photoImg = await loadImage(student.photo);
+    const themeImg = await loadImage('../attachments/Theme%20Signet%20Ring.png').catch(()=>null);
 
     // ── HELPERS ──
     function roundRect(px, py, pw, ph, pr, fill, stroke, lw = 2){
@@ -3154,43 +3155,62 @@
       ctx.fillStyle=c; ctx.fill();
     });
 
-    // ── STARS ROW ──
-    const starColors=['#FFD700','#FFD700','#FFD700','#FFD700','#FFD700'];
-    // Medal in center
-    // Draw medal
-    const medalX=cx, medalY=y(340);
-    ctx.save();
-    ctx.shadowColor='rgba(255,180,0,0.5)'; ctx.shadowBlur=x(15);
-    // Ribbon
-    ctx.fillStyle='#FF5722';
-    ctx.beginPath(); ctx.moveTo(medalX-x(22),medalY-x(28)); ctx.lineTo(medalX+x(22),medalY-x(28));
-    ctx.lineTo(medalX+x(14),medalY+x(8)); ctx.lineTo(medalX,medalY-x(4));
-    ctx.lineTo(medalX-x(14),medalY+x(8)); ctx.closePath(); ctx.fill();
-    // Medal circle
-    ctx.beginPath(); ctx.arc(medalX,medalY-x(32),x(28),0,Math.PI*2);
-    const mg=ctx.createRadialGradient(medalX,medalY-x(32),0,medalX,medalY-x(32),x(28));
-    mg.addColorStop(0,'#FFF9C4'); mg.addColorStop(0.5,'#FFD700'); mg.addColorStop(1,'#F57F17');
-    ctx.fillStyle=mg; ctx.fill();
-    ctx.strokeStyle='#F57F17'; ctx.lineWidth=x(3); ctx.stroke();
-    // Star on medal
-    star(medalX,medalY-x(32),x(16),'#FFFFFF');
-    ctx.restore();
-    // Stars on each side of medal
-    [-2,-1,1,2].forEach(i=>{
-      star(medalX+i*x(80),medalY-x(28),x(26),'#FFD700');
-    });
+    // ── THEME PHOTO / STARS ROW ──
+    const medalX=cx, medalY=y(390);
+    if(themeImg){
+      // Limit dimensions to ensure the image does not overlap text above/below or the stars
+      const maxW = x(390);
+      const maxH = y(160);
+      let targetW = maxW;
+      let targetH = targetW * (themeImg.height / themeImg.width);
+      if(targetH > maxH) {
+        targetH = maxH;
+        targetW = targetH * (themeImg.width / themeImg.height);
+      }
+      ctx.save();
+      ctx.drawImage(themeImg, cx - targetW/2, medalY - targetH/2, targetW, targetH);
+      ctx.restore();
+      
+      // Stars on each side of the theme photo
+      [-1, 1].forEach(i=>{
+        star(medalX+i*x(180),medalY,x(22),'#FFD700');
+      });
+    } else {
+      // Fallback: Medal in center
+      const oldMedalY = y(340);
+      ctx.save();
+      ctx.shadowColor='rgba(255,180,0,0.5)'; ctx.shadowBlur=x(15);
+      // Ribbon
+      ctx.fillStyle='#FF5722';
+      ctx.beginPath(); ctx.moveTo(medalX-x(22),oldMedalY-x(28)); ctx.lineTo(medalX+x(22),oldMedalY-x(28));
+      ctx.lineTo(medalX+x(14),oldMedalY+x(8)); ctx.lineTo(medalX,oldMedalY-x(4));
+      ctx.lineTo(medalX-x(14),oldMedalY+x(8)); ctx.closePath(); ctx.fill();
+      // Medal circle
+      ctx.beginPath(); ctx.arc(medalX,oldMedalY-x(32),x(28),0,Math.PI*2);
+      const mg=ctx.createRadialGradient(medalX,oldMedalY-x(32),0,medalX,oldMedalY-x(32),x(28));
+      mg.addColorStop(0,'#FFF9C4'); mg.addColorStop(0.5,'#FFD700'); mg.addColorStop(1,'#F57F17');
+      ctx.fillStyle=mg; ctx.fill();
+      ctx.strokeStyle='#F57F17'; ctx.lineWidth=x(3); ctx.stroke();
+      // Star on medal
+      star(medalX,oldMedalY-x(32),x(16),'#FFFFFF');
+      ctx.restore();
+      // Stars on each side of medal
+      [-2,-1,1,2].forEach(i=>{
+        star(medalX+i*x(80),oldMedalY-x(28),x(26),'#FFD700');
+      });
+    }
 
     // ────────────────────────────────────────
     // 4. PRESENTED TO
     // ────────────────────────────────────────
     ctx.fillStyle='#666';
     ctx.font=`italic ${fs(28)} Georgia`;
-    ctx.fillText('This certificate is awarded to', cx, y(430));
+    ctx.fillText('This certificate is awarded to', cx, y(570));
 
     // ────────────────────────────────────────
     // 5. PHOTO CIRCLE (if available)
     // ────────────────────────────────────────
-    const photoR=x(95), photoCX=cx, photoCY=y(600);
+    const photoR=x(95), photoCX=cx, photoCY=y(720);
     if(photoImg){
       ctx.save();
       // Shadow
@@ -3214,7 +3234,7 @@
     // ────────────────────────────────────────
     // 6. CHILD NAME — big, playful, colorful
     // ────────────────────────────────────────
-    const nameTopY = certPhotoDataUrl ? y(830) : y(580);
+    const nameTopY = certPhotoDataUrl ? y(910) : y(660);
 
     ctx.save();
     ctx.shadowColor='rgba(233,30,99,0.3)'; ctx.shadowBlur=x(10);
@@ -3250,30 +3270,31 @@
     ctx.font=`${fs(26)} Georgia`;
     ctx.fillText(`in recognition of ${pronoun} active participation in the`, cx, bodyTop);
 
-    // Line 2: VBS + conducted by + Church
+    // Line 2: VBS + conducted by
     ctx.font=`bold ${fs(28)} Georgia`;
     const wVBS = ctx.measureText('Vacation Bible School 2026').width;
     ctx.font=`${fs(26)} Georgia`;
-    const wCond = ctx.measureText(' conducted by ').width;
-    ctx.font=`bold ${fs(28)} Georgia`;
-    const wChurch = ctx.measureText('LEF Church, Magatapalli,').width;
+    const wCond = ctx.measureText(' conducted by').width;
 
-    const startX2 = cx - (wVBS + wCond + wChurch)/2;
+    const startX2 = cx - (wVBS + wCond)/2;
     ctx.textAlign='left';
 
     ctx.fillStyle='#1565C0';
     ctx.font=`bold ${fs(28)} Georgia`;
-    ctx.fillText('Vacation Bible School 2026', startX2, bodyTop+y(55));
+    ctx.fillText('Vacation Bible School 2026', startX2, bodyTop+y(45));
 
     ctx.fillStyle='#444';
     ctx.font=`${fs(26)} Georgia`;
-    ctx.fillText(' conducted by ', startX2 + wVBS, bodyTop+y(55));
+    ctx.fillText(' conducted by', startX2 + wVBS, bodyTop+y(45));
 
+    // Line 3: Church
+    ctx.textAlign='center';
     ctx.fillStyle='#2E7D32';
     ctx.font=`bold ${fs(28)} Georgia`;
-    ctx.fillText('LEF Church, Magatapalli,', startX2 + wVBS + wCond, bodyTop+y(55));
+    ctx.fillText('LEF Church, Magatapalli,', cx, bodyTop+y(85));
 
-    // Line 3: Dates + Class
+    // Line 4: Dates + Class
+    ctx.textAlign='left';
     if(certClass){
       const clsPre='as a student of the ';
       const clsVal=certClass;
@@ -3290,20 +3311,20 @@
 
       ctx.fillStyle='#444';
       ctx.font=`${fs(25)} Georgia`;
-      ctx.fillText('held from April 25 to 27, 2026, ' + clsPre, startX3, bodyTop+y(110));
+      ctx.fillText('held from April 25 to 27, 2026, ' + clsPre, startX3, bodyTop+y(125));
 
       ctx.font=`bold ${fs(25)} Georgia`;
       ctx.fillStyle='#E91E63';
-      ctx.fillText(clsVal, startX3 + wp1, bodyTop+y(110));
+      ctx.fillText(clsVal, startX3 + wp1, bodyTop+y(125));
 
       ctx.font=`${fs(25)} Georgia`;
       ctx.fillStyle='#444';
-      ctx.fillText(clsPost, startX3 + wp1 + wp2, bodyTop+y(110));
+      ctx.fillText(clsPost, startX3 + wp1 + wp2, bodyTop+y(125));
     } else {
       ctx.fillStyle='#555';
       ctx.font=`${fs(25)} Georgia`;
       const txt = 'held from April 25 to 27, 2026.';
-      ctx.fillText(txt, cx - ctx.measureText(txt).width/2, bodyTop+y(110));
+      ctx.fillText(txt, cx - ctx.measureText(txt).width/2, bodyTop+y(125));
     }
 
     ctx.textAlign='center';
