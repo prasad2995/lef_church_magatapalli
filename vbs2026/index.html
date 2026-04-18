@@ -515,10 +515,14 @@
       .att-mobile-actions .att-btn{width:34px;height:34px;padding:0;font-size:0.82rem;justify-content:center;}
       #view-registrations table thead,
       #view-documents table thead,
-      #view-archive table thead{display:none;}
+      #view-archive table thead,
+      #view-approvals table thead,
+      #view-prayer-requests table thead{display:none;}
       #view-registrations td,
       #view-documents td,
-      #view-archive td{padding:0;border-bottom:none;}
+      #view-archive td,
+      #view-approvals td,
+      #view-prayer-requests td{padding:0;border-bottom:none;}
       .mobile-record-cell{padding:12px 8px !important;}
       .mobile-record-cell{border-top:1px solid #E2E8F0;}
       .mobile-record-card{background:transparent;border:none;border-radius:0;padding:6px 0;box-shadow:none;}
@@ -2636,12 +2640,16 @@
                   <div class="mobile-record-sub">${r.address||'—'}</div>
                   </div>
                 </div>
-                <div class="mobile-record-head-tools">${docBtns}</div>
               </div>
               <div class="mobile-record-meta">
                 <span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span>
                 <span class="badge b-online">Age ${r.age||'—'}</span>
                 <span class="badge b-days">${clsDisplay}</span>
+              </div>
+              <div class="mobile-record-actions" style="display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;margin-top:10px;padding-top:10px;border-top:1px dashed #E2E8F0;">
+                ${r.photo ? `<button class="photo-btn" data-id="${r.id}" style="flex:0 0 auto;white-space:nowrap;background:#8B5CF6;color:white;border:none;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.85rem;font-weight:700;">📷 Photo</button>` : `<button class="photo-btn" data-id="${r.id}" style="flex:0 0 auto;white-space:nowrap;background:#F59E0B;color:white;border:none;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.85rem;font-weight:700;">📷 Upload</button>`}
+                ${r.idCard ? `<button class="view-id-btn" data-id="${r.id}" style="flex:0 0 auto;white-space:nowrap;background:#2563EB;color:white;border:none;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.85rem;font-weight:700;">🪪 ID</button>` : (r.photo ? `<button class="id-card-btn" data-id="${r.id}" style="flex:0 0 auto;white-space:nowrap;background:#3B82F6;color:white;border:none;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.85rem;font-weight:700;">🪪 Gen ID</button>` : '')}
+                ${r.photo ? `<button class="view-cert-btn" data-id="${r.id}" style="flex:0 0 auto;white-space:nowrap;background:#059669;color:white;border:none;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.85rem;font-weight:700;">📜 Cert</button>` : ''}
               </div>
             </div>
           </td>
@@ -4644,6 +4652,266 @@ Reply to this message if you need help with the certificate or student details.`
     return payload;
   }
 
+  // ══════ APPROVALS TAB ══════
+  let pendingApprovalsData = [];
+
+  async function loadPendingApprovals() {
+    const tbody = document.getElementById('approvalsBody');
+    if (!tbody) return;
+    tbody.innerHTML = '<tr><td colspan="10" class="loading-row">⏳ Loading pending approvals...</td></tr>';
+
+    try {
+      const snap = await getDocs(query(collection(db, 'pending_registrations'), orderBy('createdAt', 'desc')));
+      pendingApprovalsData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      if (pendingApprovalsData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="no-data"><span class="ni">👍</span>No pending approvals.</td></tr>';
+        return;
+      }
+
+      const isMobile = isMobileViewport();
+
+      tbody.innerHTML = pendingApprovalsData.map((r, i) => {
+        const registeredOn = r.createdAt ? new Date(r.createdAt.toDate()).toLocaleString('en-IN', {dateStyle: 'short', timeStyle: 'short'}) : '—';
+        if (isMobile) {
+          return `<tr>
+             <td colspan="10" class="mobile-record-cell">
+               <div class="mobile-record-card">
+                 <div class="mobile-record-head">
+                   <div class="mobile-record-head-main">
+                     <div>
+                     <div class="mobile-record-title">${i + 1}. ${escapeHTML(r.childName)}</div>
+                     <div class="mobile-record-sub">${registeredOn}</div>
+                     </div>
+                   </div>
+                 </div>
+                 <div class="mobile-record-meta">
+                   <span class="badge ${r.gender === 'Male' ? 'b-boy' : 'b-girl'}">${r.gender || '—'}</span>
+                   <span class="badge b-online">Age ${r.age || '—'}</span>
+                   <span class="badge b-days">${(r.days || '—').replace('All 3 Days (Apr 25, 26 & 27)', 'All 3 Days')}</span>
+                 </div>
+                 <div class="mobile-record-lines">
+                   <div class="mobile-record-line"><strong>Parent</strong><em>:</em><span>${escapeHTML(r.parentName || '—')}</span></div>
+                   <div class="mobile-record-line"><strong>Phone</strong><em>:</em><span>${escapeHTML(r.phone || '—')}</span></div>
+                   <div class="mobile-record-line"><strong>Address</strong><em>:</em><span>${escapeHTML(r.address || '—')}</span></div>
+                 </div>
+                 <div class="mobile-record-actions">
+                   <button class="action-btn approval-action-btn" data-id="${r.id}" data-action="approve" style="background:#16A34A;color:white;padding:6px 12px;border-radius:8px;font-size:0.8rem;">Approve</button>
+                   <button class="action-btn approval-action-btn" data-id="${r.id}" data-action="reject" style="background:#DC2626;color:white;margin-left:6px;padding:6px 12px;border-radius:8px;font-size:0.8rem;">Reject</button>
+                 </div>
+               </div>
+             </td>
+           </tr>`;
+        }
+        return `<tr>
+           <td><strong style="color:#94A3B8">${i + 1}</strong></td>
+           <td><strong>${escapeHTML(r.childName)}</strong></td>
+           <td>${r.age || '—'}</td>
+           <td><span class="badge ${r.gender === 'Male' ? 'b-boy' : 'b-girl'}">${r.gender || '—'}</span></td>
+           <td>${escapeHTML(r.parentName || '—')}</td>
+           <td>${escapeHTML(r.phone || '—')}</td>
+           <td>${escapeHTML(r.address || '—')}</td>
+           <td>${(r.days || '—').replace('All 3 Days (Apr 25, 26 & 27)', 'All 3 Days')}</td>
+           <td style="font-size:0.78rem;color:#64748B;">${registeredOn}</td>
+           <td style="white-space:nowrap;">
+             <button class="action-btn approval-action-btn" data-id="${r.id}" data-action="approve" style="background:#16A34A;color:white;">Approve</button>
+             <button class="action-btn approval-action-btn" data-id="${r.id}" data-action="reject" style="background:#DC2626;color:white;margin-left:6px;">Reject</button>
+           </td>
+         </tr>`;
+      }).join('');
+
+      wireApprovalButtons();
+
+    } catch (err) {
+      tbody.innerHTML = `<tr><td colspan="10" class="no-data">❌ Failed to load: ${err.message}</td></tr>`;
+    }
+  }
+
+  function wireApprovalButtons() {
+    document.querySelectorAll('.approval-action-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const action = btn.dataset.action;
+        const record = pendingApprovalsData.find(r => r.id === id);
+        if (!record) return;
+
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = '⏳';
+
+        try {
+          const { doc, setDoc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+
+          if (action === 'approve') {
+            const approvedRecord = { ...record, status: 'approved', approvedAt: serverTimestamp() };
+            await setDoc(doc(db, 'registrations', id), approvedRecord);
+            await deleteDoc(doc(db, 'pending_registrations', id));
+            showToast(`✅ ${record.childName} has been approved and added to registrations.`, 3000);
+          } else { // Reject
+            const rejectedRecord = { ...record, source: 'Rejected', status: 'rejected', archivedAt: new Date().toISOString() };
+            await setDoc(doc(db, 'archived', id), rejectedRecord);
+            await deleteDoc(doc(db, 'pending_registrations', id));
+            showToast(`🗑️ ${record.childName} has been rejected and archived.`, 3000);
+          }
+
+          loadPendingApprovals(); // Refresh the list
+          loadData(); // Refresh the main registration list
+
+        } catch (err) {
+          showToast(`❌ Failed to ${action}: ${err.message}`, 4000);
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+      });
+    });
+  }
+
+  document.getElementById('refreshApprovalsBtn')?.addEventListener('click', loadPendingApprovals);
+
+  // ══════ LOAD PRAYER REQUESTS ══════
+  let prayerRequestsData = [];
+
+  async function loadPrayerRequests() {
+    const tbody = document.getElementById('prayerTableBody');
+    if(!tbody) return;
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">⏳ Loading requests...</td></tr>';
+    try {
+      const q = query(collection(churchDb, 'prayer_requests'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      prayerRequestsData = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      if(snap.empty) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">No prayer requests found.</td></tr>';
+        return;
+      }
+
+      const isMobile = isMobileViewport();
+      let html = '';
+
+      prayerRequestsData.forEach(d => {
+        const dateStr = d.createdAt ? d.createdAt.toDate().toLocaleString() : 'Just now';
+
+        if (isMobile) {
+          html += `<tr>
+             <td colspan="6" class="mobile-record-cell">
+               <div class="mobile-record-card">
+                 <div class="mobile-record-head">
+                   <div class="mobile-record-head-main">
+                     <input type="checkbox" class="row-check prayer-rec-check mobile-head-check" data-id="${d.id}">
+                     <div>
+                       <div class="mobile-record-title">${escapeHTML(d.name)}</div>
+                       <div class="mobile-record-sub">${dateStr}</div>
+                     </div>
+                   </div>
+                   <div class="mobile-record-head-tools">
+                     <button class="del-btn prayer-del-btn mobile-head-icon-btn" data-id="${d.id}" title="Delete">🗑</button>
+                   </div>
+                 </div>
+                 <div class="mobile-record-lines" style="margin-bottom:8px;">
+                   <div class="mobile-record-line"><strong>Phone</strong><em>:</em><span>${escapeHTML(d.phone || '—')}</span></div>
+                 </div>
+                 <div style="background:#F8FAFC;padding:12px;border-radius:10px;border:1px solid #E2E8F0;">
+                   <div style="font-size:0.72rem;font-weight:800;color:#94A3B8;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.05em;">Prayer Request</div>
+                   <div style="white-space:pre-wrap;line-height:1.5;font-size:0.85rem;color:#334155;">${escapeHTML(d.request)}</div>
+                 </div>
+               </div>
+             </td>
+           </tr>`;
+        } else {
+          html += `<tr>
+              <td><input type="checkbox" class="row-check prayer-rec-check" data-id="${d.id}"></td>
+               <td style="white-space:nowrap;font-size:0.85rem;color:#64748B;">${dateStr}</td>
+               <td><strong>${escapeHTML(d.name)}</strong></td>
+               <td>${escapeHTML(d.phone || '—')}</td>
+               <td style="white-space:pre-wrap;line-height:1.5;">${escapeHTML(d.request)}</td>
+               <td><button class="del-btn prayer-del-btn" data-id="${d.id}" title="Delete">🗑️</button></td>
+           </tr>`;
+        }
+      });
+      tbody.innerHTML = html;
+      wirePrayerRequestButtons();
+    } catch(err) {
+      console.error('Error loading prayer requests:', err);
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#DC2626;">❌ Error loading data. Please check permissions.</td></tr>';
+    }
+  }
+
+  document.getElementById('refreshPrayerBtn')?.addEventListener('click', loadPrayerRequests);
+
+  function wirePrayerRequestButtons() {
+    document.querySelectorAll('.prayer-del-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const ok = await showConfirm('Delete Prayer Request?', 'This action is permanent and cannot be undone.', '🗑️ Delete Forever');
+        if (!ok) return;
+        try {
+          const { doc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+          await deleteDoc(doc(churchDb, 'prayer_requests', id));
+          loadPrayerRequests();
+          showToast('Prayer request deleted.', 2500);
+        } catch (e) {
+          showToast('❌ Delete failed: ' + e.message, 3000);
+        }
+      });
+    });
+
+    document.querySelectorAll('.prayer-rec-check').forEach(cb => {
+      cb.addEventListener('change', updatePrayerBulkBar);
+    });
+  }
+
+  function updatePrayerBulkBar() {
+    const checked = document.querySelectorAll('.prayer-rec-check:checked');
+    const bar = document.getElementById('prayerBulkBar');
+    if(!bar) return;
+    if (checked.length > 0) {
+      bar.classList.add('show');
+      document.getElementById('prayerBulkCount').textContent = checked.length + ' selected';
+    } else {
+      bar.classList.remove('show');
+    }
+  }
+
+  document.getElementById('prayerSelectAllCheck')?.addEventListener('change', function() {
+    document.querySelectorAll('.prayer-rec-check').forEach(cb => { cb.checked = this.checked; });
+    updatePrayerBulkBar();
+  });
+
+  document.getElementById('prayerBulkCancelBtn')?.addEventListener('click', () => {
+    document.querySelectorAll('.prayer-rec-check').forEach(cb => { cb.checked = false; });
+    document.getElementById('prayerSelectAllCheck').checked = false;
+    document.getElementById('prayerBulkBar').classList.remove('show');
+  });
+
+  document.getElementById('prayerBulkDelBtn')?.addEventListener('click', async () => {
+    const checked = [...document.querySelectorAll('.prayer-rec-check:checked')];
+    if (!checked.length) return;
+    const ok = await showConfirm(`Delete ${checked.length} Prayer Request(s)?`, 'This action is permanent and cannot be undone.', `🗑️ Delete ${checked.length}`);
+    if (!ok) return;
+
+    const btn = document.getElementById('prayerBulkDelBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Deleting…';
+    try {
+      const { writeBatch, doc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      const batch = writeBatch(churchDb);
+      const ids = checked.map(cb => cb.dataset.id);
+      ids.forEach(id => {
+        batch.delete(doc(churchDb, 'prayer_requests', id));
+      });
+      await batch.commit();
+
+      document.getElementById('prayerSelectAllCheck').checked = false;
+      document.getElementById('prayerBulkBar').classList.remove('show');
+      loadPrayerRequests();
+      showToast(`🗑️ ${ids.length} request(s) deleted.`, 3000);
+    } catch (err) {
+      showToast('❌ Bulk delete failed: ' + err.message, 4000);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '🗑️ Delete Selected';
+    }
+  });
 
   // ══════ CUSTOM CONFIRM DIALOG ══════
   let confirmResolve = null;
@@ -5431,7 +5699,9 @@ Reply to this message if you need help with the certificate or student details.`
       const days = (r.days||'—').replace('All 3 Days (Apr 25, 26 & 27)','All 3 Days');
       const src = r.source==='imported'
               ? `<span class="badge b-imported">⬆ Imported</span>`
-              : `<span class="badge b-online">✅ Registered</span>`;
+              : r.source==='Rejected'
+                      ? `<span class="badge" style="background:#FEE2E2;color:#DC2626;">❌ Rejected</span>`
+                      : `<span class="badge b-online">✅ Registered</span>`;
       const chk = `<input type="checkbox" class="row-check arch-rec-check mobile-head-check" data-id="${r.id}">`;
       if(isMobile){
         return `<tr>
@@ -5495,6 +5765,8 @@ Reply to this message if you need help with the certificate or student details.`
           if(snap.exists()){
             const data = snap.data();
             delete data.archivedAt;
+            if(data.source === 'Rejected') data.source = 'online';
+            if(data.status === 'rejected') data.status = 'approved';
             await setDoc(doc(db2,'registrations',btn.dataset.id), data);
           }
           await deleteDoc(doc(db2,'archived',btn.dataset.id));
@@ -5556,8 +5828,22 @@ Reply to this message if you need help with the certificate or student details.`
   document.getElementById('archiveBulkRestoreBtn')?.addEventListener('click', async()=>{
     const checked = [...document.querySelectorAll('.arch-rec-check:checked')];
     if(!checked.length) return;
-    const ok = await showConfirm(`Restore ${checked.length} Record(s)?`, `These records will be moved back to the Registrations tab.`, `↩ Restore ${checked.length}`, '↩️');
-    if(!ok) return;
+    
+    let rejectedDest = 'registrations';
+    const hasRejected = checked.some(cb => {
+      const r = archiveData.find(x => x.id === cb.dataset.id);
+      return r && r.source === 'Rejected';
+    });
+
+    if(hasRejected) {
+      const choice = await askRestoreDestination();
+      if(!choice) return;
+      rejectedDest = choice;
+    } else {
+      const ok = await showConfirm(`Restore ${checked.length} Record(s)?`, `These records will be moved back to the Registrations tab.`, `↩ Restore ${checked.length}`, '↩️');
+      if(!ok) return;
+    }
+
     const btn = document.getElementById('archiveBulkRestoreBtn');
     btn.disabled=true; btn.textContent='⏳ Restoring…';
     try{
@@ -5570,7 +5856,20 @@ Reply to this message if you need help with the certificate or student details.`
         if(snap.exists()){
           const data = snap.data();
           delete data.archivedAt;
-          batch.set(doc(db2,'registrations',id), data);
+          
+          if(data.source === 'Rejected') {
+            data.source = 'online';
+            if(rejectedDest === 'approvals') {
+              data.status = 'pending';
+              batch.set(doc(db2,'pending_registrations',id), data);
+            } else {
+              data.status = 'approved';
+              batch.set(doc(db2,'registrations',id), data);
+            }
+          } else {
+            if(data.status === 'rejected') data.status = 'approved';
+            batch.set(doc(db2,'registrations',id), data);
+          }
           batch.delete(doc(db2,'archived',id));
         }
       }
@@ -5578,6 +5877,7 @@ Reply to this message if you need help with the certificate or student details.`
       ids.forEach(id => removeArchivedRecord(id));
       renderArchiveRows();
       await loadData();
+      if(rejectedDest === 'approvals') await loadPendingApprovals();
       document.getElementById('archiveSelectAllCheck').checked=false;
       document.getElementById('archiveBulkBar').classList.remove('show');
       showToast(`↩ ${ids.length} record(s) restored.`, 3000);
@@ -5620,212 +5920,7 @@ Reply to this message if you need help with the certificate or student details.`
       btn.disabled = false;
       btn.textContent = '🗑️ Delete Selected';
     }
-  })
-
-  // ══════ LOAD PRAYER REQUESTS ══════
-  let prayerRequestsData = [];
-
-  async function loadPrayerRequests() {
-    const tbody = document.getElementById('prayerTableBody');
-    if(!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">⏳ Loading requests...</td></tr>';
-    try {
-      // Import query and orderBy at the top of your file if they aren't already imported
-      const q = query(collection(churchDb, 'prayer_requests'), orderBy('createdAt', 'desc'));
-      const snap = await getDocs(q);
-      prayerRequestsData = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-      if(snap.empty) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">No prayer requests found.</td></tr>';
-        return;
-      }
-      let html = '';
-      prayerRequestsData.forEach(d => {
-        const dateStr = d.createdAt ? d.createdAt.toDate().toLocaleString() : 'Just now';
-        html += `<tr>
-           <td><input type="checkbox" class="row-check prayer-rec-check" data-id="${d.id}"></td>
-            <td style="white-space:nowrap;font-size:0.85rem;color:#64748B;">${dateStr}</td>
-            <td><strong>${escapeHTML(d.name)}</strong></td>
-            <td>${escapeHTML(d.phone || '—')}</td>
-            <td style="white-space:pre-wrap;line-height:1.5;">${escapeHTML(d.request)}</td>
-            <td><button class="del-btn prayer-del-btn" data-id="${d.id}" title="Delete">🗑️</button></td>
-        </tr>`;
-      });
-      tbody.innerHTML = html;
-      wirePrayerRequestButtons();
-    } catch(err) {
-      console.error('Error loading prayer requests:', err);
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#DC2626;">❌ Error loading data. Please check permissions.</td></tr>';
-    }
-  }
-
-  document.getElementById('refreshPrayerBtn')?.addEventListener('click', loadPrayerRequests);
-
-  function wirePrayerRequestButtons() {
-    // Individual delete buttons
-    document.querySelectorAll('.prayer-del-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = btn.dataset.id;
-        const ok = await showConfirm('Delete Prayer Request?', 'This action is permanent and cannot be undone.', '🗑️ Delete Forever');
-        if (!ok) return;
-
-        try {
-          const { doc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-          await deleteDoc(doc(churchDb, 'prayer_requests', id));
-          loadPrayerRequests(); // Re-render
-          showToast('Prayer request deleted.', 2500);
-        } catch (e) {
-          showToast('❌ Delete failed: ' + e.message, 3000);
-        }
-      });
-    });
-
-    // Checkboxes
-    document.querySelectorAll('.prayer-rec-check').forEach(cb => {
-      cb.addEventListener('change', updatePrayerBulkBar);
-    });
-  }
-
-  function updatePrayerBulkBar() {
-    const checked = document.querySelectorAll('.prayer-rec-check:checked');
-    const bar = document.getElementById('prayerBulkBar');
-    if(!bar) return;
-    if (checked.length > 0) {
-      bar.classList.add('show');
-      document.getElementById('prayerBulkCount').textContent = checked.length + ' selected';
-    } else {
-      bar.classList.remove('show');
-    }
-  }
-
-  // Select all checkbox
-  document.getElementById('prayerSelectAllCheck')?.addEventListener('change', function() {
-    document.querySelectorAll('.prayer-rec-check').forEach(cb => { cb.checked = this.checked; });
-    updatePrayerBulkBar();
   });
-
-  // Cancel bulk selection
-  document.getElementById('prayerBulkCancelBtn')?.addEventListener('click', () => {
-    document.querySelectorAll('.prayer-rec-check').forEach(cb => { cb.checked = false; });
-    document.getElementById('prayerSelectAllCheck').checked = false;
-    document.getElementById('prayerBulkBar').classList.remove('show');
-  });
-
-  // Bulk delete
-  document.getElementById('prayerBulkDelBtn')?.addEventListener('click', async () => {
-    const checked = [...document.querySelectorAll('.prayer-rec-check:checked')];
-    if (!checked.length) return;
-
-    const ok = await showConfirm(`Delete ${checked.length} Prayer Request(s)?`, 'This action is permanent and cannot be undone.', `🗑️ Delete ${checked.length}`);
-    if (!ok) return;
-
-    const btn = document.getElementById('prayerBulkDelBtn');
-    btn.disabled = true;
-    btn.textContent = '⏳ Deleting…';
-
-    try {
-      const { writeBatch, doc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-      const batch = writeBatch(churchDb);
-      const ids = checked.map(cb => cb.dataset.id);
-      ids.forEach(id => {
-        batch.delete(doc(churchDb, 'prayer_requests', id));
-      });
-      await batch.commit();
-
-      document.getElementById('prayerSelectAllCheck').checked = false;
-      document.getElementById('prayerBulkBar').classList.remove('show');
-      loadPrayerRequests(); // Re-render
-      showToast(`🗑️ ${ids.length} request(s) deleted.`, 3000);
-    } catch (err) {
-      showToast('❌ Bulk delete failed: ' + err.message, 4000);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = '🗑️ Delete Selected';
-    }
-  });
-
-  // ══════ APPROVALS TAB ══════
-  let pendingApprovalsData = [];
-
-  async function loadPendingApprovals() {
-    const tbody = document.getElementById('approvalsBody');
-    if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="10" class="loading-row">⏳ Loading pending approvals...</td></tr>';
-
-    try {
-      const snap = await getDocs(query(collection(db, 'pending_registrations'), orderBy('createdAt', 'desc')));
-      pendingApprovalsData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-      if (pendingApprovalsData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" class="no-data"><span class="ni">👍</span>No pending approvals.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = pendingApprovalsData.map((r, i) => {
-        const registeredOn = r.createdAt ? new Date(r.createdAt.toDate()).toLocaleString('en-IN', {dateStyle: 'short', timeStyle: 'short'}) : '—';
-        return `<tr>
-          <td><strong style="color:#94A3B8">${i + 1}</strong></td>
-          <td><strong>${escapeHTML(r.childName)}</strong></td>
-          <td>${r.age || '—'}</td>
-          <td><span class="badge ${r.gender === 'Male' ? 'b-boy' : 'b-girl'}">${r.gender || '—'}</span></td>
-          <td>${escapeHTML(r.parentName || '—')}</td>
-          <td>${escapeHTML(r.phone || '—')}</td>
-          <td>${escapeHTML(r.address || '—')}</td>
-          <td>${(r.days || '—').replace('All 3 Days (Apr 25, 26 & 27)', 'All 3 Days')}</td>
-          <td style="font-size:0.78rem;color:#64748B;">${registeredOn}</td>
-          <td style="white-space:nowrap;">
-            <button class="action-btn approval-action-btn" data-id="${r.id}" data-action="approve" style="background:#16A34A;color:white;">Approve</button>
-            <button class="action-btn approval-action-btn" data-id="${r.id}" data-action="reject" style="background:#DC2626;color:white;margin-left:6px;">Reject</button>
-          </td>
-        </tr>`;
-      }).join('');
-
-      wireApprovalButtons();
-
-    } catch (err) {
-      tbody.innerHTML = `<tr><td colspan="10" class="no-data">❌ Failed to load: ${err.message}</td></tr>`;
-    }
-  }
-
-  function wireApprovalButtons() {
-    document.querySelectorAll('.approval-action-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = btn.dataset.id;
-        const action = btn.dataset.action;
-        const record = pendingApprovalsData.find(r => r.id === id);
-        if (!record) return;
-
-        const originalText = btn.textContent;
-        btn.disabled = true;
-        btn.textContent = '⏳';
-
-        try {
-          const { doc, setDoc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-
-          if (action === 'approve') {
-            const approvedRecord = { ...record, status: 'approved', approvedAt: serverTimestamp() };
-            await setDoc(doc(db, 'registrations', id), approvedRecord);
-            await deleteDoc(doc(db, 'pending_registrations', id));
-            showToast(`✅ ${record.childName} has been approved and added to registrations.`, 3000);
-          } else { // Reject
-            await deleteDoc(doc(db, 'pending_registrations', id));
-            showToast(`🗑️ ${record.childName} has been rejected.`, 3000);
-          }
-
-          loadPendingApprovals(); // Refresh the list
-          loadData(); // Refresh the main registration list
-
-        } catch (err) {
-          showToast(`❌ Failed to ${action}: ${err.message}`, 4000);
-          btn.disabled = false;
-          btn.textContent = originalText;
-        }
-      });
-    });
-  }
-
-  document.getElementById('refreshApprovalsBtn')?.addEventListener('click', loadPendingApprovals);
-
 </script>
 <div class="toast" id="toastMsg"></div>
 
