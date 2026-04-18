@@ -254,15 +254,15 @@
     .admin-topbar{background:var(--navy);color:white;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;gap:12px;flex-wrap:wrap;}
     .admin-topbar .logo{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--sun);}
     .admin-topbar .logo span{color:rgba(255,255,255,.65);font-size:0.8rem;font-family:'Nunito',sans-serif;font-weight:600;display:block;}
-    .role-badge{display:inline-flex;align-items:center;max-width:220px;padding:6px 12px;border-radius:20px;font-size:0.78rem;font-weight:800;font-family:'Nunito',sans-serif;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .role-badge.teacher-badge{background:#DCFCE7;color:#166534;border:1px solid rgba(22,101,52,.18);}
-    .role-admin{background:#FEF3C7;color:#92400E;}
-    .role-viewer{background:#DBEAFE;color:#1E40AF;}
+    .role-badge{display:inline-flex;align-items:center;justify-content:center;height:36px;box-sizing:border-box;max-width:220px;padding:0 16px;border-radius:20px;font-size:0.85rem;font-weight:800;font-family:'Nunito',sans-serif;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .role-badge.teacher-badge{background:#DCFCE7;color:#166534;border:2px solid rgba(22,101,52,.18);}
+    .role-admin{background:#FEF3C7;color:#92400E;border:2px solid rgba(146,64,14,.18);}
+    .role-viewer{background:#DBEAFE;color:#1E40AF;border:2px solid rgba(30,64,175,.18);}
     .topbar-right{display:flex;gap:10px;align-items:center;}
-    .sidebar-toggle{display:none;background:rgba(255,255,255,.14);color:white;border:2px solid rgba(255,255,255,.28);padding:8px 12px;border-radius:14px;font-family:'Fredoka One',cursive;font-size:1.15rem;cursor:pointer;line-height:1;}
-    .logout-btn{background:rgba(255,255,255,.15);color:white;border:2px solid rgba(255,255,255,.3);padding:8px 18px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;font-size:0.85rem;}
+    .sidebar-toggle{display:none;background:transparent;color:white;border:none;padding:0 8px 0 0;font-size:1.8rem;cursor:pointer;line-height:1;}
+    .logout-btn{display:inline-flex;align-items:center;justify-content:center;height:36px;box-sizing:border-box;background:rgba(255,255,255,.15);color:white;border:2px solid rgba(255,255,255,.3);padding:0 16px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;}
     .logout-btn:hover{background:rgba(255,255,255,.25);}
-    .refresh-btn{background:var(--sun);color:var(--navy);border:none;padding:8px 18px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;}
+    .refresh-btn{display:inline-flex;align-items:center;justify-content:center;height:36px;box-sizing:border-box;background:var(--sun);color:var(--navy);border:none;padding:0 16px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;}
     .admin-content{padding:0;}
     .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:18px;}
     .admin-panel:not(.teacher-mode) #statsGrid{grid-template-columns:repeat(2,minmax(0,1fr));}
@@ -914,9 +914,11 @@
 <!-- DASHBOARD -->
 <div class="admin-panel" id="adminPanel">
   <div class="admin-topbar">
-    <div class="logo">✝ VBS Dashboard<span id="loggedInEmail"></span></div>
-    <div class="topbar-right">
+    <div style="display:flex;align-items:center;gap:8px;">
       <button class="sidebar-toggle" id="sidebarToggle" type="button">☰</button>
+      <div class="logo">✝ VBS Dashboard<span id="loggedInEmail"></span></div>
+    </div>
+    <div class="topbar-right">
       <span class="role-badge" id="roleBadge"></span>
       <button class="refresh-btn" id="refreshBtn">🔄 Refresh</button>
       <button class="logout-btn" id="logoutBtn">⬅ Logout</button>
