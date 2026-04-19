@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VBS 2026 – LEF Church Magatapalli</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Pacifico&family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=Tiro+Telugu:ital@0;1&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
     :root{--sun:#FFD700;--sky:#38BDF8;--grass:#4ADE80;--coral:#FF6B6B;--purple:#A855F7;--orange:#FB923C;--navy:#1E3A5F;--cream:#FFF8E7;}
     *{margin:0;padding:0;box-sizing:border-box;}
@@ -369,7 +370,7 @@
     .save-teacher-btn:hover{background:var(--orange);}
     .teacher-saved-badge{font-size:0.75rem;color:#16A34A;font-weight:700;display:none;}
     .teacher-card{background:white;border:1px solid #E2E8F0;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);}
-    .teacher-config-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(160px,1fr) 110px;gap:12px;align-items:center;margin-bottom:14px;}
+    .teacher-config-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(160px,1fr) 110px 46px;gap:12px;align-items:center;margin-bottom:14px;}
     .teacher-field{display:flex;flex-direction:column;gap:6px;min-width:0;}
     .teacher-field label{font-size:0.78rem;font-weight:800;color:#64748B;letter-spacing:0.02em;text-transform:uppercase;}
     .teacher-input,.teacher-select{width:100%;padding:12px 14px;border:2px solid #E2E8F0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.95rem;outline:none;background:#F8FAFC;color:#1E3A5F;}
@@ -1035,9 +1036,9 @@
 
         <!-- DOCUMENTS VIEW -->
         <div class="dash-view" id="view-documents">
-          <div class="view-header" style="margin-bottom:14px;">
+          <div class="view-header" style="margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <h2 class="view-title">📄 Student Documents</h2>
-            <div class="header-right">
+            <div class="header-right" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
               <select class="day-dropdown" id="docsClassFilter" style="margin-right:10px;margin-bottom:6px;">
                 <option value="all">All Classes</option>
                 <option value="Beginner">Beginner</option>
@@ -1048,6 +1049,7 @@
                 <option value="Young Adult">Young Adult</option>
                 <option value="unassigned">Unassigned</option>
               </select>
+              <button id="downloadAllCertsBtn" class="action-btn" style="background:#0EA5E9;color:white;margin-bottom:6px;">📦 Download All Certs (ZIP)</button>
             </div>
           </div>
 
@@ -1061,7 +1063,7 @@
                   <th>Name</th>
                   <th>Age</th>
                   <th>Gender</th>
-                  <th>Class</th>
+                  <th>Class & Sec</th>
                   <th>Address</th>
                   <th>Documents</th>
                 </tr>
@@ -1657,7 +1659,7 @@
 <script type="module">
   import { signInWithEmailAndPassword, signOut }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp }
+  import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp, updateDoc, setDoc, getDoc, writeBatch }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   import { auth, db, churchDb } from "../firebase-config.js";
@@ -2071,7 +2073,8 @@
   }
 
   async function loadData(){
-    document.getElementById('tableBody').innerHTML='<tr><td colspan="13" class="loading-row">⏳ Loading registrations…</td></tr>';
+    const tb = document.getElementById('tableBody');
+    if(tb) tb.innerHTML='<tr><td colspan="13" class="loading-row">⏳ Loading registrations…</td></tr>';
     try{
       const snap=await getDocs(query(collection(db,'registrations'),orderBy('createdAt','desc')));
       allData=snap.docs.map(d=>({id:d.id,...d.data()}));
@@ -2096,11 +2099,10 @@
       if(document.getElementById('view-attendance').classList.contains('active')) renderAttendanceView();
       if(document.getElementById('view-analytics').classList.contains('active')) renderAnalytics();
     }catch(err){
-      const isTeacher = currentRole==='teacher';
-      const msg = isTeacher
-              ? `<span class="ni">⚠️</span>Could not load data.<br><small>Please update Firestore rules:<br><code>allow read: if true;</code></small>`
-              : `<span class="ni">⚠️</span>Could not load data. Check Firestore rules.`;
-      document.getElementById('tableBody').innerHTML=`<tr><td colspan="13" class="no-data">${msg}</td></tr>`;
+      console.error("loadData error:", err);
+      const msg = `<span class="ni">⚠️</span>Could not load data.<br><small style="color:#DC2626;font-weight:bold;">${err.message}</small>`;
+      const tb = document.getElementById('tableBody');
+      if(tb) tb.innerHTML=`<tr><td colspan="13" class="no-data">${msg}</td></tr>`;
     }
   }
 
@@ -2152,8 +2154,8 @@
     };
 
     const classes = [...new Set(allData.map(r=>r.class || 'unassigned'))].filter(Boolean).sort((a,b)=>a.localeCompare(b));
-    const villages = [...new Set(allData.map(r=>(r.address||'').trim() || 'Not specified'))].sort((a,b)=>a.localeCompare(b));
-    const churches = [...new Set(allData.map(r=>(r.church||'').trim() || 'Not specified'))].sort((a,b)=>a.localeCompare(b));
+    const villages = [...new Set(allData.map(r=>String(r.address||'').trim() || 'Not specified'))].sort((a,b)=>a.localeCompare(b));
+    const churches = [...new Set(allData.map(r=>String(r.church||'').trim() || 'Not specified'))].sort((a,b)=>a.localeCompare(b));
 
     classFilter.innerHTML = '<option value="all">Class: All</option>' + classes.map(v=>`<option value="${v}">${v==='unassigned'?'Unassigned':v}</option>`).join('');
     villageFilter.innerHTML = '<option value="all">Address: All</option>' + villages.map(v=>`<option value="${v}">${v}</option>`).join('');
@@ -2178,10 +2180,10 @@
       d=d.filter(r=>classFilter==='unassigned' ? !r.class : r.class===classFilter);
     }
     if(villageFilter !== 'all'){
-      d=d.filter(r=>((r.address||'').trim() || 'Not specified')===villageFilter);
+      d=d.filter(r=>(String(r.address||'').trim() || 'Not specified')===villageFilter);
     }
     if(churchFilter !== 'all'){
-      d=d.filter(r=>((r.church||'').trim() || 'Not specified')===churchFilter);
+      d=d.filter(r=>(String(r.church||'').trim() || 'Not specified')===churchFilter);
     }
     if(q) d=d.filter(r=>[r.childName,r.childFirst,r.childLast,r.phone,r.parentName,r.address,r.church].join(' ').toLowerCase().includes(q));
     renderRows(d);
@@ -2577,6 +2579,69 @@
     renderDocumentsView();
   });
 
+  document.getElementById('downloadAllCertsBtn').addEventListener('click', async () => {
+    // Get the currently filtered data
+    let data = [...allData];
+    if(currentRole === 'teacher' && teacherClass){
+      data = data.filter(r => r.class === teacherClass);
+      if(teacherSection) data = data.filter(r => r.section === teacherSection);
+    }
+    if(selectedDocsClass !== 'all'){
+      if(selectedDocsClass === 'unassigned'){
+        data = data.filter(r => !r.class);
+      } else {
+        data = data.filter(r => r.class === selectedDocsClass);
+      }
+    }
+
+    // Filter only those who have uploaded a photo
+    const studentsWithPhotos = data.filter(r => r.photo);
+    if(studentsWithPhotos.length === 0){
+      showToast('⚠️ No photos available to generate certificates in this view.', 3500);
+      return;
+    }
+
+    const btn = document.getElementById('downloadAllCertsBtn');
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+
+    try {
+      const zip = new JSZip();
+      const folderName = `VBS2026_Certificates_${selectedDocsClass.replace(/\s+/g,'_')}`;
+      const folder = zip.folder(folderName);
+      const usedNames = {};
+
+      for(let i = 0; i < studentsWithPhotos.length; i++){
+        const student = studentsWithPhotos[i];
+        btn.textContent = `⏳ Generating ${i + 1} of ${studentsWithPhotos.length}...`;
+        const blob = await prepareCertBlob(student);
+        let fileName = getCertificateFileName(student, 'jpg');
+        
+        if (usedNames[fileName]) {
+          usedNames[fileName]++;
+          fileName = fileName.replace('.jpg', `_${usedNames[fileName]}.jpg`);
+        } else {
+          usedNames[fileName] = 1;
+        }
+        folder.file(fileName, blob);
+      }
+
+      btn.textContent = '📦 Zipping files...';
+      const zipBlob = await zip.generateAsync({type: 'blob'});
+      const url = URL.createObjectURL(zipBlob);
+      const a = Object.assign(document.createElement('a'), { href: url, download: `${folderName}.zip` });
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      showToast(`✅ Successfully downloaded ${studentsWithPhotos.length} certificates!`, 3000);
+    } catch(err) {
+      console.error('Bulk download error:', err);
+      showToast('❌ Error generating bulk certificates.', 3000);
+    } finally {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+  });
+
   function renderDocumentsView(){
     const tb = document.getElementById('documentsTableBody');
     const isMobile = isMobileViewport();
@@ -2664,7 +2729,6 @@
         <td><strong>${childName}</strong></td>
         <td>${r.age||'—'}</td>
         <td><span class="badge ${r.gender==='Male'?'b-boy':'b-girl'}">${r.gender||'—'}</span></td>
-        <td><span class="badge b-days">${r.class||'Unassigned'}</span></td>
         <td><span class="badge b-days">${clsDisplay}</span></td>
         <td>${r.address||'—'}</td>
         <td style="white-space:nowrap">${docBtns}</td>
@@ -2923,7 +2987,9 @@
   }
 
   function getCertificateFileName(student, extension = 'jpg'){
-    return `VBS2026_Certificate_${sanitizeFilePart(student?.childName)}.${extension}`;
+    const className = sanitizeFilePart(student?.class || 'Unassigned');
+    const studentName = sanitizeFilePart(student?.childName);
+    return `${className}_${studentName}.${extension}`;
   }
 
   function canvasToBlob(canvas, type, quality){
@@ -4941,8 +5007,7 @@ Reply to this message if you need help with the certificate or student details.`
 
   async function loadTeacherProfiles(){
     try{
-      const {getFirestore,doc,getDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-      const snap = await getDoc(doc(getFirestore(),'teachers','profiles'));
+      const snap = await getDoc(doc(db,'teachers','profiles'));
       cachedTeacherProfiles = normalizeTeacherProfiles(snap.exists() ? (snap.data()||{}) : {});
     }catch{
       // Fallback to localStorage if Firestore fails
@@ -4953,9 +5018,8 @@ Reply to this message if you need help with the certificate or student details.`
 
   async function saveTeacherProfiles(profiles){
     try{
-      const {getFirestore,doc,setDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
       profiles = normalizeTeacherProfiles(profiles);
-      await setDoc(doc(getFirestore(),'teachers','profiles'), profiles);
+      await setDoc(doc(db,'teachers','profiles'), profiles);
       cachedTeacherProfiles = profiles;
       // Also cache locally as backup
       localStorage.setItem('vbs2026_teachers', JSON.stringify(profiles));
@@ -5159,6 +5223,9 @@ Reply to this message if you need help with the certificate or student details.`
               <label>Section</label>
                <select class="teacher-sec-sel teacher-select" data-key="${key}">${secOpts}</select>
              </div>
+            <div class="teacher-field" style="justify-content:flex-end;">
+              <button type="button" class="del-teacher-btn" data-key="${key}" style="background:#FEE2E2;color:#DC2626;border:none;border-radius:10px;height:46px;width:100%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.2rem;transition:background 0.2s;" onmouseover="this.style.background='#FECACA'" onmouseout="this.style.background='#FEE2E2'" title="Remove Teacher">🗑️</button>
+            </div>
           </div>
           <div class="teacher-card-actions">
             <div>
@@ -5201,8 +5268,25 @@ Reply to this message if you need help with the certificate or student details.`
       }
 
       list.querySelectorAll('.teacher-class-sel, .teacher-sec-sel').forEach(control => {
-        control.addEventListener('change', () => refreshPrimaryTeacherGroups());
+        control.addEventListener('change', () => {
+          refreshPrimaryTeacherGroups();
+        });
       });
+
+      function attachDeleteListener(row) {
+        const delBtn = row.querySelector('.del-teacher-btn');
+        if (delBtn) {
+          delBtn.addEventListener('click', async () => {
+            const ok = await showConfirm('Remove Teacher?', 'This will remove the teacher from the list. Remember to click "Save All Teachers" to apply changes.', '🗑️ Remove');
+            if (ok) {
+              row.remove();
+              refreshPrimaryTeacherGroups();
+            }
+          });
+        }
+      }
+
+      list.querySelectorAll('.teacher-row').forEach(row => attachDeleteListener(row));
 
       function attachSigListeners(container) {
         container.querySelectorAll('.sig-upload-input').forEach(inp => {
@@ -5267,9 +5351,12 @@ Reply to this message if you need help with the certificate or student details.`
           const newRow = div.firstElementChild;
           list.appendChild(newRow);
           attachSigListeners(newRow);
+          attachDeleteListener(newRow);
 
           newRow.querySelectorAll('.teacher-class-sel, .teacher-sec-sel').forEach(control => {
-            control.addEventListener('change', () => refreshPrimaryTeacherGroups());
+            control.addEventListener('change', () => {
+              refreshPrimaryTeacherGroups();
+            });
           });
           refreshPrimaryTeacherGroups();
         });
@@ -5278,9 +5365,19 @@ Reply to this message if you need help with the certificate or student details.`
   }
 
   document.getElementById('saveAllTeachersBtn').addEventListener('click', async()=>{
+
     const btn = document.getElementById('saveAllTeachersBtn');
     btn.disabled=true; btn.textContent='⏳ Saving to server…';
     const profiles = {...cachedTeacherProfiles};
+
+    // Remove deleted teachers
+    const activeKeys = Array.from(document.querySelectorAll('.teacher-name-input[data-key]')).map(inp => inp.dataset.key);
+    activeKeys.push('_director');
+    Object.keys(profiles).forEach(k => {
+      if (k.startsWith('teacher') && !activeKeys.includes(k)) {
+        delete profiles[k];
+      }
+    });
 
     if(!profiles['_director']) profiles['_director']={};
     profiles['_director'].name = document.getElementById('directorNameInput')?.value.trim() || '';
@@ -5402,7 +5499,7 @@ Reply to this message if you need help with the certificate or student details.`
     // ── Village breakdown ──
     const villageMap = {};
     allData.forEach(r=>{
-      const v = (r.address||'').trim() || 'Not specified';
+      const v = String(r.address||'').trim() || 'Not specified';
       villageMap[v] = (villageMap[v]||0)+1;
     });
     barChart('chart-village', villageMap, COLORS);
@@ -5676,9 +5773,7 @@ Reply to this message if you need help with the certificate or student details.`
     const tb = document.getElementById('archiveBody');
     tb.innerHTML = '<tr><td colspan="12" class="loading-row">⏳ Loading archived records…</td></tr>';
     try{
-      const {getFirestore,collection,getDocs,orderBy,query} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-      const db2 = getFirestore();
-      const snap = await getDocs(query(collection(db2,'archived'), orderBy('archivedAt','desc')));
+      const snap = await getDocs(query(collection(db,'archived'), orderBy('archivedAt','desc')));
       archiveData = snap.docs.map(d=>({id:d.id,...d.data()}));
       updateArchiveCount();
       renderArchiveRows();
@@ -5761,17 +5856,15 @@ Reply to this message if you need help with the certificate or student details.`
         const ok = await showConfirm('Restore Record?','This record will be moved back to the Registrations tab.','↩ Restore','↩️');
         if(!ok) return;
         try{
-          const {getFirestore,doc,getDoc,setDoc,deleteDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-          const db2=getFirestore();
-          const snap = await getDoc(doc(db2,'archived',btn.dataset.id));
+          const snap = await getDoc(doc(db,'archived',btn.dataset.id));
           if(snap.exists()){
             const data = snap.data();
             delete data.archivedAt;
             if(data.source === 'Rejected') data.source = 'online';
             if(data.status === 'rejected') data.status = 'approved';
-            await setDoc(doc(db2,'registrations',btn.dataset.id), data);
+            await setDoc(doc(db,'registrations',btn.dataset.id), data);
           }
-          await deleteDoc(doc(db2,'archived',btn.dataset.id));
+          await deleteDoc(doc(db,'archived',btn.dataset.id));
           removeArchivedRecord(btn.dataset.id);
           renderArchiveRows();
           await loadData();
@@ -5786,9 +5879,7 @@ Reply to this message if you need help with the certificate or student details.`
         const ok = await showConfirm('Permanently Delete?','This record will be deleted forever and cannot be recovered.','🗑 Delete Forever','🗑️');
         if(!ok) return;
         try{
-          const {getFirestore,doc,deleteDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-          const db2=getFirestore();
-          await deleteDoc(doc(db2,'archived',btn.dataset.id));
+          await deleteDoc(doc(db,'archived',btn.dataset.id));
           removeArchivedRecord(btn.dataset.id);
           renderArchiveRows();
           showToast('🗑 Record permanently deleted.',2500);
@@ -5849,12 +5940,10 @@ Reply to this message if you need help with the certificate or student details.`
     const btn = document.getElementById('archiveBulkRestoreBtn');
     btn.disabled=true; btn.textContent='⏳ Restoring…';
     try{
-      const {getFirestore,doc,getDoc,writeBatch} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-      const db2=getFirestore();
-      const batch=writeBatch(db2);
+      const batch=writeBatch(db);
       const ids = checked.map(cb=>cb.dataset.id);
       for(const id of ids){
-        const snap = await getDoc(doc(db2,'archived',id));
+        const snap = await getDoc(doc(db,'archived',id));
         if(snap.exists()){
           const data = snap.data();
           delete data.archivedAt;
@@ -5863,16 +5952,16 @@ Reply to this message if you need help with the certificate or student details.`
             data.source = 'online';
             if(rejectedDest === 'approvals') {
               data.status = 'pending';
-              batch.set(doc(db2,'pending_registrations',id), data);
+              batch.set(doc(db,'pending_registrations',id), data);
             } else {
               data.status = 'approved';
-              batch.set(doc(db2,'registrations',id), data);
+              batch.set(doc(db,'registrations',id), data);
             }
           } else {
             if(data.status === 'rejected') data.status = 'approved';
-            batch.set(doc(db2,'registrations',id), data);
+            batch.set(doc(db,'registrations',id), data);
           }
-          batch.delete(doc(db2,'archived',id));
+          batch.delete(doc(db,'archived',id));
         }
       }
       await batch.commit();
@@ -5901,15 +5990,9 @@ Reply to this message if you need help with the certificate or student details.`
     btn.disabled = true;
     btn.textContent = '⏳ Deleting…';
     try {
-      const {
-        getFirestore,
-        doc,
-        writeBatch
-      } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-      const db2 = getFirestore();
-      const batch = writeBatch(db2);
+      const batch = writeBatch(db);
       const ids = checked.map(cb => cb.dataset.id);
-      ids.forEach(id => batch.delete(doc(db2, 'archived', id)));
+      ids.forEach(id => batch.delete(doc(db, 'archived', id)));
       await batch.commit();
       ids.forEach(id => removeArchivedRecord(id));
       renderArchiveRows();
