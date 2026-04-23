@@ -3155,9 +3155,14 @@
     skyGrad.addColorStop(0,'#E8F4FD'); skyGrad.addColorStop(1,'#FFFFFF');
     ctx.fillStyle=skyGrad; ctx.fillRect(0,0,W,y(300));
 
-    // Outer border — playful thick rounded
-    roundRect(x(14),y(14),W-x(28),H-y(28),x(28),null,'#4FC3F7',x(12));
-    roundRect(x(26),y(26),W-x(52),H-y(52),x(20),null,'#81D4FA',x(4));
+    // Outer border — sharp edges
+    ctx.strokeStyle = '#4FC3F7';
+    ctx.lineWidth = x(12) * s;
+    ctx.strokeRect(x(14), y(14), W - x(28), H - y(28));
+
+    ctx.strokeStyle = '#81D4FA';
+    ctx.lineWidth = x(4) * s;
+    ctx.strokeRect(x(26), y(26), W - x(52), H - y(52));
 
     // ────────────────────────────────────────
     // 2. CORNER DECORATIONS
@@ -6038,7 +6043,7 @@ Reply to this message if you need help with the certificate or student details.`
       <!-- Certificate Preview -->
       <div id="certPreviewWrap" style="display:none;">
         <p style="font-weight:700;color:var(--navy);margin-bottom:12px;">📄 Certificate Preview</p>
-        <canvas id="certCanvas" style="max-width:100%;height:auto;border-radius:12px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
+        <canvas id="certCanvas" style="max-width:100%;height:auto;border-radius:0;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
 
         <!-- Save Status -->
         <div id="certSaveStatus" style="display:none;background:#DCFCE7;border:2px solid #16A34A;color:#166534;padding:12px;border-radius:10px;margin-top:16px;font-weight:700;text-align:center;">
@@ -6295,7 +6300,7 @@ Reply to this message if you need help with the certificate or student details.`
         <div style="font-size:0.85rem;color:#64748B;" id="viewCertGeneratedDate">Generated: --</div>
       </div>
 
-      <canvas id="viewCertCanvas" style="width:100%;height:auto;border-radius:12px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
+      <canvas id="viewCertCanvas" style="width:100%;height:auto;border-radius:0;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
 
       <div style="display:flex;gap:10px;margin-top:16px;">
         <button id="viewCertDownloadBtn" style="flex:1;background:#3B82F6;color:white;border:none;padding:12px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
