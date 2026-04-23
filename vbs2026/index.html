@@ -1050,6 +1050,7 @@
                 <option value="unassigned">Unassigned</option>
               </select>
               <button id="downloadAllCertsBtn" class="action-btn" style="background:#0EA5E9;color:white;margin-bottom:6px;">📦 Download All Certs (ZIP)</button>
+              <button id="downloadA3CertsBtn" class="action-btn" style="background:#8B5CF6;color:white;margin-bottom:6px;" title="4 A5 Certificates per A3 Sheet">🖨️ A3 Print Sheets</button>
             </div>
           </div>
 
@@ -2642,6 +2643,104 @@
     }
   });
 
+  // ── 4-in-1 A3 Print Sheets Generator ──
+  document.getElementById('downloadA3CertsBtn').addEventListener('click', async () => {
+    let data = [...allData];
+    if(currentRole === 'teacher' && teacherClass){
+      data = data.filter(r => r.class === teacherClass);
+      if(teacherSection) data = data.filter(r => r.section === teacherSection);
+    }
+    if(selectedDocsClass !== 'all'){
+      if(selectedDocsClass === 'unassigned'){
+        data = data.filter(r => !r.class);
+      } else {
+        data = data.filter(r => r.class === selectedDocsClass);
+      }
+    }
+
+    const studentsWithPhotos = data.filter(r => r.photo);
+    if(studentsWithPhotos.length === 0){
+      showToast('⚠️ No photos available to generate certificates.', 3500);
+      return;
+    }
+
+    const btn = document.getElementById('downloadA3CertsBtn');
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+
+    try {
+      const zip = new JSZip();
+      const folderName = `VBS2026_A3_Print_Sheets_${selectedDocsClass.replace(/\s+/g,'_')}`;
+      const folder = zip.folder(folderName);
+
+      // A3 Size at 300 DPI (Portrait layout holds 4 A5s)
+      const A3_WIDTH = 3508;
+      const A3_HEIGHT = 4960;
+      const A5_WIDTH = A3_WIDTH / 2;
+      const A5_HEIGHT = A3_HEIGHT / 2;
+
+      const a3Canvas = document.createElement('canvas');
+      a3Canvas.width = A3_WIDTH;
+      a3Canvas.height = A3_HEIGHT;
+      const a3Ctx = a3Canvas.getContext('2d');
+
+      const indivCanvas = document.createElement('canvas');
+      const totalSheets = Math.ceil(studentsWithPhotos.length / 4);
+
+      for(let i = 0; i < totalSheets; i++){
+        btn.textContent = `⏳ Generating Sheet ${i + 1} of ${totalSheets}...`;
+        
+        // White background for A3 sheet
+        a3Ctx.fillStyle = '#FFFFFF';
+        a3Ctx.fillRect(0, 0, A3_WIDTH, A3_HEIGHT);
+
+        // Draw 4 certificates per sheet
+        for(let j = 0; j < 4; j++){
+          const studentIndex = (i * 4) + j;
+          if(studentIndex >= studentsWithPhotos.length) break;
+
+          const student = studentsWithPhotos[studentIndex];
+          await renderCertificateToCanvas(student, indivCanvas, CERT_EXPORT_SIZE);
+
+          const dx = (j % 2) * A5_WIDTH;
+          const dy = Math.floor(j / 2) * A5_HEIGHT;
+
+          // Add margin/whitespace for cutting edges (80px at 300DPI is ~6.7mm margin, creating a ~1.3cm gap between certs)
+          const margin = 40;
+          const drawW = A5_WIDTH - (margin * 2);
+          const drawH = A5_HEIGHT - (margin * 2);
+          const drawX = dx + margin;
+          const drawY = dy + margin;
+
+          // Draw scaled A5 certificate onto the A3 sheet with margins
+          a3Ctx.drawImage(indivCanvas, drawX, drawY, drawW, drawH);
+          
+          // Draw a light grey cutting line for the print lab around the actual certificate
+          a3Ctx.strokeStyle = '#CCCCCC';
+          a3Ctx.lineWidth = 2;
+          a3Ctx.strokeRect(drawX, drawY, drawW, drawH);
+        }
+
+        const blob = await canvasToBlob(a3Canvas, 'image/jpeg', 0.95);
+        folder.file(`A3_Print_Sheet_${String(i + 1).padStart(3, '0')}.jpg`, blob);
+      }
+
+      btn.textContent = '📦 Zipping files...';
+      const zipBlob = await zip.generateAsync({type: 'blob'});
+      const url = URL.createObjectURL(zipBlob);
+      const a = Object.assign(document.createElement('a'), { href: url, download: `${folderName}.zip` });
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      showToast(`✅ Successfully downloaded ${totalSheets} A3 sheets!`, 3000);
+    } catch(err) {
+      console.error('A3 Print Sheets error:', err);
+      showToast('❌ Error generating A3 print sheets.', 3000);
+    } finally {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+  });
+
   function renderDocumentsView(){
     const tb = document.getElementById('documentsTableBody');
     const isMobile = isMobileViewport();
@@ -3155,9 +3254,14 @@
     skyGrad.addColorStop(0,'#E8F4FD'); skyGrad.addColorStop(1,'#FFFFFF');
     ctx.fillStyle=skyGrad; ctx.fillRect(0,0,W,y(300));
 
-    // Outer border — playful thick rounded
-    roundRect(x(14),y(14),W-x(28),H-y(28),x(28),null,'#4FC3F7',x(12));
-    roundRect(x(26),y(26),W-x(52),H-y(52),x(20),null,'#81D4FA',x(4));
+    // Outer border — sharp edges
+    ctx.strokeStyle = '#4FC3F7';
+    ctx.lineWidth = x(12) * s;
+    ctx.strokeRect(x(14), y(14), W - x(28), H - y(28));
+
+    ctx.strokeStyle = '#81D4FA';
+    ctx.lineWidth = x(4) * s;
+    ctx.strokeRect(x(26), y(26), W - x(52), H - y(52));
 
     // ────────────────────────────────────────
     // 2. CORNER DECORATIONS
@@ -6038,7 +6142,7 @@ Reply to this message if you need help with the certificate or student details.`
       <!-- Certificate Preview -->
       <div id="certPreviewWrap" style="display:none;">
         <p style="font-weight:700;color:var(--navy);margin-bottom:12px;">📄 Certificate Preview</p>
-        <canvas id="certCanvas" style="max-width:100%;height:auto;border-radius:12px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
+        <canvas id="certCanvas" style="max-width:100%;height:auto;border-radius:0;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
 
         <!-- Save Status -->
         <div id="certSaveStatus" style="display:none;background:#DCFCE7;border:2px solid #16A34A;color:#166534;padding:12px;border-radius:10px;margin-top:16px;font-weight:700;text-align:center;">
@@ -6295,7 +6399,7 @@ Reply to this message if you need help with the certificate or student details.`
         <div style="font-size:0.85rem;color:#64748B;" id="viewCertGeneratedDate">Generated: --</div>
       </div>
 
-      <canvas id="viewCertCanvas" style="width:100%;height:auto;border-radius:12px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
+      <canvas id="viewCertCanvas" style="width:100%;height:auto;border-radius:0;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,.1);"></canvas>
 
       <div style="display:flex;gap:10px;margin-top:16px;">
         <button id="viewCertDownloadBtn" style="flex:1;background:#3B82F6;color:white;border:none;padding:12px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;">
